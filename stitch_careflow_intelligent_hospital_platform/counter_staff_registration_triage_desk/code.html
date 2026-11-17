@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareFlow — Counter Staff Registration &amp; Triage Desk</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'accent': '#F2D500',
+        'on-accent': '#212529',
+        'secondary': '#2585E8',
+        'on-secondary': '#1C1C1C',
+        'light-bg': '#F5F6F7',
+        'success': '#249B69',
+        'on-success': '#222222',
+        'warning': '#E9A23B',
+        'on-warning': '#212529',
+        'danger': '#D9534F',
+        'on-danger': '#171717',
+        'light-primary': '#343A40',
+        'light-on-primary': '#FFFFFF',
+        'light-surface': '#FFFFFF',
+        'light-on-surface': '#343A40',
+        'light-surface-variant': '#F5F6F7',
+        'light-on-surface-variant': '#495057',
+        'light-outline': '#DEE2E6',
+        'light-outline-variant': '#E9ECEF',
+        'dark-primary': '#F8F9FA',
+        'dark-on-primary': '#212529',
+        'dark-surface': '#1E2227',
+        'dark-on-surface': '#F8F9FA',
+        'dark-surface-variant': '#2B3035',
+        'dark-on-surface-variant': '#ADB5BD',
+        'dark-outline': '#495057',
+        'dark-outline-variant': '#343A40',
+      },
+      spacing: {
+        'spacing-2xs': '4px',
+        'spacing-xs': '8px',
+        'spacing-sm': '12px',
+        'spacing-md': '16px',
+        'spacing-lg': '24px',
+        'spacing-xl': '32px',
+        'spacing-2xl': '48px',
+        'spacing-3xl': '64px',
+        'gutter': '24px',
+        'margin': '24px',
+      },
+      fontFamily: {
+        'display': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'headline': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'title': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'body': ['"Rubik"', 'sans-serif'],
+        'label': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'code': ['"Spline Sans Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['48px', { lineHeight: '56px', letterSpacing: '-1px', fontWeight: '800' }],
+        'display-lg-mobile': ['32px', { lineHeight: '40px', letterSpacing: '-0.5px', fontWeight: '800' }],
+        'display-md': ['36px', { lineHeight: '44px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'display-md-mobile': ['28px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-lg': ['30px', { lineHeight: '38px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+        'headline-sm': ['20px', { lineHeight: '28px', fontWeight: '600' }],
+        'title-lg': ['18px', { lineHeight: '24px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }],
+        'body-sm': ['12px', { lineHeight: '18px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', fontWeight: '600' }],
+        'label-md': ['12px', { lineHeight: '16px', fontWeight: '600' }],
+        'label-sm': ['11px', { lineHeight: '14px', fontWeight: '500' }],
+        'code-md': ['14px', { lineHeight: '20px', fontWeight: '600' }],
+        'code-lg': ['20px', { lineHeight: '26px', fontWeight: '700' }],
+      },
+      transitionDuration: {
+        'standard': '200ms',
+        'emphasized': '350ms',
+      },
+      transitionTimingFunction: {
+        'standard': 'cubic-bezier(0.2, 0, 0, 1)',
+        'emphasized': 'cubic-bezier(0.05, 0.7, 0.1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Rubik:wght@400;500;600&amp;family=Spline+Sans+Mono:wght@600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }
+  </style>
+</head>
+<body class="bg-light-bg text-light-on-surface font-body min-h-[1024px] antialiased flex flex-col" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+  <!-- Top Counter Header -->
+  <header class="bg-light-surface border-b border-light-outline px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <a href="../landing-page/CareFlowHome.html" class="flex items-center gap-2">
+        <svg viewBox="0 0 36 36" fill="none" class="w-7 h-7">
+          <path d="M4 18L10 6L18 28L24 14L30 22" stroke="#2585E8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
+        </svg>
+        <span class="font-headline text-headline-sm font-extrabold text-light-primary">care<span class="text-secondary font-medium">flow</span></span>
+      </a>
+      <span class="h-5 w-px bg-light-outline hidden sm:block"></span>
+      <span class="font-headline text-title-md font-bold text-light-primary hidden sm:inline-block">
+        Registration Counter #02 • OPD Main Hall
+      </span>
+      <span class="px-2.5 py-0.5 rounded bg-success/15 text-success font-code text-xs font-bold">Counter Open</span>
+    </div>
+
+    <!-- Staff ID & Mode Switcher -->
+    <div class="flex items-center gap-4 text-xs">
+      <div class="hidden md:flex items-center gap-2 bg-light-surface-variant px-3 py-1.5 rounded-lg border border-light-outline">
+        <span class="material-symbols-outlined text-sm text-secondary">timer</span>
+        <span>Avg Token Issue Time: <strong class="font-code text-light-primary">14.2 sec</strong></span>
+      </div>
+      <div class="flex items-center gap-2 pl-3 border-l border-light-outline">
+        <span class="font-semibold text-light-primary">Staff: Anita Devi</span>
+        <span class="font-code text-light-on-surface-variant">(ID: REG-8812)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Split Counter Screen: Left Rapid Form (7 cols), Right Live Issue Slip & Recent Queue (5 cols) -->
+  <main class="flex-grow p-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT: Rapid Patient Registration & Triage Form (7 cols) -->
+    <div class="lg:col-span-7 space-y-5">
+      
+      <!-- ABHA & Quick Search Bar -->
+      <div class="bg-light-surface rounded-xl border-2 border-secondary/30 p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <label class="font-headline text-label-lg font-bold text-light-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary">search</span>
+            Search Existing Patient or Scan ABHA / Aadhaar QR
+          </label>
+          <span class="text-xs text-secondary font-semibold cursor-pointer flex items-center gap-1 hover:underline">
+            <span class="material-symbols-outlined text-sm">qr_code_scanner</span> USB Scanner Ready
+          </span>
+        </div>
+
+        <div class="flex gap-2">
+          <input type="text" placeholder="Enter ABHA Address (e.g. 91-8274-1049), Mobile (10 Digits) or Name..." class="flex-grow text-xs rounded-lg border-light-outline p-3 bg-light-surface-variant font-code focus:bg-white" value="9812401824">
+          <button class="px-5 py-3 bg-light-primary text-white font-headline text-xs font-bold rounded-lg hover:bg-light-primary/90 flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-sm">person_search</span> Find
+          </button>
+        </div>
+      </div>
+
+      <!-- Patient Information & Emergency Marking -->
+      <div class="bg-light-surface rounded-xl border border-light-outline p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-light-outline">
+          <h3 class="font-headline text-title-md font-bold text-light-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary">person_add</span>
+            Patient Registration Details
+          </h3>
+
+          <!-- EMERGENCY OVERRIDE BUTTON -->
+          <label class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-danger/10 border border-danger/30 cursor-pointer">
+            <input type="checkbox" class="rounded text-danger focus:ring-danger h-4 w-4">
+            <span class="text-xs font-bold text-danger flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">emergency</span> Mark as Critical Emergency
+            </span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-body">
+          <div>
+            <label class="block text-light-on-surface-variant mb-1 font-semibold">Patient Full Name *</label>
+            <input type="text" value="Rajesh Sharma" class="w-full text-xs rounded border-light-outline p-2.5 font-medium bg-light-surface">
+          </div>
+
+          <div>
+            <label class="block text-light-on-surface-variant mb-1 font-semibold">Age &amp; Gender *</label>
+            <div class="grid grid-cols-2 gap-2">
+              <input type="number" value="48" class="text-xs rounded border-light-outline p-2.5 bg-light-surface font-code">
+              <select class="text-xs rounded border-light-outline p-2.5 bg-light-surface">
+                <option>Male (M)</option>
+                <option>Female (F)</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-light-on-surface-variant mb-1 font-semibold">Mobile Number (For SMS Live Token) *</label>
+            <input type="text" value="+91 98124 01824" class="w-full text-xs rounded border-light-outline p-2.5 bg-light-surface font-code">
+          </div>
+
+          <div>
+            <label class="block text-light-on-surface-variant mb-1 font-semibold">Residential District / Village</label>
+            <input type="text" value="Ambala Cantt, Haryana" class="w-full text-xs rounded border-light-outline p-2.5 bg-light-surface">
+          </div>
+        </div>
+
+        <!-- AI Department & Symptom Recommendation Widget -->
+        <div class="p-3.5 rounded-lg bg-secondary/5 border border-secondary/20 text-xs">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-headline font-bold text-secondary flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">psychology</span>
+              AI Department Recommendation &amp; Chief Complaint
+            </span>
+            <button class="px-2 py-1 rounded bg-secondary/15 text-secondary font-bold text-[11px] flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">mic</span> Record Hindi Voice
+            </button>
+          </div>
+
+          <textarea rows="2" class="w-full text-xs rounded border-light-outline p-2 bg-light-surface font-body" placeholder="Describe symptoms or patient complaint...">Mild chest heaviness and breathlessness on exertion for 2 days; no history of diabetes.</textarea>
+          
+          <div class="mt-2 flex flex-wrap items-center gap-2">
+            <span class="text-[11px] text-light-on-surface-variant">Recommended:</span>
+            <span class="px-2 py-0.5 rounded bg-accent text-on-accent font-bold text-[11px]">Cardiology (OPD-4)</span>
+            <span class="px-2 py-0.5 rounded bg-light-surface-variant text-light-primary text-[11px] cursor-pointer hover:bg-light-outline">Or: General Medicine (OPD-12)</span>
+          </div>
+        </div>
+
+        <!-- Department & Consultation Room Selection -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-body">
+          <div>
+            <label class="block text-light-on-surface-variant mb-1 font-semibold">Assign Department</label>
+            <select class="w-full text-xs rounded border-light-outline p-2.5 bg-light-surface font-semibold text-light-primary">
+              <option selected>General Medicine • Wing A</option>
+              <option>Cardiology • Wing C</option>
+              <option>Orthopaedics • Wing B</option>
+              <option>Paediatrics • Wing A</option>
+              <option>ENT &amp; Eye • Wing B</option>
+              <option>Emergency Trauma • Ground Floor</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-light-on-surface-variant mb-1 font-semibold">Target Doctor / Room</label>
+            <select class="w-full text-xs rounded border-light-outline p-2.5 bg-light-surface text-light-primary font-medium">
+              <option selected>Room 12 • Dr. Rajesh Sharma (Est. 25 min wait)</option>
+              <option>Room 13 • Dr. Priya Verma (Est. 30 min wait)</option>
+              <option>Room 14 • Auto-Assigned by AI Load Balancer</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Submit & Print Button Bar -->
+        <div class="pt-4 border-t border-light-outline flex flex-wrap items-center justify-between gap-3">
+          <button class="px-4 py-2.5 rounded-lg border border-light-outline text-xs font-semibold hover:bg-light-surface-variant">
+            Clear Form (Esc)
+          </button>
+          <div class="flex items-center gap-2">
+            <button class="px-5 py-2.5 rounded-lg bg-light-primary text-white font-headline text-xs font-bold hover:bg-light-primary/90 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">badge</span> Register &amp; SMS Token
+            </button>
+            <button class="px-6 py-2.5 rounded-lg bg-accent text-on-accent font-headline text-xs font-extrabold hover:brightness-95 flex items-center gap-2 shadow-sm">
+              <span class="material-symbols-outlined text-base">print</span> Print Physical Token Slip (Enter)
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Generated Token Slip Preview & Live Counter Queue (5 cols) -->
+    <div class="lg:col-span-5 space-y-5">
+      
+      <!-- Thermal Paper Slip Preview (Exact layout printed for patient) -->
+      <div class="bg-light-surface rounded-xl border border-light-outline p-5 shadow-card relative">
+        <div class="text-center pb-4 border-b border-dashed border-light-outline">
+          <div class="font-headline font-extrabold text-sm text-light-primary">GOVERNMENT CIVIL HOSPITAL AMBALA</div>
+          <div class="text-[11px] text-light-on-surface-variant">Department of Health &amp; Family Welfare, Haryana</div>
+          <div class="font-code text-[11px] text-light-on-surface-variant mt-1">Date: 17 Nov 2026 • 09:22:14 AM</div>
+        </div>
+
+        <!-- Token Big Number -->
+        <div class="text-center py-5 bg-light-surface-variant/40 my-3 rounded-lg border border-light-outline-variant">
+          <span class="text-xs font-bold text-light-on-surface-variant uppercase tracking-wider block">OPD TOKEN NUMBER</span>
+          <span class="font-code text-display-lg font-extrabold text-light-primary block">OPD-104</span>
+          <span class="inline-block mt-1 px-3 py-0.5 rounded-full bg-secondary/15 text-secondary text-xs font-bold">
+            General Medicine • Room 12 (1st Floor)
+          </span>
+        </div>
+
+        <div class="space-y-2 text-xs py-2 border-b border-dashed border-light-outline font-code">
+          <div class="flex justify-between">
+            <span class="text-light-on-surface-variant">Patient Name:</span>
+            <span class="font-bold text-light-primary">Rajesh Sharma (48/M)</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-light-on-surface-variant">Unique Patient ID:</span>
+            <span class="font-bold text-light-primary">CF-2026-9812</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-light-on-surface-variant">Doctor on Duty:</span>
+            <span class="font-bold text-light-primary">Dr. Rajesh Sharma</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-light-on-surface-variant">Patients Ahead:</span>
+            <span class="font-bold text-secondary">06 Patients</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-light-on-surface-variant">Estimated Waiting:</span>
+            <span class="font-bold text-warning font-headline">~25 Minutes</span>
+          </div>
+        </div>
+
+        <div class="pt-3 text-center text-[11px] text-light-on-surface-variant">
+          <p>Scan QR code below with any smartphone or hospital kiosk to track live queue status in real-time.</p>
+          <div class="flex justify-center my-2">
+            <div class="p-2 border border-light-outline rounded bg-white">
+              <span class="material-symbols-outlined text-4xl text-light-primary">qr_code_2</span>
+            </div>
+          </div>
+          <span class="font-code text-[10px]">careflow.in/t/OPD-104</span>
+        </div>
+      </div>
+
+      <!-- Counter Statistics Today -->
+      <div class="bg-light-surface rounded-xl border border-light-outline p-4 shadow-sm text-xs">
+        <h4 class="font-headline font-bold text-light-primary mb-3">Counter #02 Performance Today</h4>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="p-2 rounded bg-light-surface-variant">
+            <span class="text-light-on-surface-variant block">Slips Issued</span>
+            <span class="font-bold text-light-primary font-code text-sm">312</span>
+          </div>
+          <div class="p-2 rounded bg-light-surface-variant">
+            <span class="text-light-on-surface-variant block">ABHA Scans</span>
+            <span class="font-bold text-success font-code text-sm">188 (60%)</span>
+          </div>
+          <div class="p-2 rounded bg-light-surface-variant">
+            <span class="text-light-on-surface-variant block">Emergencies</span>
+            <span class="font-bold text-danger font-code text-sm">03 Flagged</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+
+
+</body></html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareFlow — Hospital Operations &amp; AI Command Center</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'accent': '#F2D500',
+        'on-accent': '#212529',
+        'secondary': '#2585E8',
+        'on-secondary': '#1C1C1C',
+        'light-bg': '#F5F6F7',
+        'success': '#249B69',
+        'on-success': '#222222',
+        'warning': '#E9A23B',
+        'on-warning': '#212529',
+        'danger': '#D9534F',
+        'on-danger': '#171717',
+        'light-primary': '#343A40',
+        'light-on-primary': '#FFFFFF',
+        'light-surface': '#FFFFFF',
+        'light-on-surface': '#343A40',
+        'light-surface-variant': '#F5F6F7',
+        'light-on-surface-variant': '#495057',
+        'light-outline': '#DEE2E6',
+        'light-outline-variant': '#E9ECEF',
+        'dark-primary': '#F8F9FA',
+        'dark-on-primary': '#212529',
+        'dark-surface': '#1E2227',
+        'dark-on-surface': '#F8F9FA',
+        'dark-surface-variant': '#2B3035',
+        'dark-on-surface-variant': '#ADB5BD',
+        'dark-outline': '#495057',
+        'dark-outline-variant': '#343A40',
+      },
+      spacing: {
+        'spacing-2xs': '4px',
+        'spacing-xs': '8px',
+        'spacing-sm': '12px',
+        'spacing-md': '16px',
+        'spacing-lg': '24px',
+        'spacing-xl': '32px',
+        'spacing-2xl': '48px',
+        'spacing-3xl': '64px',
+        'gutter': '24px',
+        'margin': '24px',
+      },
+      fontFamily: {
+        'display': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'headline': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'title': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'body': ['"Rubik"', 'sans-serif'],
+        'label': ['"Plus Jakarta Sans"', 'sans-serif'],
+        'code': ['"Spline Sans Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['48px', { lineHeight: '56px', letterSpacing: '-1px', fontWeight: '800' }],
+        'display-lg-mobile': ['32px', { lineHeight: '40px', letterSpacing: '-0.5px', fontWeight: '800' }],
+        'display-md': ['36px', { lineHeight: '44px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'display-md-mobile': ['28px', { lineHeight: '36px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-lg': ['30px', { lineHeight: '38px', letterSpacing: '-0.25px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+        'headline-sm': ['20px', { lineHeight: '28px', fontWeight: '600' }],
+        'title-lg': ['18px', { lineHeight: '24px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }],
+        'body-sm': ['12px', { lineHeight: '18px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', fontWeight: '600' }],
+        'label-md': ['12px', { lineHeight: '16px', fontWeight: '600' }],
+        'label-sm': ['11px', { lineHeight: '14px', fontWeight: '500' }],
+        'code-md': ['14px', { lineHeight: '20px', fontWeight: '600' }],
+        'code-lg': ['20px', { lineHeight: '26px', fontWeight: '700' }],
+      },
+      transitionDuration: {
+        'standard': '200ms',
+        'emphasized': '350ms',
+      },
+      transitionTimingFunction: {
+        'standard': 'cubic-bezier(0.2, 0, 0, 1)',
+        'emphasized': 'cubic-bezier(0.05, 0.7, 0.1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;family=Rubik:wght@400;500;600&amp;family=Spline+Sans+Mono:wght@600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }
+  </style>
+</head>
+<body class="bg-light-bg text-light-on-surface font-body min-h-[1024px] antialiased flex" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+  <!-- Admin Enterprise Sidebar -->
+  <aside class="w-64 bg-light-surface border-r border-light-outline flex-shrink-0 flex flex-col justify-between hidden md:flex min-h-[1024px]" data-stitch-vh="min-h-[1024px]===min-h-screen">
+    <div>
+      <div class="p-6 border-b border-light-outline">
+        <a href="../landing-page/CareFlowHome.html" class="flex items-center gap-2 mb-4">
+          <svg viewBox="0 0 36 36" fill="none" class="w-7 h-7">
+            <path d="M4 18L10 6L18 28L24 14L30 22" stroke="#2585E8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
+          </svg>
+          <span class="font-headline text-headline-sm font-extrabold text-light-primary">care<span class="text-secondary font-medium">flow</span></span>
+        </a>
+        <div class="text-xs text-light-on-surface-variant font-medium">
+          Civil Hospital Ambala • Command Admin
+        </div>
+      </div>
+
+      <nav class="p-4 space-y-1 text-label-md font-label">
+        <a href="#overview" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-light-primary text-white font-semibold shadow-sm">
+          <span class="material-symbols-outlined text-lg">dashboard</span>
+          <span>Operations Overview</span>
+        </a>
+        <a href="#departments" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary transition-colors">
+          <span class="material-symbols-outlined text-lg">apartment</span>
+          <span>Department Flow</span>
+        </a>
+        <a href="#doctors" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary transition-colors">
+          <span class="material-symbols-outlined text-lg">stethoscope</span>
+          <span>Doctor Management</span>
+        </a>
+        <a href="#resources" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary transition-colors">
+          <span class="material-symbols-outlined text-lg">hotel</span>
+          <span>Beds &amp; Stretchers</span>
+        </a>
+        <a href="#ai-intelligence" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-secondary/10 text-secondary font-bold hover:bg-secondary/15 transition-colors">
+          <span class="material-symbols-outlined text-lg">psychology</span>
+          <span>AI &amp; Digital Twin</span>
+        </a>
+        <a href="../registration-counter/RegistrationCounter.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary transition-colors">
+          <span class="material-symbols-outlined text-lg">how_to_reg</span>
+          <span>Counter Staff Desk</span>
+        </a>
+        <a href="../doctor-dashboard/DoctorOPD.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary transition-colors">
+          <span class="material-symbols-outlined text-lg">clinical_notes</span>
+          <span>Doctor OPD View</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- System Connectivity -->
+    <div class="p-4 border-t border-light-outline bg-light-surface-variant/30 text-xs text-light-on-surface-variant">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-2 h-2 rounded-full bg-success"></span>
+        <span class="font-semibold text-light-primary">ABHA NHM Gateway Live</span>
+      </div>
+      <div>Telemetry sync: 1,840 events/min</div>
+    </div>
+  </aside>
+
+  <!-- Main Administrator Workspace -->
+  <main class="flex-grow flex flex-col min-w-0">
+
+    <!-- Top Admin Bar -->
+    <header class="bg-light-surface border-b border-light-outline px-6 sm:px-8 py-3.5 flex items-center justify-between">
+      <div>
+        <h1 class="font-headline text-headline-sm font-bold text-light-primary">Hospital Operations &amp; AI Intelligence Command</h1>
+        <p class="text-xs text-light-on-surface-variant">Real-time telemetry from 7 OPD counters, 6 clinical wings, 2 labs &amp; dispensary.</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-success/10 text-success text-xs font-bold border border-success/30">
+          <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+          Hospital Status: Normal Throughput
+        </span>
+        <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-accent text-on-accent font-label text-xs font-bold shadow-sm hover:brightness-95">
+          <span class="material-symbols-outlined text-base">download</span> Export Daily Report
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Operations Canvas -->
+    <div class="flex-grow p-6 sm:p-8 space-y-8 overflow-y-auto">
+
+      <!-- 1. OVERVIEW METRICS (Total Registered, Waiting, Under Consultation, Completed, Available Doctors, Emergency Cases, Overload Alerts) -->
+      <section id="overview" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        
+        <div class="p-4 rounded-xl bg-light-surface border border-light-outline shadow-sm">
+          <span class="text-xs font-medium text-light-on-surface-variant block">Total Registered</span>
+          <span class="font-headline text-headline-sm font-bold text-light-primary font-code mt-1 block">4,820</span>
+          <span class="text-[11px] text-success flex items-center gap-0.5 mt-1 font-medium">+14% vs avg</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-light-surface border border-light-outline shadow-sm">
+          <span class="text-xs font-medium text-light-on-surface-variant block">Currently Waiting</span>
+          <span class="font-headline text-headline-sm font-bold text-warning font-code mt-1 block">184</span>
+          <span class="text-[11px] text-light-on-surface-variant mt-1 block">Across 6 OPDs</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-light-surface border border-light-outline shadow-sm">
+          <span class="text-xs font-medium text-light-on-surface-variant block">Under Consultation</span>
+          <span class="font-headline text-headline-sm font-bold text-secondary font-code mt-1 block">42</span>
+          <span class="text-[11px] text-light-on-surface-variant mt-1 block">Active rooms</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-light-surface border border-light-outline shadow-sm">
+          <span class="text-xs font-medium text-light-on-surface-variant block">Completed Consults</span>
+          <span class="font-headline text-headline-sm font-bold text-success font-code mt-1 block">1,412</span>
+          <span class="text-[11px] text-light-on-surface-variant mt-1 block">Since 08:00 AM</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-light-surface border border-light-outline shadow-sm">
+          <span class="text-xs font-medium text-light-on-surface-variant block">Available Doctors</span>
+          <span class="font-headline text-headline-sm font-bold text-light-primary font-code mt-1 block">42 / 46</span>
+          <span class="text-[11px] text-success font-medium mt-1 block">91% Attendance</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-light-surface border border-danger/40 bg-danger/5 shadow-sm">
+          <span class="text-xs font-bold text-danger block">Emergency Cases</span>
+          <span class="font-headline text-headline-sm font-bold text-danger font-code mt-1 block">12 Critical</span>
+          <span class="text-[11px] text-danger font-medium mt-1 block">0 min queue delay</span>
+        </div>
+
+        <div class="p-4 rounded-xl bg-light-surface border border-light-outline shadow-sm">
+          <span class="text-xs font-medium text-light-on-surface-variant block">Overload Alerts</span>
+          <span class="font-headline text-headline-sm font-bold text-secondary font-code mt-1 block">01 Active</span>
+          <span class="text-[11px] text-warning font-medium mt-1 block">Ortho Queue Surge</span>
+        </div>
+
+      </section>
+
+      <!-- 2. AI INTELLIGENCE & DIGITAL TWIN SIMULATION SECTION (Requested #8) -->
+      <section id="ai-intelligence" class="bg-light-surface rounded-2xl border-2 border-secondary/40 p-6 shadow-card relative">
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-light-outline gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-secondary text-white font-headline text-xs font-extrabold uppercase tracking-wide">
+                AI Intelligence &amp; Simulation Engine
+              </span>
+              <span class="text-xs font-code text-light-on-surface-variant">CareFlow Neural Twin v4.8</span>
+            </div>
+            <h2 class="font-headline text-display-sm font-bold text-light-primary mt-1">
+              Surge Forecasting &amp; Digital Twin What-If Sandbox
+            </h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-light-on-surface-variant">Live prediction confidence: <strong class="text-success font-code">97.4%</strong></span>
+            <button class="px-3.5 py-1.5 rounded-lg bg-accent text-on-accent font-headline text-xs font-bold hover:brightness-95">
+              Run Re-Optimization
+            </button>
+          </div>
+        </div>
+
+        <!-- Simulation Scenario Controls & Before/After Comparison Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6">
+
+          <!-- Left Simulation Sliders & Triggers (4 cols) -->
+          <div class="lg:col-span-4 bg-light-surface-variant p-5 rounded-xl border border-light-outline space-y-4">
+            <h3 class="font-headline text-title-md font-bold text-light-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary">tune</span>
+              Simulate Operations Scenario
+            </h3>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-light-primary mb-1">
+                <span>Extra Patient Influx:</span>
+                <span class="font-code text-secondary">+100 Patients</span>
+              </div>
+              <input type="range" min="0" max="250" value="100" class="w-full accent-secondary">
+              <div class="flex justify-between text-[11px] text-light-on-surface-variant mt-0.5">
+                <span>0</span>
+                <span>+100</span>
+                <span>+250 Surge</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-light-primary mb-1">
+                <span>Doctor Availability:</span>
+                <span class="font-code text-danger">-2 Specialists Absent</span>
+              </div>
+              <input type="range" min="-5" max="5" value="-2" class="w-full accent-danger">
+              <div class="flex justify-between text-[11px] text-light-on-surface-variant mt-0.5">
+                <span>-5 Doctors</span>
+                <span>Baseline</span>
+                <span>+5 Floaters</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold text-light-primary mb-1">
+                <span>Active Pharmacy Counters:</span>
+                <span class="font-code text-success">3 Counters Open</span>
+              </div>
+              <input type="range" min="1" max="5" value="3" class="w-full accent-success">
+            </div>
+
+            <div class="pt-2">
+              <button class="w-full py-2.5 rounded-lg bg-light-primary text-white font-headline text-xs font-bold hover:bg-light-primary/90 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">play_circle</span> Compute Digital Twin Result
+              </button>
+            </div>
+          </div>
+
+          <!-- Middle & Right: BEFORE vs AFTER Comparison & Explainable AI (8 cols) -->
+          <div class="lg:col-span-8 space-y-4">
+            
+            <!-- BEFORE / AFTER Waiting Times Comparison -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              <!-- BEFORE (Without AI Rebalancing) -->
+              <div class="p-4 rounded-xl border-2 border-danger/40 bg-danger/5">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-headline text-xs font-extrabold uppercase text-danger">BEFORE (Unassisted Manual Flow)</span>
+                  <span class="material-symbols-outlined text-danger text-base">error</span>
+                </div>
+                <div class="font-headline text-display-sm font-extrabold text-danger font-code">108 Mins</div>
+                <div class="text-xs text-danger font-medium mt-1">Severe Hallway Congestion in General OPD</div>
+                <ul class="text-[11px] text-light-on-surface-variant space-y-1 mt-3 pt-3 border-t border-danger/20">
+                  <li>• Patient queue spills into main entrance</li>
+                  <li>• Pharmacy queue exceeds 45 patients</li>
+                  <li>• Doctor fatigue risk: <strong>High</strong></li>
+                </ul>
+              </div>
+
+              <!-- AFTER (With CareFlow Dynamic AI Optimization) -->
+              <div class="p-4 rounded-xl border-2 border-success/40 bg-success/5">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-headline text-xs font-extrabold uppercase text-success">AFTER (CareFlow AI Optimized)</span>
+                  <span class="material-symbols-outlined text-success text-base">check_circle</span>
+                </div>
+                <div class="font-headline text-display-sm font-extrabold text-success font-code">26 Mins</div>
+                <div class="text-xs text-success font-bold mt-1">-76% Waiting Time Compression</div>
+                <ul class="text-[11px] text-light-on-surface-variant space-y-1 mt-3 pt-3 border-t border-success/20">
+                  <li>• 2 secondary consultation chambers activated</li>
+                  <li>• Fast-track prescription pre-packaging enabled</li>
+                  <li>• Stable throughput across all counters</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <!-- Explainable AI Recommendation Box (Action, Reason, Expected Impact, Supporting Data) -->
+            <div class="p-4 rounded-xl border border-secondary/30 bg-secondary/5 text-xs">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-headline text-label-md font-bold text-secondary flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-base">auto_awesome</span>
+                  Explainable AI Operational Directive
+                </span>
+                <span class="font-code text-secondary font-semibold">Confidence: 98.1%</span>
+              </div>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-2">
+                <div>
+                  <span class="text-light-on-surface-variant block font-medium">Suggested Action:</span>
+                  <span class="font-bold text-light-primary block mt-0.5">Divert 30% fever walk-ins to OPD Room 14 &amp; 15</span>
+                </div>
+                <div>
+                  <span class="text-light-on-surface-variant block font-medium">Reason:</span>
+                  <span class="text-light-primary block mt-0.5">Paediatrics OPD experiencing seasonal 9 AM lull; rooms vacant</span>
+                </div>
+                <div>
+                  <span class="text-light-on-surface-variant block font-medium">Expected Impact:</span>
+                  <span class="text-success font-bold block mt-0.5">-82 min wait time in Gen Med lobby</span>
+                </div>
+                <div>
+                  <span class="text-light-on-surface-variant block font-medium">Supporting Data:</span>
+                  <span class="font-code text-light-on-surface-variant block mt-0.5">Historical 3-year Ambala monsoon footfall correlation</span>
+                </div>
+              </div>
+
+              <div class="mt-3 pt-3 border-t border-secondary/20 flex justify-end gap-2">
+                <button class="px-3 py-1 rounded bg-light-surface border border-light-outline font-semibold hover:bg-light-surface-variant">
+                  Dismiss
+                </button>
+                <button class="px-4 py-1 rounded bg-secondary text-white font-bold hover:bg-secondary/90 shadow-sm">
+                  Apply Directive Across System
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 3. DEPARTMENT MONITORING TABLE (Live counts, wait times, doctor list, overload status) -->
+      <section id="departments" class="bg-light-surface rounded-xl border border-light-outline p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+          <div>
+            <h3 class="font-headline text-title-lg font-bold text-light-primary">Department-Wise Live Operations</h3>
+            <p class="text-xs text-light-on-surface-variant">Live telemetry from outpatient consultations, labs, and dispensary counters.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-light-on-surface-variant">Filter Wing:</span>
+            <select class="text-xs rounded border-light-outline py-1 bg-light-surface">
+              <option>All Wings (A, B, C)</option>
+              <option>OPD Block</option>
+              <option>Diagnostic Wing</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse font-body text-xs">
+            <thead>
+              <tr class="bg-light-surface-variant border-b border-light-outline text-light-on-surface-variant font-label">
+                <th class="py-3 px-4 font-semibold">Department</th>
+                <th class="py-3 px-4 font-semibold">Assigned Doctors</th>
+                <th class="py-3 px-4 font-semibold">Waiting Patients</th>
+                <th class="py-3 px-4 font-semibold">In Consultation</th>
+                <th class="py-3 px-4 font-semibold">Avg Wait Time</th>
+                <th class="py-3 px-4 font-semibold">Overload Status</th>
+                <th class="py-3 px-4 text-right font-semibold">Quick Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-light-outline">
+              
+              <tr class="hover:bg-light-surface-variant/40">
+                <td class="py-3.5 px-4 font-bold text-light-primary flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span> General Medicine (Wing A)
+                </td>
+                <td class="py-3.5 px-4">8 Doctors (Rooms 10–17)</td>
+                <td class="py-3.5 px-4 font-code font-bold text-light-primary">54 Patients</td>
+                <td class="py-3.5 px-4 font-code text-secondary font-bold">8 Active</td>
+                <td class="py-3.5 px-4 font-code font-bold text-warning">25 Mins</td>
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-full bg-warning/15 text-warning font-bold">Moderate Surge</span>
+                </td>
+                <td class="py-3.5 px-4 text-right">
+                  <button class="px-2.5 py-1 bg-light-primary text-white text-[11px] rounded font-semibold hover:bg-light-primary/90">Add Doctor</button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-light-surface-variant/40">
+                <td class="py-3.5 px-4 font-bold text-light-primary flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-danger"></span> Orthopaedics (Wing B)
+                </td>
+                <td class="py-3.5 px-4">4 Doctors (Rooms 1–4)</td>
+                <td class="py-3.5 px-4 font-code font-bold text-danger">48 Patients</td>
+                <td class="py-3.5 px-4 font-code text-secondary font-bold">4 Active</td>
+                <td class="py-3.5 px-4 font-code font-bold text-danger">38 Mins</td>
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-full bg-danger/15 text-danger font-bold">High Overload</span>
+                </td>
+                <td class="py-3.5 px-4 text-right">
+                  <button class="px-2.5 py-1 bg-danger text-white text-[11px] rounded font-semibold hover:bg-danger/90">Rebalance</button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-light-surface-variant/40">
+                <td class="py-3.5 px-4 font-bold text-light-primary flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-success"></span> Cardiology (Wing C)
+                </td>
+                <td class="py-3.5 px-4">3 Specialists (Rooms 21–23)</td>
+                <td class="py-3.5 px-4 font-code font-bold text-light-primary">16 Patients</td>
+                <td class="py-3.5 px-4 font-code text-secondary font-bold">3 Active</td>
+                <td class="py-3.5 px-4 font-code font-bold text-success">14 Mins</td>
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-full bg-success/15 text-success font-bold">Optimal</span>
+                </td>
+                <td class="py-3.5 px-4 text-right">
+                  <button class="px-2.5 py-1 bg-light-surface-variant text-light-primary border border-light-outline text-[11px] rounded font-semibold hover:bg-light-outline">Details</button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-light-surface-variant/40">
+                <td class="py-3.5 px-4 font-bold text-light-primary flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-success"></span> Paediatrics (Wing A)
+                </td>
+                <td class="py-3.5 px-4">5 Doctors (Rooms 5–9)</td>
+                <td class="py-3.5 px-4 font-code font-bold text-light-primary">18 Patients</td>
+                <td class="py-3.5 px-4 font-code text-secondary font-bold">5 Active</td>
+                <td class="py-3.5 px-4 font-code font-bold text-success">12 Mins</td>
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-full bg-success/15 text-success font-bold">Optimal (Low Load)</span>
+                </td>
+                <td class="py-3.5 px-4 text-right">
+                  <button class="px-2.5 py-1 bg-secondary text-white text-[11px] rounded font-semibold hover:bg-secondary/90">Lend Doctor</button>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-light-surface-variant/40">
+                <td class="py-3.5 px-4 font-bold text-light-primary flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-success"></span> ENT &amp; Ophthalmology
+                </td>
+                <td class="py-3.5 px-4">4 Doctors (Rooms 28–31)</td>
+                <td class="py-3.5 px-4 font-code font-bold text-light-primary">22 Patients</td>
+                <td class="py-3.5 px-4 font-code text-secondary font-bold">4 Active</td>
+                <td class="py-3.5 px-4 font-code font-bold text-success">16 Mins</td>
+                <td class="py-3.5 px-4">
+                  <span class="px-2 py-0.5 rounded-full bg-success/15 text-success font-bold">Optimal</span>
+                </td>
+                <td class="py-3.5 px-4 text-right">
+                  <button class="px-2.5 py-1 bg-light-surface-variant text-light-primary border border-light-outline text-[11px] rounded font-semibold hover:bg-light-outline">Details</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4. RESOURCE & STAFF MANAGEMENT (Beds, Wheelchairs, Stretchers, Oxygen cylinders) -->
+      <section id="resources" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <div class="bg-light-surface p-5 rounded-xl border border-light-outline shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-light-on-surface-variant uppercase">Bed Availability</span>
+            <span class="material-symbols-outlined text-secondary">hotel</span>
+          </div>
+          <div class="font-headline text-headline-sm font-bold text-light-primary font-code">218 / 250</div>
+          <div class="w-full bg-light-surface-variant h-2 rounded-full mt-2 overflow-hidden">
+            <div class="bg-secondary h-full w-[87%]"></div>
+          </div>
+          <span class="text-[11px] text-light-on-surface-variant mt-1.5 block">32 Beds Empty (General + ICU)</span>
+        </div>
+
+        <div class="bg-light-surface p-5 rounded-xl border border-light-outline shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-light-on-surface-variant uppercase">Wheelchairs</span>
+            <span class="material-symbols-outlined text-secondary">accessible</span>
+          </div>
+          <div class="font-headline text-headline-sm font-bold text-success font-code">14 Ready</div>
+          <div class="w-full bg-light-surface-variant h-2 rounded-full mt-2 overflow-hidden">
+            <div class="bg-success h-full w-[70%]"></div>
+          </div>
+          <span class="text-[11px] text-light-on-surface-variant mt-1.5 block">6 in transit at Gate 1 &amp; 2</span>
+        </div>
+
+        <div class="bg-light-surface p-5 rounded-xl border border-light-outline shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-light-on-surface-variant uppercase">Stretchers</span>
+            <span class="material-symbols-outlined text-secondary">emergency</span>
+          </div>
+          <div class="font-headline text-headline-sm font-bold text-warning font-code">05 / 20 Ready</div>
+          <div class="w-full bg-light-surface-variant h-2 rounded-full mt-2 overflow-hidden">
+            <div class="bg-warning h-full w-[25%]"></div>
+          </div>
+          <span class="text-[11px] text-warning mt-1.5 block font-semibold">Low at Trauma Entry</span>
+        </div>
+
+        <div class="bg-light-surface p-5 rounded-xl border border-light-outline shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-light-on-surface-variant uppercase">Central Pharmacy Stock</span>
+            <span class="material-symbols-outlined text-secondary">inventory_2</span>
+          </div>
+          <div class="font-headline text-headline-sm font-bold text-success font-code">99.1% Ready</div>
+          <div class="w-full bg-light-surface-variant h-2 rounded-full mt-2 overflow-hidden">
+            <div class="bg-success h-full w-[99%]"></div>
+          </div>
+          <span class="text-[11px] text-light-on-surface-variant mt-1.5 block">Essential formulary fully stocked</span>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+
+</body></html>
