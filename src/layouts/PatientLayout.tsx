@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, NavLink, Link } from 'react-router-dom';
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { useQueue } from '../context/QueueContext';
@@ -7,6 +7,9 @@ import { useQueue } from '../context/QueueContext';
 export const PatientLayout: React.FC = () => {
   const { user } = useAuth();
   const { myToken } = useQueue();
+  const location = useLocation();
+
+  const isDashboardActive = location.pathname === '/patient' || location.pathname === '/patient/dashboard';
 
   return (
     <div className="bg-light-bg text-light-on-surface font-body min-h-screen flex flex-col selection:bg-accent selection:text-on-accent">
@@ -61,14 +64,11 @@ export const PatientLayout: React.FC = () => {
         <div className="max-w-7xl mx-auto flex items-center gap-1 text-xs font-label">
           <NavLink
             to="/patient/dashboard"
-            end
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
+            className={`py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+              isDashboardActive
+                ? 'border-secondary text-secondary'
+                : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
+            }`}
           >
             <span className="material-symbols-outlined text-base">dashboard</span>
             <span>Dashboard</span>

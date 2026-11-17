@@ -52,6 +52,9 @@ export const LoginPage: React.FC = () => {
     try {
       setLoading(true);
       await login(email, role);
+      if (role === 'doctor' || role === 'admin') {
+        sessionStorage.setItem('careflow_doctor_verified', 'true');
+      }
       setSuccess('Authentication verified! Redirecting to secure dashboard...');
       setTimeout(() => {
         if (role === 'doctor') navigate('/doctor/dashboard');

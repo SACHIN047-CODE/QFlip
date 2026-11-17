@@ -5,6 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { PublicLayout } from '../layouts/PublicLayout';
 import { PatientLayout } from '../layouts/PatientLayout';
 import { DashboardLayout } from '../layouts/DashboardLayout';
+import { DoctorGuard } from './DoctorGuard';
 
 // Public Pages
 import { LandingPage } from '../pages/public/LandingPage';
@@ -86,17 +87,19 @@ export const AppRoutes: React.FC = () => {
         <Route path="notifications" element={<NotificationsPage />} />
       </Route>
 
-      {/* Doctor Dashboard Pages */}
-      <Route
-        path="/doctor"
-        element={<DashboardLayout title="Doctor OPD Consultation Desk" subtitle="Dr. Rajesh Sharma, MD • Room 12" />}
-      >
-        <Route index element={<Navigate to="/doctor/dashboard" replace />} />
-        <Route path="dashboard" element={<DoctorDashboard />} />
-        <Route path="patients" element={<PatientQueueList />} />
-        <Route path="consultation" element={<DoctorDashboard />} />
-        <Route path="prescriptions" element={<PrescriptionManager />} />
-        <Route path="schedule" element={<DoctorSchedule />} />
+      {/* Doctor Dashboard Pages (Protected - Doctor Clearance Required) */}
+      <Route element={<DoctorGuard />}>
+        <Route
+          path="/doctor"
+          element={<DashboardLayout title="Doctor OPD Consultation Desk" subtitle="Dr. Rajesh Sharma, MD • Room 12" />}
+        >
+          <Route index element={<Navigate to="/doctor/dashboard" replace />} />
+          <Route path="dashboard" element={<DoctorDashboard />} />
+          <Route path="patients" element={<PatientQueueList />} />
+          <Route path="consultation" element={<DoctorDashboard />} />
+          <Route path="prescriptions" element={<PrescriptionManager />} />
+          <Route path="schedule" element={<DoctorSchedule />} />
+        </Route>
       </Route>
 
       {/* Registration Staff Dashboard Pages */}
@@ -111,20 +114,22 @@ export const AppRoutes: React.FC = () => {
         <Route path="token-management" element={<TokenManagement />} />
       </Route>
 
-      {/* Administrator Dashboard Pages */}
-      <Route
-        path="/admin"
-        element={<DashboardLayout title="Hospital Operations Command Admin" subtitle="Civil Hospital Ambala • Operations Center" />}
-      >
-        <Route index element={<Navigate to="/admin/dashboard" replace />} />
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="doctors" element={<DoctorsManagement />} />
-        <Route path="staff" element={<StaffManagement />} />
-        <Route path="departments" element={<DepartmentsManagement />} />
-        <Route path="resources" element={<ResourceManagement />} />
-        <Route path="analytics" element={<AnalyticsPage />} />
-        <Route path="reports" element={<ReportsPage />} />
-        <Route path="complaints" element={<ComplaintsManagement />} />
+      {/* Administrator Dashboard Pages (Protected - Doctor & Medical Officers Only) */}
+      <Route element={<DoctorGuard />}>
+        <Route
+          path="/admin"
+          element={<DashboardLayout title="Hospital Operations Command Admin" subtitle="Civil Hospital Ambala • Operations Center" />}
+        >
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="doctors" element={<DoctorsManagement />} />
+          <Route path="staff" element={<StaffManagement />} />
+          <Route path="departments" element={<DepartmentsManagement />} />
+          <Route path="resources" element={<ResourceManagement />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="reports" element={<ReportsPage />} />
+          <Route path="complaints" element={<ComplaintsManagement />} />
+        </Route>
       </Route>
 
       {/* Laboratory Dashboard Pages */}

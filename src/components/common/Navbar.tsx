@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { VoiceInputModal } from './VoiceInputModal';
 import { HospitalMapModal } from './HospitalMapModal';
+import { DoctorAccessModal } from './DoctorAccessModal';
 
 interface NavbarProps {
   mode?: 'public' | 'patient' | 'dashboard';
@@ -18,6 +19,18 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false);
+  const [doctorTargetRoute, setDoctorTargetRoute] = useState('/doctor/dashboard');
+
+  const handleHospitalCommandClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (sessionStorage.getItem('careflow_doctor_verified') === 'true') {
+      navigate('/admin/dashboard');
+    } else {
+      setDoctorTargetRoute('/admin/dashboard');
+      setIsDoctorModalOpen(true);
+    }
+  };
 
   return (
     <>
@@ -94,44 +107,110 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
           {/* Navigation Links based on mode */}
           {mode === 'public' && (
             <nav className="hidden lg:flex items-center gap-8 text-label-md font-label text-light-on-surface">
-              <Link to="/#solutions" className="hover:text-secondary transition-colors">
-                Our Solutions
-              </Link>
-              <Link to="/patient/dashboard" className="hover:text-secondary transition-colors">
+              <NavLink
+                to="/patient/dashboard"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 Patient Services
-              </Link>
-              <Link to="/admin/dashboard" className="hover:text-secondary transition-colors">
-                Hospital Command
-              </Link>
-              <Link to="/ai/dashboard" className="hover:text-secondary transition-colors text-secondary font-bold">
+              </NavLink>
+              <button
+                type="button"
+                onClick={handleHospitalCommandClick}
+                className="hover:text-secondary transition-colors flex items-center gap-1 font-semibold"
+              >
+                <span>Hospital Command</span>
+                <span className="material-symbols-outlined text-xs text-secondary">lock</span>
+              </button>
+              <NavLink
+                to="/ai/dashboard"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-extrabold' : 'text-secondary font-bold hover:brightness-90'
+                  }`
+                }
+              >
                 AI &amp; Digital Twin
-              </Link>
-              <Link to="/feedback" className="hover:text-secondary transition-colors">
+              </NavLink>
+              <NavLink
+                to="/feedback"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 Feedback &amp; Grievance
-              </Link>
+              </NavLink>
             </nav>
           )}
 
           {mode === 'patient' && (
             <nav className="hidden md:flex items-center gap-6 text-label-md font-label text-light-on-surface">
-              <Link to="/patient/dashboard" className="hover:text-secondary transition-colors font-bold text-light-primary">
+              <NavLink
+                to="/patient/dashboard"
+                end
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 My Dashboard
-              </Link>
-              <Link to="/patient/queue" className="hover:text-secondary transition-colors text-secondary font-bold">
+              </NavLink>
+              <NavLink
+                to="/patient/queue"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 Smart Queue Tracker
-              </Link>
-              <Link to="/patient/registration" className="hover:text-secondary transition-colors">
+              </NavLink>
+              <NavLink
+                to="/patient/registration"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 Book / Register
-              </Link>
-              <Link to="/patient/prescriptions" className="hover:text-secondary transition-colors">
+              </NavLink>
+              <NavLink
+                to="/patient/prescriptions"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 Prescriptions
-              </Link>
-              <Link to="/patient/lab-tests" className="hover:text-secondary transition-colors">
+              </NavLink>
+              <NavLink
+                to="/patient/lab-tests"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 Lab Tests
-              </Link>
-              <Link to="/patient/pharmacy" className="hover:text-secondary transition-colors">
+              </NavLink>
+              <NavLink
+                to="/patient/pharmacy"
+                className={({ isActive }) =>
+                  `transition-colors ${
+                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
+                  }`
+                }
+              >
                 Pharmacy Orders
-              </Link>
+              </NavLink>
             </nav>
           )}
 
@@ -208,6 +287,13 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                 value={role}
                 onChange={(e) => {
                   const r = e.target.value as any;
+                  if (r === 'doctor' || r === 'admin') {
+                    if (sessionStorage.getItem('careflow_doctor_verified') !== 'true') {
+                      setDoctorTargetRoute(r === 'admin' ? '/admin/dashboard' : '/doctor/dashboard');
+                      setIsDoctorModalOpen(true);
+                      return;
+                    }
+                  }
                   switchRole(r);
                   if (r === 'doctor') navigate('/doctor/dashboard');
                   else if (r === 'admin') navigate('/admin/dashboard');
@@ -219,9 +305,9 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                 className="bg-transparent font-bold text-light-primary text-xs focus:outline-none cursor-pointer"
               >
                 <option value="patient">Patient</option>
-                <option value="doctor">Doctor</option>
+                <option value="doctor">Doctor 🔒</option>
                 <option value="staff">Staff Desk</option>
-                <option value="admin">Administrator</option>
+                <option value="admin">Administrator 🔒</option>
                 <option value="lab">Lab Staff</option>
                 <option value="pharmacy">Chemist</option>
               </select>
@@ -262,6 +348,13 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
 
       {/* Hospital Interactive Navigation Modal */}
       <HospitalMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
+
+      {/* Doctor Access Security Modal */}
+      <DoctorAccessModal
+        isOpen={isDoctorModalOpen}
+        onClose={() => setIsDoctorModalOpen(false)}
+        targetRoute={doctorTargetRoute}
+      />
     </>
   );
 };

@@ -1,7 +1,8 @@
-import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useQueue } from '../../context/QueueContext';
+import { DoctorAccessModal } from './DoctorAccessModal';
 
 interface SidebarProps {
   onCloseMobile?: () => void;
@@ -10,6 +11,10 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
   const { user, role, switchRole } = useAuth();
   const { tokens } = useQueue();
+  const navigate = useNavigate();
+
+  const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false);
+  const [doctorTargetRoute, setDoctorTargetRoute] = useState('/doctor/dashboard');
 
   const waitingCount = tokens.filter((t) => t.status === 'WAITING').length;
 
@@ -450,19 +455,35 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       <div className="p-4 border-t border-light-outline bg-light-surface-variant/30 space-y-3">
         <div>
           <label className="text-[10px] uppercase font-bold text-light-on-surface-variant block mb-1">
-            Switch Dashboard Role (Demo):
+            Switch Dashboard Role:
           </label>
           <select
             value={role}
-            onChange={(e) => switchRole(e.target.value as any)}
+            onChange={(e) => {
+              const r = e.target.value as any;
+              if (r === 'doctor' || r === 'admin') {
+                if (sessionStorage.getItem('careflow_doctor_verified') !== 'true') {
+                  setDoctorTargetRoute(r === 'admin' ? '/admin/dashboard' : '/doctor/dashboard');
+                  setIsDoctorModalOpen(true);
+                  return;
+                }
+              }
+              switchRole(r);
+              if (r === 'doctor') navigate('/doctor/dashboard');
+              else if (r === 'admin') navigate('/admin/dashboard');
+              else if (r === 'staff') navigate('/staff/dashboard');
+              else if (r === 'lab') navigate('/lab/dashboard');
+              else if (r === 'pharmacy') navigate('/pharmacy/dashboard');
+              else navigate('/patient/dashboard');
+            }}
             className="w-full text-xs font-semibold py-1.5 px-2 rounded-lg border border-light-outline bg-white text-light-primary focus:outline-none"
           >
-            <option value="doctor">Doctor OPD Desk</option>
+            <option value="patient">Patient Portal</option>
+            <option value="doctor">Doctor OPD Desk 🔒</option>
             <option value="staff">Registration Staff</option>
-            <option value="admin">Operations Command Admin</option>
+            <option value="admin">Operations Command Admin 🔒</option>
             <option value="lab">Clinical Laboratory</option>
             <option value="pharmacy">Jan Aushadhi Pharmacy</option>
-            <option value="patient">Patient Portal View</option>
           </select>
         </div>
 
@@ -474,6 +495,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
           <div>Telemetry sync: 1,840 events/min</div>
         </div>
       </div>
+
+      <DoctorAccessModal
+        isOpen={isDoctorModalOpen}
+        onClose={() => setIsDoctorModalOpen(false)}
+        targetRoute={doctorTargetRoute}
+      />
     </aside>
   );
 };
