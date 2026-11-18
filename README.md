@@ -1,6 +1,6 @@
-# CAREFLOW — AI-Powered Hospital Patient-Flow & Operations Management Platform
+# QFLIP — AI-Powered Hospital Patient-Flow & Operations Management Platform
 
-CAREFLOW is a production-oriented, enterprise healthcare technology frontend built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**. Designed specifically for Indian Civil, District, and Sub-divisional hospitals under the **National Health Mission (NHM)** and **Ayushman Bharat Digital Mission (ABDM)**.
+QFlip is a production-oriented, enterprise healthcare technology frontend built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**. Designed specifically for Indian Civil, District, and Sub-divisional hospitals under the **National Health Mission (NHM)** and **Ayushman Bharat Digital Mission (ABDM)**.
 
 Implemented faithfully from the approved **Google Stitch** design system.
 

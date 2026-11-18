@@ -16,7 +16,7 @@ export const apiClient: AxiosInstance = axios.create({
 // Request Interceptor: Attach Auth Bearer token if present
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('careflow_auth_token');
+    const token = localStorage.getItem('qflip_auth_token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,7 +30,7 @@ apiClient.interceptors.response.use(
   (response: AxiosResponse) => response.data,
   (error) => {
     const message = error.response?.data?.message || error.message || 'An unexpected network error occurred';
-    console.warn(`[CareFlow API Error]`, message);
+    console.warn(`[QFlip API Error]`, message);
     return Promise.reject(new Error(message));
   }
 );

@@ -64,7 +64,7 @@ export const RegisterPage: React.FC = () => {
               <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
             </svg>
             <span className="font-headline text-headline-sm font-extrabold text-light-primary">
-              care<span className="text-secondary font-medium">flow</span>
+              Q<span className="text-secondary font-medium">Flip</span>
             </span>
           </Link>
           <h2 className="font-headline text-title-lg font-bold text-light-primary">
@@ -236,7 +236,7 @@ export const ForgotPasswordPage: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="doctor@careflow.gov.in"
+                placeholder="doctor@qflip.gov.in"
                 className="w-full px-3.5 py-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-secondary/30"
               />
             </div>

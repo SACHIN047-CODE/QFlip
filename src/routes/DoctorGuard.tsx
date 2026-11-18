@@ -8,7 +8,7 @@ export const DoctorGuard: React.FC = () => {
   const navigate = useNavigate();
 
   // Strict check: Must have entered Doctor password/PIN or Biometric in this session
-  const isVerified = sessionStorage.getItem('careflow_doctor_verified') === 'true';
+  const isVerified = sessionStorage.getItem('qflip_doctor_verified') === 'true';
 
   const [modalOpen, setModalOpen] = useState(!isVerified);
 
@@ -53,7 +53,7 @@ export const DoctorGuard: React.FC = () => {
         isOpen={modalOpen}
         onClose={() => {
           setModalOpen(false);
-          if (sessionStorage.getItem('careflow_doctor_verified') !== 'true') {
+          if (sessionStorage.getItem('qflip_doctor_verified') !== 'true') {
             navigate('/');
           }
         }}

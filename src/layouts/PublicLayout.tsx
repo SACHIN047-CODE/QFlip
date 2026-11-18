@@ -29,7 +29,7 @@ export const PublicLayout: React.FC = () => {
                   <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
                 </svg>
                 <span className="font-headline text-headline-sm font-extrabold tracking-tight text-white leading-none">
-                  care<span className="text-secondary font-medium">flow</span>
+                  Q<span className="text-secondary font-medium">Flip</span>
                 </span>
               </div>
               <p className="text-xs text-light-surface-variant/80 max-w-sm leading-relaxed">
@@ -152,7 +152,7 @@ export const PublicLayout: React.FC = () => {
           {/* Bottom Bar */}
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
             <div>
-              &copy; 2026 CareFlow Technologies. Designed for Government Health Clusters &amp; Civil Hospitals.
+              &copy; 2026 QFlip Technologies. Designed for Government Health Clusters &amp; Civil Hospitals.
             </div>
             <div className="flex items-center gap-6">
               <span>National Health Portal Integration</span>

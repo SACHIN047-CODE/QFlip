@@ -8,8 +8,8 @@ export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [role, setRole] = useState<UserRole>('doctor');
-  const [email, setEmail] = useState('doctor@careflow.gov.in');
-  const [password, setPassword] = useState('careflow2026');
+  const [email, setEmail] = useState('doctor@qflip.gov.in');
+  const [password, setPassword] = useState('qflip2026');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -19,22 +19,22 @@ export const LoginPage: React.FC = () => {
     setRole(selectedRole);
     switch (selectedRole) {
       case 'patient':
-        setEmail('patient@careflow.gov.in');
+        setEmail('patient@qflip.gov.in');
         break;
       case 'doctor':
-        setEmail('doctor@careflow.gov.in');
+        setEmail('doctor@qflip.gov.in');
         break;
       case 'staff':
-        setEmail('staff@careflow.gov.in');
+        setEmail('staff@qflip.gov.in');
         break;
       case 'admin':
-        setEmail('admin@careflow.gov.in');
+        setEmail('admin@qflip.gov.in');
         break;
       case 'lab':
-        setEmail('lab@careflow.gov.in');
+        setEmail('lab@qflip.gov.in');
         break;
       case 'pharmacy':
-        setEmail('pharmacy@careflow.gov.in');
+        setEmail('pharmacy@qflip.gov.in');
         break;
     }
   };
@@ -53,7 +53,7 @@ export const LoginPage: React.FC = () => {
       setLoading(true);
       await login(email, role);
       if (role === 'doctor' || role === 'admin') {
-        sessionStorage.setItem('careflow_doctor_verified', 'true');
+        sessionStorage.setItem('qflip_doctor_verified', 'true');
       }
       setSuccess('Authentication verified! Redirecting to secure dashboard...');
       setTimeout(() => {
@@ -88,7 +88,7 @@ export const LoginPage: React.FC = () => {
               <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
             </svg>
             <span className="font-headline text-headline-sm font-extrabold text-light-primary">
-              care<span className="text-secondary font-medium">flow</span>
+              Q<span className="text-secondary font-medium">Flip</span>
             </span>
           </Link>
           <h2 className="font-headline text-title-lg font-bold text-light-primary">
@@ -187,7 +187,7 @@ export const LoginPage: React.FC = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@careflow.gov.in"
+              placeholder="name@qflip.gov.in"
               required
               className="w-full px-3.5 py-2.5 text-xs rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-secondary/30 font-body"
             />

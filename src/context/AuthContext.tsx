@@ -34,14 +34,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
-    sessionStorage.removeItem('careflow_doctor_verified');
+    sessionStorage.removeItem('qflip_doctor_verified');
     authService.logout();
     setUser(null);
   };
 
   const switchRole = (newRole: UserRole) => {
     if (newRole !== 'doctor' && newRole !== 'admin') {
-      sessionStorage.removeItem('careflow_doctor_verified');
+      sessionStorage.removeItem('qflip_doctor_verified');
     }
     const newUser = authService.switchRole(newRole);
     setUser(newUser);

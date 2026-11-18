@@ -7,7 +7,7 @@ import {
 } from '../types';
 import { CROWD_FORECAST_DATA, INITIAL_AI_RECOMMENDATIONS } from './mockData';
 
-const REC_STORAGE_KEY = 'careflow_ai_recommendations';
+const REC_STORAGE_KEY = 'qflip_ai_recommendations';
 
 const getStoredRecs = (): AIRecommendation[] => {
   const data = localStorage.getItem(REC_STORAGE_KEY);

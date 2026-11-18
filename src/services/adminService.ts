@@ -33,7 +33,7 @@ export const adminService = {
   async getComplaints(): Promise<ComplaintFeedback[]> {
     if (USE_MOCK) {
       await delay(200);
-      const stored = localStorage.getItem('careflow_complaints');
+      const stored = localStorage.getItem('qflip_complaints');
       return stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
     }
     return apiClient.get('/admin/complaints');
@@ -42,10 +42,10 @@ export const adminService = {
   async updateComplaintStatus(id: string, status: ComplaintFeedback['status'], resolutionNote?: string): Promise<void> {
     if (USE_MOCK) {
       await delay(250);
-      const stored = localStorage.getItem('careflow_complaints');
+      const stored = localStorage.getItem('qflip_complaints');
       const list: ComplaintFeedback[] = stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
       const updated = list.map(c => c.id === id ? { ...c, status, resolutionNote: resolutionNote || c.resolutionNote } : c);
-      localStorage.setItem('careflow_complaints', JSON.stringify(updated));
+      localStorage.setItem('qflip_complaints', JSON.stringify(updated));
       return;
     }
     return apiClient.patch(`/admin/complaints/${id}`, { status, resolutionNote });

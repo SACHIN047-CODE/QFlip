@@ -5,7 +5,7 @@ export const MOCK_USERS: Record<UserRole, User> = {
   patient: {
     id: 'PT-10088',
     name: 'Manpreet Singh',
-    email: 'patient@careflow.gov.in',
+    email: 'patient@qflip.gov.in',
     role: 'patient',
     phone: '9812401824',
     abhaId: '91-8274-1049-9812',
@@ -14,7 +14,7 @@ export const MOCK_USERS: Record<UserRole, User> = {
   doctor: {
     id: 'doc-rajesh',
     name: 'Dr. Rajesh Sharma, MD',
-    email: 'doctor@careflow.gov.in',
+    email: 'doctor@qflip.gov.in',
     role: 'doctor',
     department: 'General Medicine',
     roomNumber: 'OPD Room 12',
@@ -24,7 +24,7 @@ export const MOCK_USERS: Record<UserRole, User> = {
   staff: {
     id: 'REG-8812',
     name: 'Anita Devi',
-    email: 'staff@careflow.gov.in',
+    email: 'staff@qflip.gov.in',
     role: 'staff',
     department: 'Central Registration Counter #02',
     phone: '9811554433',
@@ -33,7 +33,7 @@ export const MOCK_USERS: Record<UserRole, User> = {
   admin: {
     id: 'ADM-001',
     name: 'Chief Medical Superintendent',
-    email: 'admin@careflow.gov.in',
+    email: 'admin@qflip.gov.in',
     role: 'admin',
     department: 'Hospital Administration Command',
     phone: '9811998877',
@@ -42,7 +42,7 @@ export const MOCK_USERS: Record<UserRole, User> = {
   lab: {
     id: 'LAB-502',
     name: 'Manoj Varma',
-    email: 'lab@careflow.gov.in',
+    email: 'lab@qflip.gov.in',
     role: 'lab',
     department: 'Central Clinical Pathology & Imaging',
     phone: '9811332211',
@@ -51,7 +51,7 @@ export const MOCK_USERS: Record<UserRole, User> = {
   pharmacy: {
     id: 'PHARM-301',
     name: 'Rakesh Verma, B.Pharm',
-    email: 'pharmacy@careflow.gov.in',
+    email: 'pharmacy@qflip.gov.in',
     role: 'pharmacy',
     department: 'OPD Main Chemist & Jan Aushadhi Counter',
     phone: '9811776655',
@@ -70,8 +70,8 @@ export const authService = {
                           email.includes('pharm') ? 'pharmacy' : 'patient');
       const user = MOCK_USERS[targetRole];
       const token = `mock-jwt-token-${user.id}-${Date.now()}`;
-      localStorage.setItem('careflow_auth_token', token);
-      localStorage.setItem('careflow_user', JSON.stringify(user));
+      localStorage.setItem('qflip_auth_token', token);
+      localStorage.setItem('qflip_user', JSON.stringify(user));
       return { user, token };
     }
     return apiClient.post('/auth/login', { email, role });
@@ -89,15 +89,15 @@ export const authService = {
         role: data.role || 'patient'
       };
       const token = `mock-jwt-token-${user.id}-${Date.now()}`;
-      localStorage.setItem('careflow_auth_token', token);
-      localStorage.setItem('careflow_user', JSON.stringify(user));
+      localStorage.setItem('qflip_auth_token', token);
+      localStorage.setItem('qflip_user', JSON.stringify(user));
       return { user, token };
     }
     return apiClient.post('/auth/register', data);
   },
 
   getCurrentUser(): User | null {
-    const raw = localStorage.getItem('careflow_user');
+    const raw = localStorage.getItem('qflip_user');
     if (!raw) return MOCK_USERS.patient; // Default to patient for seamless demo experience
     try {
       return JSON.parse(raw);
@@ -108,14 +108,14 @@ export const authService = {
 
   switchRole(role: UserRole): User {
     const user = MOCK_USERS[role];
-    localStorage.setItem('careflow_user', JSON.stringify(user));
-    localStorage.setItem('careflow_auth_token', `mock-jwt-token-${user.id}-${Date.now()}`);
+    localStorage.setItem('qflip_user', JSON.stringify(user));
+    localStorage.setItem('qflip_auth_token', `mock-jwt-token-${user.id}-${Date.now()}`);
     return user;
   },
 
   logout(): void {
-    localStorage.removeItem('careflow_auth_token');
-    localStorage.removeItem('careflow_user');
+    localStorage.removeItem('qflip_auth_token');
+    localStorage.removeItem('qflip_user');
   },
 
   async forgotPassword(email: string): Promise<{ success: boolean; message: string }> {

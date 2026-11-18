@@ -58,7 +58,7 @@ export const doctorService = {
   async updateDoctorAvailability(status: 'IN_SESSION' | 'ON_BREAK' | 'UNAVAILABLE'): Promise<{ status: string }> {
     if (USE_MOCK) {
       await delay(200);
-      localStorage.setItem('careflow_doctor_status', status);
+      localStorage.setItem('qflip_doctor_status', status);
       return { status };
     }
     return apiClient.patch('/doctor/status', { status });

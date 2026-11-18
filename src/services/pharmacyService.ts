@@ -2,7 +2,7 @@ import { apiClient, delay, USE_MOCK } from './api';
 import { PharmacyOrder } from '../types';
 import { INITIAL_PHARMACY_ORDERS } from './mockData';
 
-const PHARM_STORAGE_KEY = 'careflow_pharmacy_orders';
+const PHARM_STORAGE_KEY = 'qflip_pharmacy_orders';
 
 const getStoredOrders = (): PharmacyOrder[] => {
   const data = localStorage.getItem(PHARM_STORAGE_KEY);

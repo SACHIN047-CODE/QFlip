@@ -3,7 +3,7 @@ import { PatientToken, TokenStatus, PriorityLevel } from '../types';
 import { INITIAL_TOKENS } from './mockData';
 
 // In-memory reactive state stored in localStorage for persistence across pages
-const STORAGE_KEY = 'careflow_tokens_state';
+const STORAGE_KEY = 'qflip_tokens_state';
 
 const getStoredTokens = (): PatientToken[] => {
   const data = localStorage.getItem(STORAGE_KEY);

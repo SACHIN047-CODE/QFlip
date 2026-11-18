@@ -53,7 +53,7 @@ export const patientService = {
   async getNotifications(): Promise<AppNotification[]> {
     if (USE_MOCK) {
       await delay(150);
-      const stored = localStorage.getItem('careflow_notifications');
+      const stored = localStorage.getItem('qflip_notifications');
       return stored ? JSON.parse(stored) : INITIAL_NOTIFICATIONS;
     }
     return apiClient.get('/patient/notifications');
@@ -61,10 +61,10 @@ export const patientService = {
 
   async markNotificationRead(id: string): Promise<void> {
     if (USE_MOCK) {
-      const stored = localStorage.getItem('careflow_notifications');
+      const stored = localStorage.getItem('qflip_notifications');
       const list: AppNotification[] = stored ? JSON.parse(stored) : INITIAL_NOTIFICATIONS;
       const updated = list.map(n => n.id === id ? { ...n, read: true } : n);
-      localStorage.setItem('careflow_notifications', JSON.stringify(updated));
+      localStorage.setItem('qflip_notifications', JSON.stringify(updated));
       return;
     }
     return apiClient.patch(`/patient/notifications/${id}/read`);
@@ -90,9 +90,9 @@ export const patientService = {
         status: 'OPEN',
         submittedAt: 'Just now'
       };
-      const stored = localStorage.getItem('careflow_complaints');
+      const stored = localStorage.getItem('qflip_complaints');
       const list: ComplaintFeedback[] = stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
-      localStorage.setItem('careflow_complaints', JSON.stringify([item, ...list]));
+      localStorage.setItem('qflip_complaints', JSON.stringify([item, ...list]));
       return item;
     }
     return apiClient.post('/patient/feedback', feedback);

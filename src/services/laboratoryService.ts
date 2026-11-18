@@ -2,7 +2,7 @@ import { apiClient, delay, USE_MOCK } from './api';
 import { LabTestRequest } from '../types';
 import { INITIAL_LAB_REQUESTS } from './mockData';
 
-const LAB_STORAGE_KEY = 'careflow_lab_requests';
+const LAB_STORAGE_KEY = 'qflip_lab_requests';
 
 const getStoredLabRequests = (): LabTestRequest[] => {
   const data = localStorage.getItem(LAB_STORAGE_KEY);

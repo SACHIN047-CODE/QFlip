@@ -423,7 +423,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             </svg>
             <div className="flex flex-col">
               <span className="font-headline text-headline-sm font-extrabold tracking-tight text-light-primary leading-none">
-                care<span className="text-secondary font-medium">flow</span>
+                Q<span className="text-secondary font-medium">Flip</span>
               </span>
               <span className="text-[9px] uppercase tracking-wider text-light-on-surface-variant font-bold">
                 Civil Hospital Ambala
@@ -462,7 +462,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             onChange={(e) => {
               const r = e.target.value as any;
               if (r === 'doctor' || r === 'admin') {
-                if (sessionStorage.getItem('careflow_doctor_verified') !== 'true') {
+                if (sessionStorage.getItem('qflip_doctor_verified') !== 'true') {
                   setDoctorTargetRoute(r === 'admin' ? '/admin/dashboard' : '/doctor/dashboard');
                   setIsDoctorModalOpen(true);
                   return;

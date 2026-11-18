@@ -98,7 +98,7 @@ export const NotificationsPage: React.FC = () => {
   const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
-    const raw = localStorage.getItem('careflow_notifications');
+    const raw = localStorage.getItem('qflip_notifications');
     if (raw) setNotifications(JSON.parse(raw));
   }, []);
 

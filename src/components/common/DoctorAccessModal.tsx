@@ -39,7 +39,7 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
     setIsVerifying(true);
     setTimeout(() => {
       if (VALID_PINS.includes(code.toLowerCase())) {
-        sessionStorage.setItem('careflow_doctor_verified', 'true');
+        sessionStorage.setItem('qflip_doctor_verified', 'true');
         switchRole('doctor'); // Switch role to Doctor / Medical Officer
         setVerifiedSuccess(true);
         setIsVerifying(false);

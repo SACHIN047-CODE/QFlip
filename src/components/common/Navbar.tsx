@@ -24,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
 
   const handleHospitalCommandClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (sessionStorage.getItem('careflow_doctor_verified') === 'true') {
+    if (sessionStorage.getItem('qflip_doctor_verified') === 'true') {
       navigate('/admin/dashboard');
     } else {
       setDoctorTargetRoute('/admin/dashboard');
@@ -95,7 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               </div>
               <div className="flex flex-col">
                 <span className="font-headline text-headline-sm font-extrabold tracking-tight text-light-primary leading-none">
-                  care<span className="text-secondary font-medium">flow</span>
+                  Q<span className="text-secondary font-medium">Flip</span>
                 </span>
                 <span className="text-[9px] uppercase tracking-wider text-light-on-surface-variant font-bold">
                   Health Logistics AI
@@ -288,7 +288,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                 onChange={(e) => {
                   const r = e.target.value as any;
                   if (r === 'doctor' || r === 'admin') {
-                    if (sessionStorage.getItem('careflow_doctor_verified') !== 'true') {
+                    if (sessionStorage.getItem('qflip_doctor_verified') !== 'true') {
                       setDoctorTargetRoute(r === 'admin' ? '/admin/dashboard' : '/doctor/dashboard');
                       setIsDoctorModalOpen(true);
                       return;
