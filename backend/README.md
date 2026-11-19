@@ -1,63 +1,62 @@
-# CAREFLOW Backend
+# CAREFLOW (QFlip) Backend — Technical Documentation
 
 [![Backend Deploy](https://img.shields.io/badge/Render-Backend%20Live-success?style=for-the-badge&logo=render)](https://qflip-1.onrender.com/api/health)
 [![API Status](https://img.shields.io/badge/API-Online-blue?style=for-the-badge)](https://qflip-1.onrender.com/)
 
 > **Live Production Base URL**: [https://qflip-1.onrender.com/api](https://qflip-1.onrender.com/api)  
-> **Live Health Check**: [https://qflip-1.onrender.com/api/health](https://qflip-1.onrender.com/api/health)
+> **Live Health Check**: [https://qflip-1.onrender.com/api/health](https://qflip-1.onrender.com/api/health)  
+> **Live Root Endpoint**: [https://qflip-1.onrender.com/](https://qflip-1.onrender.com/)
 
-Production-ready backend for CAREFLOW: An AI-Powered Hospital Patient-Flow & Operations Management Platform.
+---
 
-## Features
-- **MVC Architecture with ES Modules**: Clean separation of models, controllers, services, routes, middleware, and sockets.
-- **Role-Based Access Control (RBAC)**: Support for 6 distinct roles: `patient`, `doctor`, `registration_staff`, `admin`, `lab_staff`, `pharmacy_staff`.
-- **Live OPD Queue Algorithm**: Dynamic wait-time computation, atomic token sequence per department, triage color priority sorting (Red emergency, Yellow urgent, Green routine).
-- **Socket.IO Real-Time Updates**: Live departmental OPD boards (`join_department`), private notifications (`join_user`), and push alerts.
-- **Downstream Operations Integration**: Consultations trigger e-prescriptions sent directly to the Pharmacy, and diagnostic requisitions dispatched to the Laboratory.
-- **AI Intelligence**: Multilingual symptom triage with Google Gemini (English, Hindi, Punjabi), crowd surge forecasting, and hospital digital twin simulation.
-- **Centralized Security**: JWT verification, bcryptjs password hashing, Helmet, CORS, and Express Rate Limiting.
+## 🏥 About the Backend
+The **CAREFLOW Backend** is an enterprise-grade, event-driven Node.js & Express REST API powered by MongoDB and Socket.IO. It is engineered specifically for high-throughput OPD environments in Indian government and civil hospitals.
 
-## Getting Started
+### Core Modules & Capabilities:
+- **MVC Architecture (ES Modules)**: Clean layer segregation between controllers, services, models, routes, and middleware.
+- **Role-Based Access Control (RBAC)**: Enforced authorization for 6 distinct roles: `patient`, `doctor`, `registration_staff`, `admin`, `lab_staff`, `pharmacy_staff`.
+- **Atomic Queue Management Engine**: Generates unique sequential tokens per department per calendar day; sorts by emergency priority (Red/Yellow/Green) and recalculates estimated wait times dynamically.
+- **Downstream Operations Integration**: Consultations trigger e-prescriptions directly to the Jan Aushadhi Pharmacy and diagnostic orders to the Laboratory.
+- **Multilingual AI Triage (Google Gemini)**: Clinical symptom analysis supporting English, Hindi, and Punjabi with urgent triage color coding.
+- **Hospital Digital Twin & Simulation**: Mathematical simulation module for hospital administrators to simulate patient arrival surges, bed utilization, and doctor absenteeism.
+- **Real-Time WebSockets**: Socket.IO department rooms for OPD waiting room boards and individual user alert channels.
 
-### Prerequisites
-- Node.js (v18+)
-- MongoDB (local or MongoDB Atlas URI)
+---
 
-### Environment Configuration
-Copy `.env.example` to `.env`:
+## ⚡ Quick Backend Commands
+
 ```bash
-cp .env.example .env
-```
-Key variables:
-- `PORT=8000`
-- `MONGODB_URI=mongodb://localhost:27017/careflow`
-- `JWT_SECRET=careflow_super_secure_jwt_secret_key_2026_dev`
-- `GEMINI_API_KEY=your_gemini_key_here` (optional; heuristic rule-engine active by default)
+# Install dependencies
+npm install
 
-### Database Seeding
-To populate realistic hospital departments, doctors, staff, 30+ patients, live queues, consultations, lab tests, and hospital resources:
-```bash
+# Seed database with 30+ demo patients, doctors, departments & queues
 npm run seed
-```
 
-### Running the Backend
-```bash
-# Development (with nodemon)
+# Run in development mode (with nodemon)
 npm run dev
 
-# Production
+# Run in production mode
 npm start
-```
 
-### Automated Tests
-```bash
+# Run automated integration test suite (Vitest)
 npm test
 ```
 
-## Seeded Demo Credentials (Password for all: `Careflow@2026`)
-- **Administrator**: `admin@careflow.gov.in`
-- **Doctor**: `doctor@careflow.gov.in`
-- **Registration Staff**: `staff@careflow.gov.in`
-- **Laboratory Staff**: `lab@careflow.gov.in`
-- **Pharmacy Staff**: `pharmacy@careflow.gov.in`
-- **Patient**: `patient@careflow.gov.in`
+---
+
+## 👥 Seeded Demo Accounts (Password: `Careflow@2026`)
+
+| Role | Email |
+|---|---|
+| **Administrator** | `admin@careflow.gov.in` |
+| **Doctor** | `doctor@careflow.gov.in` |
+| **Registration Staff** | `staff@careflow.gov.in` |
+| **Laboratory Staff** | `lab@careflow.gov.in` |
+| **Pharmacy Staff** | `pharmacy@careflow.gov.in` |
+| **Patient** | `patient@careflow.gov.in` |
+
+---
+
+## 📜 Full API Documentation
+For all request payloads, query parameters, and response schemas, refer to:  
+👉 **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)**

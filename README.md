@@ -1,216 +1,299 @@
-# CAREFLOW — AI-Powered Hospital Patient-Flow & Operations Management Platform
+# CAREFLOW (QFlip) — AI-Powered Hospital Patient-Flow & Operations Management Platform
 
 [![Backend Deploy](https://img.shields.io/badge/Render-Backend%20Live-success?style=for-the-badge&logo=render)](https://qflip-1.onrender.com/api/health)
 [![API Status](https://img.shields.io/badge/API-Online-blue?style=for-the-badge)](https://qflip-1.onrender.com/)
-
-> **Live Backend API**: [https://qflip-1.onrender.com/api](https://qflip-1.onrender.com/api)  
-> **API Health Check**: [https://qflip-1.onrender.com/api/health](https://qflip-1.onrender.com/api/health)
-
-CAREFLOW is a full-stack, enterprise healthcare operations management platform designed specifically for Indian Civil, District, and Sub-divisional hospitals under the **National Health Mission (NHM)** and **Ayushman Bharat Digital Mission (ABDM)**.
-
-The platform bridges real-time patient queue flow, electronic triage, doctor consultations, Jan Aushadhi pharmacy dispensing, laboratory diagnostic requisitions, hospital resource tracking, and AI digital twin simulations.
-
----
-
-## 🏗 System Architecture
-
-```
-                  ┌──────────────────────────────────────────────┐
-                  │          CAREFLOW Frontend (React)           │
-                  │  Vite + TypeScript + Tailwind CSS + Lucide   │
-                  │           http://localhost:5173              │
-                  └──────────────┬───────────────────▲───────────┘
-                                 │ HTTP REST (Axios) │ WebSockets
-                                 │                   │ (Socket.IO)
-                  ┌──────────────▼───────────────────┴───────────┐
-                  │           CAREFLOW Backend (Express)         │
-                  │   Node.js (ESM) + Mongoose + JWT + Helmet    │
-                  │   Local:  http://localhost:8000              │
-                  │   Render: https://qflip-1.onrender.com       │
-                  └──────────────┬───────────────────▲───────────┘
-                                 │                   │
-                  ┌──────────────▼───────────┐ ┌─────┴───────────┐
-                  │    MongoDB (Local/Atlas) │ │ Google Gemini   │
-                  │  15 Schemas & Indexes    │ │ AI Triage Engine│
-                  └──────────────────────────┘ └─────────────────┘
-```
-
-- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS, Lucide React, Recharts, React Hook Form.
-- **Backend**: Node.js v24, Express.js (ES Modules), MongoDB & Mongoose ODM, Socket.IO.
-- **Security**: JWT Authentication, bcryptjs password hashing, RBAC (6 Roles), Helmet, CORS, Express Rate Limit, Express Validator.
-- **AI Engine**: Google Gemini API (`@google/generative-ai`) for multilingual clinical triage, crowd surge forecasting, and hospital digital twin simulation.
+[![Node.js](https://img.shields.io/badge/Node.js-v18%2B-339933?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-Backend-black?style=for-the-badge&logo=express)](https://expressjs.com/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![Socket.IO](https://img.shields.io/badge/Socket.IO-Real--Time-010101?style=for-the-badge&logo=socketdotio)](https://socket.io/)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-AI%20Triage-8E75C2?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
 
 ---
 
-## ⚡ Quick Start (Single Command)
+## 📌 Important Links & Quick Access
+
+| Resource | URL / Location | Description |
+|---|---|---|
+| **Live Production Backend** | [https://qflip-1.onrender.com/api](https://qflip-1.onrender.com/api) | Hosted REST API on Render |
+| **API Health Check** | [https://qflip-1.onrender.com/api/health](https://qflip-1.onrender.com/api/health) | Live server & database health status |
+| **Live Root Status** | [https://qflip-1.onrender.com/](https://qflip-1.onrender.com/) | Live API welcome endpoint |
+| **GitHub Repository** | [https://github.com/SACHIN047-CODE/QFlip](https://github.com/SACHIN047-CODE/QFlip) | Source code repository |
+| **Full API Documentation** | [backend/API_DOCUMENTATION.md](backend/API_DOCUMENTATION.md) | Endpoint specifications, payloads & response formats |
+| **Local Frontend** | `http://localhost:5173` | React + Vite client |
+| **Local Backend** | `http://localhost:8000/api` | Express + Socket.IO server |
+
+---
+
+## 💡 The Project Idea & Problem Statement
+
+### The Problem in Indian Public Healthcare
+In Indian Civil, District, and Sub-divisional hospitals operating under the **National Health Mission (NHM)**:
+- **Severe OPD Overcrowding:** Over 3,000–5,000 patients arrive every morning, resulting in physical stampedes at registration counters and doctor cabins.
+- **Zero Transparency & Blind Waiting:** Patients and their families wait 3–5 hours without knowing how many people are ahead of them or if their doctor has gone on emergency rounds.
+- **Disconnected Downstream Departments:** When a doctor writes a paper prescription, the patient must stand in yet another unorganized line at the **Jan Aushadhi Pharmacy** and **Diagnostic Laboratory**, where paper slips are frequently misplaced.
+- **Lack of Predictive Hospital Operations:** Hospital superintendents cannot forecast daily crowd surges, detect departmental bottlenecks, or dynamically allocate emergency stretchers, beds, and wheelchairs.
+
+### The Solution: CAREFLOW (QFlip)
+**CAREFLOW** is a closed-loop hospital operations platform designed to digitize the entire patient journey:
+1. **Intelligent Triage & Token Generation:** Instant identification via unique Patient IDs (`CF-2026-XXXX`) and sequential department-specific daily tokens (`OPD-CARD-101`).
+2. **Dynamic Waiting-Time Algorithm:** Real-time wait-time calculation based on patients ahead, average consultation duration, active doctor count, and emergency priority queuing.
+3. **Closed-Loop Workflow:** Doctors create digital consultations that automatically route electronic prescriptions to the in-house **Jan Aushadhi Pharmacy** and diagnostic test orders to the **Laboratory**.
+4. **Multilingual AI Assistant (Google Gemini):** Patient symptom assessment in English, Hindi, and Punjabi to guide patients to the appropriate department without medical misdirection.
+5. **Hospital Digital Twin & Operations Command Center:** Real-time operational simulation for hospital administrators to test hypothetical scenarios (e.g., +150 surge patients or 2 doctors on leave) before real-world impact.
+
+---
+
+## 🔄 End-to-End Hospital Patient Flow (Operational Lifecycle)
+
+CAREFLOW is built as a single, interconnected operational pipeline where every step advances the patient's state and updates the corresponding dashboard:
+
+```
+[Patient Arrival]
+       │
+       ▼
+1. REGISTRATION & SMART TRIAGE
+   ├── Walk-in Counter / Online Booking
+   ├── Patient ID Generation (CF-2026-0001)
+   ├── AI Multilingual Symptom Analysis (Cardiology, Ortho, etc.)
+   └── Emergency Prioritization (Red/Yellow/Green)
+       │
+       ▼
+2. REAL-TIME OPD QUEUE DISPATCH
+   ├── Department Token Generated (OPD-GEN-101)
+   ├── Dynamic Wait-Time Calculation (e.g., 24 mins)
+   └── Socket.IO Broadcast to Patient Tracker & OPD Display
+       │
+       ▼
+3. DOCTOR CONSULTATION CABIN
+   ├── Doctor calls token via Doctor Portal (Queue: 'in_consultation')
+   ├── Doctor reviews patient history & records symptoms/diagnosis
+   └── Doctor writes Treatment Plan & Orders
+       │
+       ├───► Electronic Prescription Forwarded ──────┐
+       │                                             │
+       └───► Diagnostic Lab Request Dispatched ──┐   │
+                                                 │   │
+       ┌─────────────────────────────────────────┘   │
+       ▼                                             │
+4. LABORATORY DIAGNOSTICS                            │
+   ├── Lab staff receives test order in real-time    │
+   ├── Sample collection & token tracking            │
+   └── Medical report uploaded & notified to patient │
+                                                     │
+       ┌─────────────────────────────────────────────┘
+       ▼
+5. JAN AUSHADHI PHARMACY
+   ├── Order received directly from Doctor's prescription
+   ├── Pharmacist verifies medicine stock availability
+   └── Medicines packaged & marked 'dispensed'
+       │
+       ▼
+6. VISIT COMPLETION & DIGITAL TWIN ANALYTICS
+   ├── Queue status marked 'completed'
+   ├── Doctor workload & turnaround time recorded
+   ├── Patient submits star rating & feedback (AI categorized)
+   └── Digital Twin updates bed/resource utilization metrics
+```
+
+---
+
+## 🏗 System Architecture & Tech Flow
+
+```
+                     ┌──────────────────────────────────────────────┐
+                     │          CAREFLOW Frontend (React)           │
+                     │  Vite + TypeScript + Tailwind CSS + Lucide   │
+                     │    Local: http://localhost:5173              │
+                     └──────────────┬───────────────────▲───────────┘
+                                    │ HTTP REST (Axios) │ WebSockets
+                                    │                   │ (Socket.IO)
+                     ┌──────────────▼───────────────────┴───────────┐
+                     │           CAREFLOW Backend (Express)         │
+                     │   Node.js (ESM) + Mongoose + JWT + Helmet    │
+                     │   Local:  http://localhost:8000/api          │
+                     │   Render: https://qflip-1.onrender.com/api   │
+                     └──────────────┬───────────────────▲───────────┘
+                                    │                   │
+                     ┌──────────────▼───────────┐ ┌─────┴───────────┐
+                     │    MongoDB (Atlas/Local) │ │ Google Gemini   │
+                     │  15 Schemas & Indexes    │ │ AI Triage Engine│
+                     └──────────────────────────┘ └─────────────────┘
+```
+
+### Technology Stack Details:
+- **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, Lucide React, Recharts, React Hook Form.
+- **Backend:** Node.js (ES Modules), Express.js, Socket.IO for duplex events, Mongoose ODM.
+- **Database:** MongoDB (Local or MongoDB Atlas) with 15 interconnected schemas & optimized indexes.
+- **Security & RBAC:** JWT authentication, bcryptjs password hashing, Helmet, CORS, Express Rate Limit, Express Validator.
+- **AI Engine:** Google Gemini API (`@google/generative-ai`) for multilingual clinical triage, surge forecasting, and hospital digital twin simulation.
+- **Deployment:** Render (Cloud Node.js Web Service) + MongoDB Atlas.
+
+---
+
+## 👥 Role-Based Access Control (RBAC)
+
+CAREFLOW features 6 dedicated user roles with isolated privileges and views:
+
+| Role | Permitted Actions & Responsibilities | Demo Login |
+|---|---|---|
+| **Administrator** | Operations Command Center, Bed/Stretcher management, Department analytics, Doctor shift rosters, AI Surge forecasting, Audit logs | `admin@careflow.gov.in` |
+| **Doctor** | Department OPD queue board, Call next patient, Skip token, Record clinical notes & diagnosis, Dispatch e-prescriptions & lab requisitions | `doctor@careflow.gov.in` |
+| **Registration Staff** | Patient search/registration, Issue daily OPD tokens, Emergency queue prioritization override | `staff@careflow.gov.in` |
+| **Laboratory Staff** | Real-time diagnostic requisition board, Test processing, Secure medical report upload | `lab@careflow.gov.in` |
+| **Pharmacy Staff** | Live e-prescriptions feed, Medicine inventory check, Order preparation, Dispensing confirmation | `pharmacy@careflow.gov.in` |
+| **Patient** | Live token countdown tracker, Digital prescriptions, Diagnostic lab reports, Patient feedback submission | `patient@careflow.gov.in` |
+
+> **Password for all seeded accounts:** `Careflow@2026`
+
+---
+
+## ⚡ Commands to Run CAREFLOW
 
 ### 1. Prerequisites
-- **Node.js** v18+ (tested on Node v24)
-- **MongoDB** running locally (`mongodb://localhost:27017/careflow`) or a MongoDB Atlas URI
+- **Node.js**: v18 or higher (v20+ recommended)
+- **MongoDB**: Local MongoDB instance (`mongodb://localhost:27017/careflow`) or MongoDB Atlas URI
 
-### 2. Install Dependencies
+---
+
+### 2. Installation
+Install dependencies for both frontend and backend in one go:
 ```bash
-# Install root (frontend + concurrently runner) dependencies
+# 1. Install root dependencies (React, Vite, concurrently)
 npm install
 
-# Install backend dependencies
+# 2. Install backend dependencies (Express, Mongoose, Socket.IO, Gemini)
 npm install --prefix backend
 ```
 
-### 3. Seed Database with Realistic Data
-Populate 7 departments, 30+ realistic patients, doctors across specialties, staff, active OPD tokens, consultations, lab tests, and hospital resources:
+---
+
+### 3. Database Seeding (Populate Demo Data)
+Run the automated seeder to generate 7 departments, 30+ realistic patients, active doctors, queues, consultations, lab tests, and hospital resources:
 ```bash
 npm run seed
 ```
 
-### 4. Run Frontend and Backend Together
+---
+
+### 4. Run Both Frontend & Backend (Single Command) 🚀
+Start both the React Vite frontend and the Express backend concurrently:
 ```bash
-# Starts both Vite Frontend (port 5173) and Express Backend (port 8000) concurrently
 npm run dev:all
 ```
-- **Web App**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://localhost:8000/api](http://localhost:8000/api)
-- **Health Check**: [http://localhost:8000/api/health](http://localhost:8000/api/health)
+- **Frontend App:** [http://localhost:5173](http://localhost:5173)
+- **Backend API:** [http://localhost:8000/api](http://localhost:8000/api)
+- **Health Check:** [http://localhost:8000/api/health](http://localhost:8000/api/health)
 
 ---
 
-## 🧪 How to Test the Backend
+### 5. Running Components Separately (Optional)
 
-You can test the backend using any of the three methods below:
-
-### Method 1: Run the Automated Test Suite (Vitest)
-CAREFLOW includes automated test suites covering authentication, role protection, queue wait-time calculations, multilingual symptom triage, surge predictions, and digital twin simulations:
+#### Run Backend Only:
 ```bash
-# Run tests directly via npm script
+# Development mode with auto-reload (nodemon)
+npm run server
+
+# Production mode
+npm run server:start
+```
+
+#### Run Frontend Only:
+```bash
+npm run dev
+```
+
+#### Run Backend Automated Tests:
+```bash
 npm run test:backend
-
-# Or run Vitest from backend directory
-npm --prefix backend test
-```
-**Expected Output:**
-```
- ✓ tests/queue.test.js  (4 tests)
- ✓ tests/auth.test.js   (3 tests)
- Test Files  2 passed (2)
-      Tests  7 passed (7)
 ```
 
 ---
 
-### Method 2: Test Endpoints via cURL or PowerShell / Postman
+## 🌐 Connecting Frontend to Live Deployed Backend
 
-With the backend running (`npm run server` or `npm run dev:all`), test the live REST APIs:
+In your root `.env` file, configure your API target:
 
-#### 1. System Health Check
-```bash
-curl http://localhost:8000/api/health
-```
-**Response:**
-```json
-{"success":true,"status":"ONLINE","service":"CareFlow Hospital Platform Backend","version":"1.0.0"}
-```
+```env
+# Point to the live Render deployed backend:
+VITE_API_BASE_URL=https://qflip-1.onrender.com/api
 
-#### 2. AI Multilingual Symptom Triage (Hindi / English / Punjabi)
-Evaluate acute symptoms for automated OPD department routing:
-```bash
-curl -X POST http://localhost:8000/api/ai/triage \
-  -H "Content-Type: application/json" \
-  -d "{\"symptoms\": \"छाती में तेज दर्द और सांस फूल रही है\", \"language\": \"hi\"}"
-```
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "department": "Cardiology",
-    "departmentCode": "CARD",
-    "urgency": "urgent",
-    "triageColor": "yellow",
-    "confidence": 0.94,
-    "summary": "Cardiovascular indicators detected. Prompt cardiac assessment advised.",
-    "disclaimer": "AI operational recommendation only. Please consult a registered medical practitioner."
-  }
-}
+# Set to false to use the live cloud backend database:
+VITE_USE_MOCK_API=false
+
+# Hospital Branding
+VITE_APP_NAME=CareFlow
+VITE_HOSPITAL_NAME="Civil Hospital Ambala"
 ```
 
-#### 3. User Login & JWT Authentication
-Authenticate using one of the pre-seeded demo accounts:
-```bash
-curl -X POST http://localhost:8000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d "{\"email\": \"doctor@careflow.gov.in\", \"password\": \"Careflow@2026\"}"
-```
-**Response:**
-Returns `{ "success": true, "data": { "token": "<JWT_TOKEN>", "user": { ... } } }`.
-
-#### 4. Fetch Live Department OPD Queue Board
-Publicly view current tokens being served, called, and waiting:
-```bash
-# First get department list to find ID
-curl http://localhost:8000/api/departments
-
-# Then query queue for a department ID
-curl http://localhost:8000/api/queues/department/<DEPARTMENT_ID>
-```
-
-#### 5. Hospital Digital Twin Operational Metrics
-```bash
-curl http://localhost:8000/api/ai/digital-twin
-```
-Returns live bed occupancy (general wards, ICU), oxygen cylinder capacity, departmental wait times, and real-time bottleneck alerts.
+*(If you are developing offline without internet, keep `VITE_USE_MOCK_API=true` or point `VITE_API_BASE_URL=http://localhost:8000/api`)*.
 
 ---
 
-### Method 3: Test Through the React Web UI
+## ⚙️ Environment Variables Reference
 
-Open [http://localhost:5173](http://localhost:5173) in your browser and log in with any of the seeded credentials:
+### Backend (`backend/.env`):
+```env
+PORT=8000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/careflow
+JWT_SECRET=careflow_super_secure_jwt_secret_key_2026_dev
+JWT_EXPIRE=7d
+CORS_ORIGIN=http://localhost:5173,http://localhost:3000
+DOCTOR_PASSKEY=7788
+GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-| Role | Email | Password | What You Can Test |
-|---|---|---|---|
-| **Administrator** | `admin@careflow.gov.in` | `Careflow@2026` | Real-time footfall charts, bed occupancy, doctor rosters, audit logs, AI surge prediction. |
-| **Doctor** | `doctor@careflow.gov.in` | `Careflow@2026` | Live OPD queue, call next patient, clinical diagnosis, electronic prescriptions, lab test orders. |
-| **Registration Staff** | `staff@careflow.gov.in` | `Careflow@2026` | Rapid patient registration, sequential token generation, emergency override triage. |
-| **Laboratory Staff** | `lab@careflow.gov.in` | `Careflow@2026` | Incoming diagnostic test requests, sample collection, verified result upload. |
-| **Pharmacy Staff** | `pharmacy@careflow.gov.in` | `Careflow@2026` | Prescriptions sent from doctors, medicine packaging, dispensing status. |
-| **Patient** | `patient@careflow.gov.in` | `Careflow@2026` | View token `OPD-GEN-104`, live wait countdown, medical history, lab results. |
+### Frontend (`.env`):
+```env
+VITE_API_BASE_URL=http://localhost:8000/api
+VITE_USE_MOCK_API=false
+VITE_APP_NAME=CareFlow
+VITE_HOSPITAL_NAME="Civil Hospital Ambala"
+```
 
 ---
 
-## 📁 Repository Structure
+## 📁 Repository Directory Structure
 
 ```
 CareFlow/
-├── backend/                  # Complete Node.js / Express / MongoDB Backend
+├── backend/                       # Complete Express / Node.js Backend
 │   ├── src/
-│   │   ├── config/           # Database, logger, Cloudinary, environment configs
-│   │   ├── controllers/      # 13 REST controllers (Auth, Patient, Queue, Doctor, AI, etc.)
-│   │   ├── middleware/       # JWT protect, RBAC authorizeRoles, error handler, Multer upload
-│   │   ├── models/           # 15 Mongoose schemas with indexes & timestamps
-│   │   ├── routes/           # Express routers mounted under /api
-│   │   ├── services/         # Queue algorithm, Gemini AI triage, Digital Twin, notifications
-│   │   ├── sockets/          # Socket.IO department rooms & push notifications
-│   │   ├── utils/            # ApiResponse, ApiError, asyncHandler, token generators
-│   │   ├── validators/       # Request validation rules
-│   │   ├── app.js            # Express application setup
-│   │   ├── server.js         # HTTP + Socket.IO server listener (Port 8000)
-│   │   └── seed.js           # Comprehensive database seeder
-│   ├── tests/                # Automated integration tests
-│   ├── API_DOCUMENTATION.md  # Detailed API specifications
-│   ├── .env.example          # Environment variable template
-│   └── package.json          # Backend dependencies
+│   │   ├── config/                # Database, Cloudinary, Logger, Env config
+│   │   ├── controllers/           # 13 REST Controllers (Auth, Queue, Doctor, AI, etc.)
+│   │   ├── middleware/            # JWT Protect, Role RBAC, Error Handler, Upload
+│   │   ├── models/                # 15 Mongoose Models with Indexes & Timestamps
+│   │   ├── routes/                # Express Routers mounted under /api
+│   │   ├── services/              # Queue Algorithm, Gemini AI Triage, Digital Twin
+│   │   ├── sockets/               # Real-Time Socket.IO Department & Alert Rooms
+│   │   ├── utils/                 # ApiResponse, ApiError, ID Generators
+│   │   ├── validators/            # Input validation schemas
+│   │   ├── app.js                 # Express Application Setup & Security
+│   │   ├── server.js              # HTTP & Socket.IO Server Listener
+│   │   └── seed.js                # Database Seeder (30+ patients, departments, staff)
+│   ├── tests/                     # Automated Vitest test suites
+│   ├── API_DOCUMENTATION.md       # Complete REST API specifications
+│   ├── .env.example               # Backend environment variable template
+│   └── package.json               # Backend dependencies
 │
-├── src/                      # React / TypeScript / Vite Frontend
-│   ├── components/           # Reusable UI components & layouts
-│   ├── pages/                # Pages for all 8 hospital modules
-│   ├── services/             # Axios API client & data services
-│   └── ...
+├── src/                           # React / TypeScript Frontend
+│   ├── components/                # Modals, Navbar, Sidebar, StatCards, StatusBadges
+│   ├── context/                   # AuthContext, NotificationContext, QueueContext
+│   ├── layouts/                   # DashboardLayout, PatientLayout, PublicLayout
+│   ├── pages/                     # Admin, Doctor, Staff, Lab, Pharmacy, Patient Pages
+│   ├── routes/                    # Protected Routes & Role Guards
+│   ├── services/                  # Axios API services & fallback mock data
+│   └── types/                     # TypeScript Interfaces & Enums
 │
-├── package.json              # Root package with concurrently full-stack runner
-└── README.md                 # Full documentation
+├── .env                           # Frontend environment configuration
+├── package.json                   # Concurrently runner & scripts
+└── README.md                      # Project master documentation
 ```
 
 ---
 
 ## 📜 Full API Documentation
-Detailed request/response bodies, error codes, and Socket.IO protocol specifications are available in:
-**[backend/API_DOCUMENTATION.md](backend/API_DOCUMENTATION.md)**
+For comprehensive details on all 40+ endpoints, request/response bodies, query parameters, error responses, and Socket.IO real-time events, see:  
+👉 **[backend/API_DOCUMENTATION.md](backend/API_DOCUMENTATION.md)**
