@@ -185,6 +185,8 @@ npm run dev:all
 - **Frontend App:** [http://localhost:5173](http://localhost:5173)
 - **Backend API:** [http://localhost:8000/api](http://localhost:8000/api)
 - **Health Check:** [http://localhost:8000/api/health](http://localhost:8000/api/health)
+- **FRONTEND DEPLOYED URL=[https://care-flow-liard.vercel.app/]
+- **BACKEND DEPLOYED URL=[https://qflip-1.onrender.com/]
 
 ---
 
