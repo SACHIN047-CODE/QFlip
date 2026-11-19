@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Modal } from './Modal';
+import { apiClient } from '../../services/api';
 
 interface DoctorAccessModalProps {
   isOpen: boolean;
@@ -24,10 +25,7 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifiedSuccess, setVerifiedSuccess] = useState(false);
 
-  // Valid Doctor security PINs / passcodes
-  const VALID_PINS = ['7788', '1234', '1026', 'doctor', 'DOC-2026'];
-
-  const handleVerifyPin = (inputPin?: string) => {
+  const handleVerifyPin = async (inputPin?: string) => {
     const code = (inputPin || pin).trim();
     setError('');
 
@@ -37,10 +35,30 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
     }
 
     setIsVerifying(true);
-    setTimeout(() => {
-      if (VALID_PINS.includes(code.toLowerCase())) {
+
+    try {
+      // 1. Try secure server-side verification first (no secret exposed in frontend)
+      await apiClient.post('/auth/verify-doctor-passkey', { pin: code });
+      
+      sessionStorage.setItem('qflip_doctor_verified', 'true');
+      switchRole('doctor');
+      setVerifiedSuccess(true);
+      setIsVerifying(false);
+
+      setTimeout(() => {
+        onClose();
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          navigate(targetRoute);
+        }
+      }, 600);
+    } catch (err: any) {
+      // 2. Offline / local dev environment check using non-committed .env variable
+      const envPasskey = import.meta.env.VITE_DOCTOR_PASSKEY;
+      if (envPasskey && code === String(envPasskey).trim()) {
         sessionStorage.setItem('qflip_doctor_verified', 'true');
-        switchRole('doctor'); // Switch role to Doctor / Medical Officer
+        switchRole('doctor');
         setVerifiedSuccess(true);
         setIsVerifying(false);
 
@@ -52,11 +70,14 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
             navigate(targetRoute);
           }
         }, 600);
-      } else {
-        setIsVerifying(false);
-        setError('Access Denied: Invalid Clinical Passkey. Only authorized Doctors & Medical Superintendents can access Command Operations.');
+        return;
       }
-    }, 450);
+
+      setIsVerifying(false);
+      setError(
+        'Access Denied: Invalid Clinical Passkey. Only authorized Doctors & Medical Superintendents can access Command Operations.'
+      );
+    }
   };
 
   const handleKeypadPress = (val: string) => {
