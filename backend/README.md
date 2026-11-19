@@ -1,5 +1,11 @@
 # CAREFLOW Backend
 
+[![Backend Deploy](https://img.shields.io/badge/Render-Backend%20Live-success?style=for-the-badge&logo=render)](https://qflip-1.onrender.com/api/health)
+[![API Status](https://img.shields.io/badge/API-Online-blue?style=for-the-badge)](https://qflip-1.onrender.com/)
+
+> **Live Production Base URL**: [https://qflip-1.onrender.com/api](https://qflip-1.onrender.com/api)  
+> **Live Health Check**: [https://qflip-1.onrender.com/api/health](https://qflip-1.onrender.com/api/health)
+
 Production-ready backend for CAREFLOW: An AI-Powered Hospital Patient-Flow & Operations Management Platform.
 
 ## Features

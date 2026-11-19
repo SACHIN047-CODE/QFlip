@@ -1,5 +1,11 @@
 # CAREFLOW — AI-Powered Hospital Patient-Flow & Operations Management Platform
 
+[![Backend Deploy](https://img.shields.io/badge/Render-Backend%20Live-success?style=for-the-badge&logo=render)](https://qflip-1.onrender.com/api/health)
+[![API Status](https://img.shields.io/badge/API-Online-blue?style=for-the-badge)](https://qflip-1.onrender.com/)
+
+> **Live Backend API**: [https://qflip-1.onrender.com/api](https://qflip-1.onrender.com/api)  
+> **API Health Check**: [https://qflip-1.onrender.com/api/health](https://qflip-1.onrender.com/api/health)
+
 CAREFLOW is a full-stack, enterprise healthcare operations management platform designed specifically for Indian Civil, District, and Sub-divisional hospitals under the **National Health Mission (NHM)** and **Ayushman Bharat Digital Mission (ABDM)**.
 
 The platform bridges real-time patient queue flow, electronic triage, doctor consultations, Jan Aushadhi pharmacy dispensing, laboratory diagnostic requisitions, hospital resource tracking, and AI digital twin simulations.
@@ -19,7 +25,8 @@ The platform bridges real-time patient queue flow, electronic triage, doctor con
                   ┌──────────────▼───────────────────┴───────────┐
                   │           CAREFLOW Backend (Express)         │
                   │   Node.js (ESM) + Mongoose + JWT + Helmet    │
-                  │           http://localhost:8000              │
+                  │   Local:  http://localhost:8000              │
+                  │   Render: https://qflip-1.onrender.com       │
                   └──────────────┬───────────────────▲───────────┘
                                  │                   │
                   ┌──────────────▼───────────┐ ┌─────┴───────────┐
