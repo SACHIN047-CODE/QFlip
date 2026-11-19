@@ -68,6 +68,17 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Static file hosting for uploaded lab reports / medical docs
 app.use('/uploads', express.static(path.resolve('uploads')));
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'CareFlow Hospital & Operations API is running successfully!',
+    status: 'ONLINE',
+    version: '1.0.0',
+    healthCheck: '/api/health'
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
