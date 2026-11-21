@@ -17,6 +17,18 @@ describe('CAREFLOW Services & Domain Logic Tests', () => {
     expect(hindiResult.disclaimer).toBeDefined();
   });
 
+  it('PredictionService triages Punjabi symptoms accurately', async () => {
+    const punjabiResult = await PredictionService.suggestDepartment('ਮੇਰਾ ਗਿੱਟਾ ਮੁੜ ਗਿਆ ਸੀ ਤੇ ਚੱਲਣ ਵਿਚ ਬਹੁਤ ਦਰਦ ਹੋ ਰਿਹਾ ਹੈ');
+    expect(punjabiResult.department).toBe('Orthopedics');
+    expect(punjabiResult.disclaimer).toBeDefined();
+  });
+
+  it('PredictionService triages Tamil symptoms accurately', async () => {
+    const tamilResult = await PredictionService.suggestDepartment('எனக்கு மார்பு வலி மற்றும் இதயம் படபடப்பாக உள்ளது');
+    expect(tamilResult.department).toBe('Cardiology');
+    expect(tamilResult.disclaimer).toBeDefined();
+  });
+
   it('PredictionService predicts crowd surge for high volume days', () => {
     const surge = PredictionService.predictSurge({ dayOfWeek: 'Monday', expectedWeather: 'Clear' });
     expect(surge.projectedFootfall).toBeGreaterThan(400);

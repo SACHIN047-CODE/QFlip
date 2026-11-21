@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useQueue } from '../../context/QueueContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
 import { TokenCard } from '../../components/common/TokenCard';
 import { PatientToken, PriorityLevel } from '../../types';
@@ -9,6 +10,7 @@ export const PatientRegistration: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { generateToken } = useQueue();
+  const { t } = useLanguage();
 
   const [step, setStep] = useState<'form' | 'review' | 'success'>('form');
   const [voiceOpen, setVoiceOpen] = useState(false);
@@ -113,7 +115,7 @@ export const PatientRegistration: React.FC = () => {
           >
             {step === 'form' ? '1' : '✓'}
           </span>
-          <span className="text-xs font-bold text-light-primary">Patient Info</span>
+          <span className="text-xs font-bold text-light-primary">{t('reg.step_form', '1. Patient Details')}</span>
         </div>
         <div className="w-12 h-0.5 bg-light-outline"></div>
         <div className="flex items-center gap-2">
@@ -128,7 +130,7 @@ export const PatientRegistration: React.FC = () => {
           >
             {step === 'success' ? '✓' : '2'}
           </span>
-          <span className="text-xs font-bold text-light-primary">Review &amp; Triage</span>
+          <span className="text-xs font-bold text-light-primary">{t('reg.step_review', '2. Review & Triage')}</span>
         </div>
         <div className="w-12 h-0.5 bg-light-outline"></div>
         <div className="flex items-center gap-2">
@@ -141,7 +143,7 @@ export const PatientRegistration: React.FC = () => {
           >
             3
           </span>
-          <span className="text-xs font-bold text-light-primary">OPD Slip</span>
+          <span className="text-xs font-bold text-light-primary">{t('reg.step_slip', '3. OPD Slip')}</span>
         </div>
       </div>
 
@@ -151,10 +153,10 @@ export const PatientRegistration: React.FC = () => {
           <div className="flex items-center justify-between pb-4 border-b border-light-outline">
             <div>
               <h2 className="font-headline text-title-lg font-bold text-light-primary">
-                Online OPD Registration &amp; Token Slip
+                {t('reg.title', 'Online OPD Registration & Token Slip')}
               </h2>
               <p className="text-xs text-light-on-surface-variant mt-0.5">
-                Civil Hospital Ambala • Ayushman Bharat Digital Mission (ABDM)
+                {t('reg.subtitle', 'Civil Hospital • Ayushman Bharat Digital Mission (ABDM)')}
               </p>
             </div>
 
@@ -165,7 +167,7 @@ export const PatientRegistration: React.FC = () => {
               className="px-3.5 py-2 rounded-xl border border-secondary/30 bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
             >
               <span className="material-symbols-outlined text-sm">mic</span>
-              <span>Voice Intake (बोलकर बताएं)</span>
+              <span>{t('reg.voice_btn', 'Voice Intake (बोलकर बताएं)')}</span>
             </button>
           </div>
 
@@ -199,7 +201,7 @@ export const PatientRegistration: React.FC = () => {
             {/* Basic Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-light-primary block mb-1">Patient Full Name</label>
+                <label className="font-bold text-light-primary block mb-1">{t('reg.full_name', 'Patient Full Name')}</label>
                 <input
                   type="text"
                   required
@@ -210,7 +212,7 @@ export const PatientRegistration: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-bold text-light-primary block mb-1">Mobile Phone (10 digits)</label>
+                <label className="font-bold text-light-primary block mb-1">{t('reg.phone', 'Mobile Phone (10 digits)')}</label>
                 <input
                   type="tel"
                   required
@@ -223,7 +225,7 @@ export const PatientRegistration: React.FC = () => {
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="font-bold text-light-primary block mb-1">Age (Years)</label>
+                <label className="font-bold text-light-primary block mb-1">{t('reg.age', 'Age (Years)')}</label>
                 <input
                   type="number"
                   required
@@ -236,7 +238,7 @@ export const PatientRegistration: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-bold text-light-primary block mb-1">Gender</label>
+                <label className="font-bold text-light-primary block mb-1">{t('reg.gender', 'Gender')}</label>
                 <select
                   value={formData.gender}
                   onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
@@ -249,7 +251,7 @@ export const PatientRegistration: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-bold text-light-primary block mb-1">Priority Category</label>
+                <label className="font-bold text-light-primary block mb-1">{t('reg.priority', 'Priority Category')}</label>
                 <select
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
@@ -265,7 +267,7 @@ export const PatientRegistration: React.FC = () => {
 
             {/* Department Selection */}
             <div>
-              <label className="font-bold text-light-primary block mb-1">Select Clinical Department</label>
+              <label className="font-bold text-light-primary block mb-1">{t('reg.select_dept', 'Select Clinical Department')}</label>
               <select
                 value={formData.department}
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
@@ -282,7 +284,7 @@ export const PatientRegistration: React.FC = () => {
             {/* Symptoms Tags */}
             <div>
               <label className="font-bold text-light-primary block mb-2">
-                Chief Symptoms (Click to Select / Multiple)
+                {t('reg.symptoms_title', 'Chief Symptoms (Click to Select / Multiple)')}
               </label>
               <div className="flex flex-wrap gap-2">
                 {commonSymptoms.map((sym) => {
@@ -308,7 +310,7 @@ export const PatientRegistration: React.FC = () => {
             {/* Voice Notes / Text description */}
             <div>
               <label className="font-bold text-light-primary block mb-1">
-                Describe Symptoms / Voice Transcript
+                {t('reg.symptoms_desc', 'Describe Symptoms / Voice Transcript')}
               </label>
               <textarea
                 rows={3}
@@ -323,7 +325,7 @@ export const PatientRegistration: React.FC = () => {
               type="submit"
               className="w-full py-3.5 bg-accent hover:brightness-95 text-on-accent font-headline font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
             >
-              <span>Review Details &amp; Issue Token</span>
+              <span>{t('reg.submit_btn', 'Review Details & Issue Token')}</span>
               <span className="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
           </form>

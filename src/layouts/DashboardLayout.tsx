@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Sidebar } from '../components/common/Sidebar';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { HospitalMapModal } from '../components/common/HospitalMapModal';
 import { VoiceInputModal } from '../components/common/VoiceInputModal';
 
@@ -15,6 +16,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
   const [mapOpen, setMapOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const { user, role, logout } = useAuth();
+  const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
 
   return (
@@ -63,6 +65,16 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
 
           {/* Quick Header Actions */}
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-light-outline bg-light-surface hover:bg-light-surface-variant text-light-primary text-xs font-bold transition-all shadow-sm"
+              title={language === 'en' ? 'Switch to Hindi' : 'Switch to English'}
+            >
+              <span className="material-symbols-outlined text-sm text-secondary">translate</span>
+              <span>{language === 'en' ? 'हिन्दी' : 'English'}</span>
+            </button>
+
             <button
               onClick={() => setMapOpen(true)}
               className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-light-outline text-xs font-semibold text-light-primary hover:bg-light-surface-variant transition-colors"

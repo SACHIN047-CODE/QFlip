@@ -1,16 +1,28 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import request from 'supertest';
 import app from '../src/app.js';
-import connectDB, { disconnectDB } from '../src/config/db.js';
+import { Department } from '../src/models/Department.js';
+import { Doctor } from '../src/models/Doctor.js';
+import { Queue } from '../src/models/Queue.js';
 
 describe('CAREFLOW Auth API Integration Tests', () => {
   beforeAll(async () => {
-    // In test environment, connect to DB
-    await connectDB();
+    // Mock Department and related queries so tests run instantly without downloading 500MB binary
+    vi.spyOn(Department, 'find').mockReturnValue(Promise.resolve([
+      {
+        _id: 'dept-1',
+        name: 'General Medicine',
+        code: 'GEN',
+        averageWaitTimeMinutes: 15,
+        toObject: () => ({ _id: 'dept-1', name: 'General Medicine', code: 'GEN' })
+      }
+    ]));
+    vi.spyOn(Doctor, 'countDocuments').mockResolvedValue(2);
+    vi.spyOn(Queue, 'countDocuments').mockResolvedValue(5);
   });
 
   afterAll(async () => {
-    await disconnectDB();
+    vi.restoreAllMocks();
   });
 
   it('Health Check Endpoint should return 200 ONLINE', async () => {
