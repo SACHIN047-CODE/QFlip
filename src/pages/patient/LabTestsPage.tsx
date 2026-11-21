@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { laboratoryService } from '../../services/laboratoryService';
 import { LabTestRequest } from '../../types';
-import { LoadingSpinner } from '../../components/common/LoadingSpinner';
+import { PageSkeleton } from '../../components/common/LoadingSkeleton';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { PageHeader } from '../../components/common/PageHeader';
+import { Button } from '../../components/common/Button';
+import { BentoCard } from '../../components/common/BentoCard';
 import { useAuth } from '../../context/AuthContext';
+import { FlaskConical, Download, MapPin } from 'lucide-react';
 
 export const LabTestsPage: React.FC = () => {
   const { user } = useAuth();
@@ -24,83 +28,85 @@ export const LabTestsPage: React.FC = () => {
     });
   }, [user]);
 
-  if (loading) return <LoadingSpinner message="Fetching your private diagnostic lab records..." />;
+  if (loading) return <PageSkeleton variant="content" />;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-light-outline">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
-            Pathology &amp; Radiology Stream
+    <div className="space-y-6 max-w-4xl mx-auto">
+      <PageHeader
+        title="Laboratory Investigations"
+        subtitle="Pathology &amp; Radiology Diagnostic Orders • Central Hospital Lab"
+        badge={
+          <span className="text-xs text-slate-500 flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-teal-700" />
+            Sample Collection: <strong className="text-slate-800">Ground Floor, Room 04</strong>
           </span>
-          <h1 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold text-light-primary">
-            Laboratory Investigations
-          </h1>
-        </div>
-        <div className="text-xs text-light-on-surface-variant">
-          Sample Collection Counter: <strong>Ground Floor, Room 04</strong>
-        </div>
-      </div>
+        }
+      />
 
       {tests.length === 0 ? (
-        <div className="p-12 bg-light-surface rounded-2xl border border-light-outline text-center space-y-3">
-          <span className="material-symbols-outlined text-4xl text-light-on-surface-variant">biotech</span>
-          <h3 className="font-headline text-title-md font-bold text-light-primary">No Lab Tests Found</h3>
-          <p className="text-xs text-light-on-surface-variant max-w-sm mx-auto">
+        <div className="p-12 bg-white rounded-xl border border-slate-200 text-center space-y-3">
+          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+            <FlaskConical className="w-6 h-6" />
+          </div>
+          <h3 className="text-sm font-bold text-slate-900">No Lab Tests Found</h3>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
             You do not have any pending or completed diagnostic requisitions under patient ID <strong>{user?.id}</strong>.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {tests.map((test) => (
-          <div
-            key={test.id}
-            className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4 hover:shadow-md transition-all"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-[10px] uppercase font-bold text-secondary block">
-                  {test.category}
-                </span>
-                <h3 className="font-headline text-title-md font-bold text-light-primary mt-0.5">
-                  {test.testName}
-                </h3>
-                <div className="text-xs text-light-on-surface-variant mt-1">
-                  Ordered By: <strong>{test.orderedByDoctor}</strong> ({test.orderedAt})
+            <BentoCard
+              key={test.id}
+              variant="solid"
+              padding="md"
+              className="space-y-4"
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="text-[10px] uppercase font-bold text-[#0F766E] block">
+                    {test.category}
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900 mt-0.5">
+                    {test.testName}
+                  </h3>
+                  <div className="text-xs text-slate-500 mt-1">
+                    Ordered By: <strong className="text-slate-700">{test.orderedByDoctor}</strong> ({test.orderedAt})
+                  </div>
                 </div>
+                <StatusBadge status={test.status} />
               </div>
-              <StatusBadge status={test.status} />
-            </div>
 
-            {test.summaryFindings && (
-              <div className="p-3 bg-light-surface-variant rounded-xl border border-light-outline text-xs">
-                <span className="font-bold text-light-primary block mb-1">Summary Findings:</span>
-                <p className="text-light-on-surface-variant">{test.summaryFindings}</p>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between pt-3 border-t border-light-outline text-xs">
-              <span className="text-light-on-surface-variant">
-                Technician: <strong>{test.labTechnician || 'Assigned'}</strong>
-              </span>
-
-              {test.status === 'COMPLETED' ? (
-                <button
-                  onClick={() => alert(`Downloading verified digital PDF report for ${test.testName}`)}
-                  className="px-3.5 py-1.5 bg-secondary text-white font-bold rounded-lg hover:bg-secondary/90 flex items-center gap-1 shadow-sm"
-                >
-                  <span className="material-symbols-outlined text-xs">download</span>
-                  Download PDF Report
-                </button>
-              ) : (
-                <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
-                  Sample Under Processing
-                </span>
+              {test.summaryFindings && (
+                <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200 text-xs">
+                  <span className="font-semibold text-slate-900 block mb-1">Summary Findings:</span>
+                  <p className="text-slate-700">{test.summaryFindings}</p>
+                </div>
               )}
-            </div>
-          </div>
-        ))}
-      </div>
+
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+                <span className="text-slate-500">
+                  Technician: <strong className="text-slate-700">{test.labTechnician || 'Assigned'}</strong>
+                </span>
+
+                {test.status === 'COMPLETED' ? (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    icon={<Download className="w-3.5 h-3.5" />}
+                    onClick={() => alert(`Downloading verified digital PDF report for ${test.testName}`)}
+                  >
+                    Download PDF
+                  </Button>
+                ) : (
+                  <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+                    Sample Under Processing
+                  </span>
+                )}
+              </div>
+            </BentoCard>
+          ))}
+        </div>
       )}
     </div>
   );

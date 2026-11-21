@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export const RegisterPage: React.FC = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = 'Patient Portal Registration — QFlip Healthcare';
+  }, []);
 
   const [formData, setFormData] = useState({
     name: 'Harmanpreet Kaur',
@@ -50,28 +54,28 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-light-surface-variant/30">
-      <div className="max-w-md w-full bg-light-surface rounded-2xl border border-light-outline p-8 shadow-xl space-y-6">
+    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
+      <div className="max-w-md w-full glass-card p-8 shadow-xl space-y-6">
         <div className="text-center">
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
             <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8">
               <path
                 d="M4 18L10 6L18 28L24 14L30 22"
-                stroke="#2585E8"
+                stroke="#0F766E"
                 strokeWidth="3.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               ></path>
-              <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
+              <circle cx="30" cy="22" r="3.5" fill="#14B8A6"></circle>
             </svg>
-            <span className="font-headline text-headline-sm font-extrabold text-light-primary">
-              Q<span className="text-secondary font-medium">Flip</span>
+            <span className="font-headline text-headline-sm font-extrabold text-slate-900">
+              CARE<span className="text-[#0F766E] font-medium">FLOW</span>
             </span>
           </Link>
-          <h2 className="font-headline text-title-lg font-bold text-light-primary">
+          <h2 className="font-headline text-xl font-bold text-slate-900">
             Patient Portal Registration
           </h2>
-          <p className="text-xs text-light-on-surface-variant mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Link your Ayushman Bharat Health Account (ABHA) for instant digital OPD slips
           </p>
         </div>

@@ -14,6 +14,8 @@ import { LandingPage } from '../pages/public/LandingPage';
 import { LoginPage } from '../pages/public/LoginPage';
 import { RegisterPage, ForgotPasswordPage } from '../pages/public/RegisterPage';
 import { FeedbackPage } from '../pages/public/FeedbackPage';
+import { PrivacyPolicyPage } from '../pages/public/PrivacyPolicyPage';
+import { TermsAndConditionsPage } from '../pages/public/TermsAndConditionsPage';
 
 // Patient Portal Pages
 import { PatientDashboard } from '../pages/patient/PatientDashboard';
@@ -22,7 +24,8 @@ import { PatientRegistration } from '../pages/patient/PatientRegistration';
 import { MedicalHistoryPage } from '../pages/patient/MedicalHistoryPage';
 import { DigitalPrescriptionsPage } from '../pages/patient/DigitalPrescriptionsPage';
 import { LabTestsPage } from '../pages/patient/LabTestsPage';
-import { PharmacyOrderPage, NotificationsPage } from '../pages/patient/PharmacyOrderPage';
+import { PharmacyOrderPage } from '../pages/patient/PharmacyOrderPage';
+import { NotificationsPage } from '../pages/patient/NotificationsPage';
 
 // Doctor Pages
 import { DoctorDashboard } from '../pages/doctor/DoctorDashboard';
@@ -63,14 +66,16 @@ import {
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Starting Page: Direct Login Page */}
+      {/* Public Pages */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsAndConditionsPage />} />
       </Route>
 
       {/* Patient Portal Pages (Protected - Strictly Logged-in Patient Only) */}

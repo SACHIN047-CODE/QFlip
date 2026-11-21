@@ -100,6 +100,16 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return created;
   };
 
+  const addDemoPatients = async () => {
+    await queueService.addDemoPatients();
+    await refreshTokens();
+  };
+
+  const resetDemoQueue = async () => {
+    await queueService.resetDemoQueue();
+    await refreshTokens();
+  };
+
   // Active serving token
   const currentServingToken = tokens.find((t) => t.status === 'IN_CONSULTATION') || null;
 

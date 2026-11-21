@@ -23,6 +23,34 @@ const saveTokens = (tokens: PatientToken[]) => {
 };
 
 export const queueService = {
+  async addDemoPatients(): Promise<void> {
+    if (USE_MOCK) {
+      await delay(300);
+      const demoPatients: PatientToken[] = [
+        { id: 'tok-demo-1', tokenNumber: 'OPD-GEN-301', patientId: 'PT-DEMO-1', patientName: 'Riya Sharma', age: 27, gender: 'Female', phone: '+91 98765 43101', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Fever', 'Body ache'], priority: 'Normal', status: 'WAITING', registeredAt: '09:40 AM', estimatedWaitMinutes: 12 },
+        { id: 'tok-demo-2', tokenNumber: 'OPD-GEN-302', patientId: 'PT-DEMO-2', patientName: 'Mohit Verma', age: 68, gender: 'Male', phone: '+91 98765 43102', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Joint pain'], priority: 'Senior', status: 'WAITING', registeredAt: '09:42 AM', estimatedWaitMinutes: 10 },
+        { id: 'tok-demo-3', tokenNumber: 'OPD-GEN-303', patientId: 'PT-DEMO-3', patientName: 'Kabir Singh', age: 8, gender: 'Male', phone: '+91 98765 43103', department: 'Pediatrics', assignedDoctorName: 'Dr. Priya Singh', roomNumber: 'OPD Room 103', symptoms: ['Cough'], priority: 'Pediatric', status: 'WAITING', registeredAt: '09:44 AM', estimatedWaitMinutes: 8 },
+        { id: 'tok-demo-4', tokenNumber: 'OPD-GEN-304', patientId: 'PT-DEMO-4', patientName: 'Sunita Devi', age: 54, gender: 'Female', phone: '+91 98765 43104', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Chest discomfort'], priority: 'Emergency', status: 'WAITING', registeredAt: '09:46 AM', estimatedWaitMinutes: 5 },
+        { id: 'tok-demo-5', tokenNumber: 'OPD-GEN-305', patientId: 'PT-DEMO-5', patientName: 'Aarav Jain', age: 34, gender: 'Male', phone: '+91 98765 43105', department: 'Orthopedics', assignedDoctorName: 'Dr. Harpreet Singh', roomNumber: 'OPD Room 108', symptoms: ['Knee pain'], priority: 'Normal', status: 'WAITING', registeredAt: '09:48 AM', estimatedWaitMinutes: 15 },
+        { id: 'tok-demo-6', tokenNumber: 'OPD-GEN-306', patientId: 'PT-DEMO-6', patientName: 'Meera Kapoor', age: 31, gender: 'Female', phone: '+91 98765 43106', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Migraine'], priority: 'Normal', status: 'WAITING', registeredAt: '09:50 AM', estimatedWaitMinutes: 18 },
+      ];
+      const existing = getStoredTokens();
+      const newIds = new Set(demoPatients.map((token) => token.id));
+      saveTokens([...existing.filter((token) => !newIds.has(token.id)), ...demoPatients]);
+      return;
+    }
+    await apiClient.post('/queue/demo-patients');
+  },
+
+  async resetDemoQueue(): Promise<void> {
+    if (USE_MOCK) {
+      await delay(300);
+      saveTokens(INITIAL_TOKENS);
+      return;
+    }
+    await apiClient.post('/queue/reset-demo');
+  },
+
   async getTokens(department?: string): Promise<PatientToken[]> {
     if (USE_MOCK) {
       await delay(200);
