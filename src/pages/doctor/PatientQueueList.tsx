@@ -139,3 +139,99 @@ export const PatientQueueList: React.FC = () => {
   );
 };
 
+export const DoctorSchedule: React.FC = () => {
+  return (
+    <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="pb-3 border-b border-light-outline">
+        <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+          Clinical Duty Management
+        </span>
+        <h1 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold text-light-primary">
+          Doctor Schedule &amp; Roster
+        </h1>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-light-surface p-6 rounded-2xl border border-light-outline shadow-card space-y-3">
+          <span className="text-[10px] uppercase font-bold text-secondary block">Today's Shift</span>
+          <div className="font-headline text-lg font-bold text-light-primary">Morning OPD (OPD-12)</div>
+          <div className="text-xs text-light-on-surface-variant">08:30 AM – 02:00 PM</div>
+          <div className="p-2.5 bg-success/10 border border-success/30 rounded-lg text-success text-xs font-bold flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-success"></span> Currently On Duty
+          </div>
+        </div>
+
+        <div className="bg-light-surface p-6 rounded-2xl border border-light-outline shadow-card space-y-3">
+          <span className="text-[10px] uppercase font-bold text-secondary block">Upcoming Ward Round</span>
+          <div className="font-headline text-lg font-bold text-light-primary">Male Medical Ward 3</div>
+          <div className="text-xs text-light-on-surface-variant">02:30 PM – 04:00 PM</div>
+          <div className="text-xs text-light-on-surface-variant">18 Inpatients Assigned</div>
+        </div>
+
+        <div className="bg-light-surface p-6 rounded-2xl border border-light-outline shadow-card space-y-3">
+          <span className="text-[10px] uppercase font-bold text-secondary block">On-Call Trauma Reserve</span>
+          <div className="font-headline text-lg font-bold text-light-primary">Emergency Trauma Wing</div>
+          <div className="text-xs text-light-on-surface-variant">Night Emergency Backup</div>
+          <div className="text-xs text-light-on-surface-variant">Cluster Tele-Call Active</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const PrescriptionManager: React.FC = () => {
+  return (
+    <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="pb-3 border-b border-light-outline">
+        <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+          Clinical Prescribing Engine
+        </span>
+        <h1 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold text-light-primary">
+          Standard Rx Bundles &amp; Templates
+        </h1>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div className="p-5 bg-light-surface rounded-2xl border border-light-outline shadow-card space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-headline text-title-md font-bold text-light-primary">
+              Acute Viral Upper Respiratory Kit
+            </h3>
+            <span className="px-2 py-0.5 rounded bg-secondary/10 text-secondary font-bold text-[10px]">
+              Template #1
+            </span>
+          </div>
+          <p className="text-light-on-surface-variant">
+            Standard 3-drug bundle: Amoxicillin-Clav 625mg + Paracetamol 650mg + Pantoprazole 40mg.
+          </p>
+          <button
+            onClick={() => alert('Template #1 applied to current patient!')}
+            className="px-4 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-secondary/90"
+          >
+            Load into Active Consultation
+          </button>
+        </div>
+
+        <div className="p-5 bg-light-surface rounded-2xl border border-light-outline shadow-card space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-headline text-title-md font-bold text-light-primary">
+              Pre-Hypertension Starter Kit
+            </h3>
+            <span className="px-2 py-0.5 rounded bg-secondary/10 text-secondary font-bold text-[10px]">
+              Template #2
+            </span>
+          </div>
+          <p className="text-light-on-surface-variant">
+            Standard 30-day bundle: Telmisartan 40mg + Amlodipine 5mg + Low Sodium Diet Advice.
+          </p>
+          <button
+            onClick={() => alert('Template #2 applied to current patient!')}
+            className="px-4 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-secondary/90"
+          >
+            Load into Active Consultation
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

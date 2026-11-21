@@ -27,9 +27,7 @@ const prescriptionSchema = new mongoose.Schema(
       {
         name: { type: String, required: true },
         dosage: { type: String, required: true }, // e.g. "500mg"
-        quantity: { type: Number },
-        consumptionTiming: { type: String, default: 'After breakfast' }, // e.g. "Before breakfast", "After breakfast", "At bedtime", etc.
-        frequency: { type: String, required: true }, // e.g. "Once daily", "Twice daily"
+        frequency: { type: String, required: true }, // e.g. "1-0-1 (Twice daily)"
         duration: { type: String, required: true }, // e.g. "5 days"
         instructions: { type: String, default: 'After meals' },
         isDispensed: { type: Boolean, default: false }

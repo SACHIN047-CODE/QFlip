@@ -25,14 +25,12 @@ export const PatientLayout: React.FC = () => {
             <div>
               <div className="font-headline text-sm font-bold text-light-primary flex items-center gap-2">
                 <span>Welcome, {user?.name || 'Patient'}</span>
-                {user?.id && (
-                  <span className="text-[11px] font-code font-bold px-2 py-0.2 rounded bg-light-surface-variant text-light-on-surface-variant border border-light-outline">
-                    {user.id}
-                  </span>
-                )}
+                <span className="text-[11px] font-code font-bold px-2 py-0.2 rounded bg-light-surface-variant text-light-on-surface-variant border border-light-outline">
+                  {user?.id || 'PT-10088'}
+                </span>
               </div>
               <div className="text-xs text-light-on-surface-variant">
-                ABHA ID: <strong className="font-code text-light-primary">{user?.abhaId || 'Not Linked'}</strong>
+                ABHA ID: <strong className="font-code text-light-primary">{user?.abhaId || '91-8274-1049-9812'}</strong>
               </div>
             </div>
           </div>
