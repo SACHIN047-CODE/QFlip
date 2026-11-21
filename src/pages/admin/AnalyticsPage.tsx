@@ -14,6 +14,7 @@ import {
   Legend,
 } from 'recharts';
 import { ChartContainer } from '../../components/common/LoadingSpinner';
+import { BentoCard } from '../../components/common/BentoCard';
 import { adminService } from '../../services/adminService';
 
 export const AnalyticsPage: React.FC = () => {
@@ -51,127 +52,136 @@ export const AnalyticsPage: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <div className="pb-3 border-b border-light-outline">
-        <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+      <div className="pb-3 border-b border-slate-200">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
           Hospital Operational Intelligence
         </span>
-        <h1 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold text-light-primary">
+        <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
           Clinical Analytics &amp; Performance Graphs
         </h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Peak Hour Rush Analysis */}
-        <ChartContainer
-          title="Peak-Hour Patient Inflow Analysis"
-          subtitle="Correlation between arrival surge and waiting line build-up"
-          badge="OPD Rush"
-        >
-          <div className="h-72 w-full pt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={peakHourData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#DEE2E6" />
-                <XAxis dataKey="hour" stroke="#495057" fontSize={10} />
-                <YAxis stroke="#495057" fontSize={11} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '8px',
-                    border: '1px solid #DEE2E6',
-                    fontSize: '12px',
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Area
-                  type="monotone"
-                  dataKey="registrations"
-                  name="Arrivals"
-                  stroke="#2585E8"
-                  fill="#2585E8"
-                  fillOpacity={0.3}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="waitMins"
-                  name="Avg Wait (Mins)"
-                  stroke="#D9534F"
-                  fill="#D9534F"
-                  fillOpacity={0.2}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </ChartContainer>
+        <BentoCard variant="glass" padding="none" hover={false}>
+          <ChartContainer
+            title="Peak-Hour Patient Inflow Analysis"
+            subtitle="Correlation between arrival surge and waiting line build-up"
+            badge="OPD Rush"
+          >
+            <div className="h-72 w-full pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={peakHourData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+                  <XAxis dataKey="hour" stroke="#64748B" fontSize={10} />
+                  <YAxis stroke="#64748B" fontSize={11} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '12px',
+                      border: '1px solid #E2E8F0',
+                      fontSize: '12px',
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                  <Area
+                    type="monotone"
+                    dataKey="registrations"
+                    name="Arrivals"
+                    stroke="#0F766E"
+                    fill="#0F766E"
+                    fillOpacity={0.25}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="waitMins"
+                    name="Avg Wait (Mins)"
+                    stroke="#D97706"
+                    fill="#D97706"
+                    fillOpacity={0.15}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </ChartContainer>
+        </BentoCard>
 
         {/* Doctor Workload Comparison */}
-        <ChartContainer
-          title="Doctor Workload &amp; Consultation Duration"
-          subtitle="Patients evaluated per clinician alongside average consultation speed"
-          badge="Staffing Audit"
-        >
-          <div className="h-72 w-full pt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={doctorWorkloadData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#DEE2E6" />
-                <XAxis type="number" stroke="#495057" fontSize={10} />
-                <YAxis dataKey="doctor" type="category" stroke="#495057" fontSize={10} width={130} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '8px',
-                    border: '1px solid #DEE2E6',
-                    fontSize: '12px',
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="patients" name="Patients Treated" fill="#249B69" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </ChartContainer>
+        <BentoCard variant="glass" padding="none" hover={false}>
+          <ChartContainer
+            title="Doctor Workload &amp; Consultation Duration"
+            subtitle="Patients evaluated per clinician alongside average consultation speed"
+            badge="Staffing Audit"
+          >
+            <div className="h-72 w-full pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={doctorWorkloadData} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+                  <XAxis type="number" stroke="#64748B" fontSize={10} />
+                  <YAxis dataKey="doctor" type="category" stroke="#64748B" fontSize={10} width={130} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '12px',
+                      border: '1px solid #E2E8F0',
+                      fontSize: '12px',
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                  <Bar dataKey="patients" name="Patients Treated" fill="#0F766E" radius={[0, 6, 6, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </ChartContainer>
+        </BentoCard>
 
         {/* Waiting Time Trends vs NHM Benchmark */}
-        <ChartContainer
-          title="Weekly Waiting Time Trend vs NHM Benchmark"
-          subtitle="Target threshold (&lt;20 mins) compliance across Civil Hospital Ambala"
-          badge="Quality Benchmark"
-          className="lg:col-span-2"
-        >
-          <div className="h-72 w-full pt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={waitTrendsData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#DEE2E6" />
-                <XAxis dataKey="day" stroke="#495057" fontSize={11} />
-                <YAxis stroke="#495057" fontSize={11} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '8px',
-                    border: '1px solid #DEE2E6',
-                    fontSize: '12px',
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Line
-                  type="monotone"
-                  dataKey="actualWait"
-                  name="Actual Wait Time (mins)"
-                  stroke="#2585E8"
-                  strokeWidth={3}
-                  dot={{ r: 5 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="benchmark"
-                  name="NHM National Benchmark (20 mins)"
-                  stroke="#D9534F"
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </ChartContainer>
+        <BentoCard variant="glass" padding="none" hover={false} colSpan="lg:col-span-2">
+          <ChartContainer
+            title="Weekly Waiting Time Trend vs NHM Benchmark"
+            subtitle="Target threshold (<20 mins) compliance across Civil Hospital Ambala"
+            badge="Quality Benchmark"
+          >
+            <div className="h-72 w-full pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={waitTrendsData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
+                  <XAxis dataKey="day" stroke="#64748B" fontSize={11} />
+                  <YAxis stroke="#64748B" fontSize={11} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(8px)',
+                      borderRadius: '12px',
+                      border: '1px solid #E2E8F0',
+                      fontSize: '12px',
+                    }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                  <Line
+                    type="monotone"
+                    dataKey="actualWait"
+                    name="Actual Wait Time (mins)"
+                    stroke="#0F766E"
+                    strokeWidth={2.5}
+                    dot={{ fill: '#0F766E', r: 4 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="benchmark"
+                    name="NHM National Benchmark (20 mins)"
+                    stroke="#DC2626"
+                    strokeWidth={1.5}
+                    strokeDasharray="4 4"
+                    dot={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </ChartContainer>
+        </BentoCard>
       </div>
     </div>
   );

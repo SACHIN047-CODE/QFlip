@@ -14,6 +14,11 @@ export const PatientRegistration: React.FC = () => {
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [createdToken, setCreatedToken] = useState<PatientToken | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    document.title = 'Online OPD Registration & Token Booking — QFlip';
+  }, []);
 
   const [formData, setFormData] = useState({
     patientName: 'Manpreet Singh',
@@ -80,6 +85,7 @@ export const PatientRegistration: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    setError('');
     setLoading(true);
     try {
       const token = await generateToken({
@@ -94,8 +100,9 @@ export const PatientRegistration: React.FC = () => {
       });
       setCreatedToken(token);
       setStep('success');
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setError(err?.message || 'Failed to issue digital token. Please check details and try again.');
     } finally {
       setLoading(false);
     }
@@ -341,6 +348,13 @@ export const PatientRegistration: React.FC = () => {
               Please ensure mobile number is correct to receive live SMS notifications
             </p>
           </div>
+
+          {error && (
+            <div className="p-3 bg-danger/10 border border-danger/30 rounded-xl text-xs text-danger flex items-center gap-2">
+              <span className="material-symbols-outlined text-sm">error</span>
+              <span>{error}</span>
+            </div>
+          )}
 
           <div className="space-y-4 text-xs">
             <div className="grid grid-cols-2 gap-4 p-4 bg-light-surface-variant rounded-xl border border-light-outline">

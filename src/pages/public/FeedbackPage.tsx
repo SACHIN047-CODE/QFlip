@@ -12,24 +12,43 @@ export const FeedbackPage: React.FC = () => {
   const [trackedResult, setTrackedResult] = useState<ComplaintFeedback | null>(null);
   const [submittedTicket, setSubmittedTicket] = useState<ComplaintFeedback | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  React.useEffect(() => {
+    document.title = 'Patient Feedback & Grievance Redressal — QFlip';
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) return;
+    setError('');
+
+    if (!patientName.trim()) {
+      setError('Please provide your name.');
+      return;
+    }
+    if (!phone.trim() || phone.trim().length < 10) {
+      setError('Please enter a valid 10-digit mobile contact number.');
+      return;
+    }
+    if (!message.trim()) {
+      setError('Please enter your feedback or grievance details.');
+      return;
+    }
 
     setLoading(true);
     try {
       const res = await patientService.submitFeedback({
         category,
         rating,
-        message,
-        patientName,
-        phone,
+        message: message.trim(),
+        patientName: patientName.trim(),
+        phone: phone.trim(),
       });
       setSubmittedTicket(res);
       setMessage('');
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setError(err?.message || 'Failed to submit grievance. Please verify your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -83,6 +102,13 @@ export const FeedbackPage: React.FC = () => {
               Submit Grievance or Compliment
             </h2>
           </div>
+
+          {error && (
+            <div className="p-3 bg-danger/10 border border-danger/30 rounded-xl text-xs text-danger flex items-center gap-2">
+              <span className="material-symbols-outlined text-sm">error</span>
+              <span>{error}</span>
+            </div>
+          )}
 
           {submittedTicket ? (
             <div className="p-6 bg-success/10 border border-success/30 rounded-2xl text-center space-y-3">
@@ -260,11 +286,18 @@ export const FeedbackPage: React.FC = () => {
             </h4>
             <div className="flex items-center gap-2 text-light-on-surface-variant">
               <span className="material-symbols-outlined text-sm text-secondary">phone</span>
-              <span>Hospital Grievance Desk: <strong>0171-2550102</strong></span>
+              <span>
+                Hospital Grievance Desk:{' '}
+                <a href="tel:01712550102" className="font-bold text-secondary hover:underline">
+                  0171-2550102
+                </a>
+              </span>
             </div>
             <div className="flex items-center gap-2 text-light-on-surface-variant">
               <span className="material-symbols-outlined text-sm text-secondary">mail</span>
-              <span>grievance@ambalahospital.gov.in</span>
+              <a href="mailto:grievance@ambalahospital.gov.in" className="text-secondary hover:underline">
+                grievance@ambalahospital.gov.in
+              </a>
             </div>
             <div className="flex items-center gap-2 text-light-on-surface-variant">
               <span className="material-symbols-outlined text-sm text-secondary">schedule</span>

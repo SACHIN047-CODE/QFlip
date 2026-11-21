@@ -1,13 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useQueue } from '../../context/QueueContext';
 import { TokenCard } from '../../components/common/TokenCard';
-import { StatCard } from '../../components/common/StatCard';
+import { PageHeader } from '../../components/common/PageHeader';
+import { Button } from '../../components/common/Button';
+import { BentoCard } from '../../components/common/BentoCard';
+import { 
+  FileText, 
+  FlaskConical, 
+  Pill, 
+  PlusCircle, 
+  ArrowRight, 
+  MessageSquare, 
+  CheckCircle2, 
+  Clock, 
+  Stethoscope 
+} from 'lucide-react';
 
 export const PatientDashboard: React.FC = () => {
   const { user } = useAuth();
   const { myToken, currentServingToken, tokens } = useQueue();
+  const navigate = useNavigate();
 
   const patientsAhead = myToken && currentServingToken
     ? Math.max(
@@ -18,10 +32,25 @@ export const PatientDashboard: React.FC = () => {
     : 6;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      <PageHeader
+        title={`Welcome, ${user?.name || 'Patient'}`}
+        subtitle={`ABHA ID: ${user?.abhaId || '91-8274-1049-9812'} • Patient Portal`}
+        actions={
+          <Button
+            variant="primary"
+            size="md"
+            icon={<PlusCircle className="w-4 h-4" />}
+            onClick={() => navigate('/patient/registration')}
+          >
+            New OPD Slip
+          </Button>
+        }
+      />
+
       {/* Welcome & Live Queue Status Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left: Active Token Card (Stitch Live Token Tracker layout) */}
+        {/* Left: Active Token Card (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {myToken ? (
             <TokenCard
@@ -29,151 +58,151 @@ export const PatientDashboard: React.FC = () => {
               currentServingTokenNumber={currentServingToken?.tokenNumber || 'OPD-098'}
               patientsAhead={patientsAhead}
               onPrint={() => window.print()}
-              onViewDetails={() => (window.location.href = '/patient/queue')}
+              onViewDetails={() => navigate('/patient/queue')}
             />
           ) : (
-            <div className="p-8 bg-light-surface rounded-2xl border border-light-outline text-center space-y-4">
-              <span className="material-symbols-outlined text-4xl text-secondary">local_activity</span>
-              <h3 className="font-headline text-title-lg font-bold text-light-primary">
+            <div className="p-8 bg-white rounded-xl border border-slate-200 text-center space-y-4 shadow-sm">
+              <div className="w-12 h-12 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center mx-auto">
+                <Clock className="w-6 h-6" />
+              </div>
+              <h3 className="text-base font-bold text-slate-900">
                 No Active OPD Token Found
               </h3>
-              <p className="text-xs text-light-on-surface-variant max-w-sm mx-auto">
+              <p className="text-xs text-slate-500 max-w-sm mx-auto">
                 Generate an OPD slip online in 10 seconds or speak your symptoms using our Multi-lingual Voice intake.
               </p>
-              <Link
-                to="/patient/registration"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-on-accent font-bold text-xs rounded-xl hover:brightness-95 shadow-sm"
+              <Button
+                variant="primary"
+                size="md"
+                icon={<ArrowRight className="w-4 h-4" />}
+                onClick={() => navigate('/patient/registration')}
               >
-                <span>Book OPD Slip Now</span>
-                <span className="material-symbols-outlined text-sm">arrow_forward</span>
-              </Link>
+                Book OPD Slip Now
+              </Button>
             </div>
           )}
 
-          {/* Quick Shortcuts Grid */}
+          {/* Quick Shortcuts Grid (Glass Bento Tiles) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <Link
               to="/patient/registration"
-              className="p-4 bg-light-surface rounded-xl border border-light-outline hover:border-secondary/40 hover:shadow-md transition-all text-center flex flex-col items-center justify-center group"
+              className="glass-card p-4 hover:border-[#0F766E]/40 text-center flex flex-col items-center justify-center group"
             >
-              <div className="w-10 h-10 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <span className="material-symbols-outlined">add_circle</span>
+              <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#0F766E] flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                <PlusCircle className="w-5 h-5" />
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">New OPD Slip</span>
-              <span className="text-[10px] text-light-on-surface-variant">Instant booking</span>
+              <span className="text-xs font-bold text-slate-900">New OPD Slip</span>
+              <span className="text-[10px] text-slate-500 mt-0.5">Instant booking</span>
             </Link>
 
             <Link
               to="/patient/prescriptions"
-              className="p-4 bg-light-surface rounded-xl border border-light-outline hover:border-secondary/40 hover:shadow-md transition-all text-center flex flex-col items-center justify-center group"
+              className="glass-card p-4 hover:border-blue-400 text-center flex flex-col items-center justify-center group"
             >
-              <div className="w-10 h-10 rounded-lg bg-accent/20 text-on-accent flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <span className="material-symbols-outlined">prescriptions</span>
+              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                <FileText className="w-5 h-5" />
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">Prescriptions</span>
-              <span className="text-[10px] text-light-on-surface-variant">Digital QR Rx</span>
+              <span className="text-xs font-bold text-slate-900">Prescriptions</span>
+              <span className="text-[10px] text-slate-500 mt-0.5">Digital QR Rx</span>
             </Link>
 
             <Link
               to="/patient/lab-tests"
-              className="p-4 bg-light-surface rounded-xl border border-light-outline hover:border-secondary/40 hover:shadow-md transition-all text-center flex flex-col items-center justify-center group"
+              className="glass-card p-4 hover:border-purple-400 text-center flex flex-col items-center justify-center group"
             >
-              <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <span className="material-symbols-outlined">biotech</span>
+              <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                <FlaskConical className="w-5 h-5" />
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">Lab Reports</span>
-              <span className="text-[10px] text-light-on-surface-variant">2 reports ready</span>
+              <span className="text-xs font-bold text-slate-900">Lab Reports</span>
+              <span className="text-[10px] text-slate-500 mt-0.5">Verified reports</span>
             </Link>
 
             <Link
               to="/patient/pharmacy"
-              className="p-4 bg-light-surface rounded-xl border border-light-outline hover:border-secondary/40 hover:shadow-md transition-all text-center flex flex-col items-center justify-center group"
+              className="glass-card p-4 hover:border-emerald-400 text-center flex flex-col items-center justify-center group"
             >
-              <div className="w-10 h-10 rounded-lg bg-success/10 text-success flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <span className="material-symbols-outlined">medication</span>
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                <Pill className="w-5 h-5" />
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">Jan Aushadhi</span>
-              <span className="text-[10px] text-light-on-surface-variant">Counter #03</span>
+              <span className="text-xs font-bold text-slate-900">Jan Aushadhi</span>
+              <span className="text-[10px] text-slate-500 mt-0.5">Counter #03</span>
             </Link>
           </div>
         </div>
 
         {/* Right: Hospital Status & Clinical Alerts (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          {/* Doctor On Duty Card */}
-          <div className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-light-outline">
-              <span className="text-xs font-bold text-light-on-surface-variant uppercase tracking-wider">
-                Assigned Clinical OPD
+          {/* Doctor On Duty Card (Glass Surface) */}
+          <div className="glass-card p-5 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/70">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                Assigned OPD Clinic
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-success/15 text-success text-[11px] font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-success"></span> In Session
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                In Session
               </span>
             </div>
 
-            <div className="flex items-center gap-4">
-              <img
-                src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&q=80"
-                alt="Doctor"
-                className="w-14 h-14 rounded-xl object-cover border border-light-outline"
-              />
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-xl bg-teal-50 text-[#0F766E] flex items-center justify-center border border-teal-100">
+                <Stethoscope className="w-6 h-6" />
+              </div>
               <div>
-                <h4 className="font-headline text-title-md font-bold text-light-primary">
+                <h4 className="text-sm font-bold text-slate-900">
                   Dr. Rajesh Sharma, MD
                 </h4>
-                <div className="text-xs text-secondary font-semibold">General Medicine • OPD Room 12</div>
-                <div className="text-[11px] text-light-on-surface-variant mt-0.5">
-                  Shift: 08:30 AM – 02:00 PM (Civil Hospital Ambala)
+                <div className="text-xs text-[#0F766E] font-medium">General Medicine • Room 12</div>
+                <div className="text-[11px] text-slate-500 mt-0.5">
+                  Shift: 08:30 AM – 02:00 PM • Civil Hospital Ambala
                 </div>
               </div>
             </div>
 
-            <div className="p-3 bg-light-surface-variant rounded-xl border border-light-outline text-xs space-y-2">
-              <div className="flex justify-between text-light-on-surface-variant">
+            <div className="p-3 bg-white/80 rounded-xl border border-slate-200/80 text-xs space-y-2">
+              <div className="flex justify-between text-slate-600">
                 <span>Patients in Queue:</span>
-                <strong className="text-light-primary font-code">24 Patients</strong>
+                <strong className="text-slate-900 font-mono">24 Patients</strong>
               </div>
-              <div className="flex justify-between text-light-on-surface-variant">
+              <div className="flex justify-between text-slate-600">
                 <span>Avg. Consultation Time:</span>
-                <strong className="text-light-primary font-code">6.5 mins / patient</strong>
+                <strong className="text-slate-900 font-mono">6.5 mins / patient</strong>
               </div>
-              <div className="flex justify-between text-light-on-surface-variant">
-                <span>OPD Hall Location:</span>
-                <strong className="text-light-primary">Block B, 1st Floor (Near Lift 2)</strong>
+              <div className="flex justify-between text-slate-600">
+                <span>OPD Location:</span>
+                <strong className="text-slate-900">Block B, 1st Floor (Near Lift 2)</strong>
               </div>
             </div>
           </div>
 
-          {/* Real-time SMS and Voice Alert History */}
-          <div className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-light-outline">
-              <h4 className="font-headline text-title-md font-bold text-light-primary flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary text-base">sms</span>
+          {/* Real-time SMS and Voice Alert History (Glass Surface) */}
+          <div className="glass-card p-5 space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200/70">
+              <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5 text-[#0F766E]" />
                 Live Token SMS Updates
               </h4>
-              <span className="text-[10px] text-light-on-surface-variant">Simulated Telco Stream</span>
+              <span className="text-[10px] text-slate-400">ABDM Synced</span>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="p-3 bg-secondary/5 rounded-xl border border-secondary/20">
-                <div className="flex justify-between text-[10px] text-secondary font-bold mb-1">
+            <div className="space-y-2.5 text-xs">
+              <div className="p-3 bg-teal-50/70 rounded-xl border border-[#0F766E]/20">
+                <div className="flex justify-between text-[10px] text-[#0F766E] font-bold mb-1">
                   <span>GOV-AMBALA-OPD</span>
                   <span>10:02 AM</span>
                 </div>
-                <p className="text-light-primary text-[11px]">
-                  "Dear Manpreet Singh, Token OPD-098 is in consultation. 6 patients ahead of OPD-104. Please take seat
-                  in 1st Floor Waiting Hall 2."
+                <p className="text-slate-800 text-xs leading-relaxed">
+                  "Dear Patient, Token OPD-098 is in consultation. 6 patients ahead of OPD-104. Please take seat in 1st Floor Waiting Hall 2."
                 </p>
               </div>
 
-              <div className="p-3 bg-light-surface-variant rounded-xl border border-light-outline">
-                <div className="flex justify-between text-[10px] text-light-on-surface-variant font-bold mb-1">
+              <div className="p-3 bg-white/80 rounded-xl border border-slate-200">
+                <div className="flex justify-between text-[10px] text-slate-500 font-semibold mb-1">
                   <span>GOV-AMBALA-OPD</span>
                   <span>09:48 AM</span>
                 </div>
-                <p className="text-light-on-surface-variant text-[11px]">
-                  "Token OPD-104 booked successfully for General Medicine (Room 12). Est wait 25 mins. Show QR code to
-                  OPD door attendant."
+                <p className="text-slate-600 text-xs leading-relaxed">
+                  "Token OPD-104 booked successfully for General Medicine (Room 12). Est wait 25 mins. Show QR code to OPD door attendant."
                 </p>
               </div>
             </div>
@@ -181,46 +210,46 @@ export const PatientDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Patient Health Records Summary */}
-      <div className="bg-light-surface rounded-2xl border border-light-outline p-6 sm:p-8 shadow-card space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-light-outline">
+      {/* Patient Health Records Summary (Solid Bento Card) */}
+      <BentoCard variant="solid" padding="lg" className="space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
           <div>
-            <h3 className="font-headline text-title-lg font-bold text-light-primary">
+            <h3 className="text-base font-bold text-slate-900">
               Ayushman Bharat Health Locker Summary
             </h3>
-            <p className="text-xs text-light-on-surface-variant">
-              Linked to ABHA: <strong>{user?.abhaId || '91-8274-1049-9812'}</strong>
+            <p className="text-xs text-slate-500">
+              Linked to ABHA: <strong className="font-mono text-slate-700">{user?.abhaId || '91-8274-1049-9812'}</strong>
             </p>
           </div>
           <Link
             to="/patient/medical-history"
-            className="text-xs font-bold text-secondary hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-[#0F766E] hover:text-[#115E59] flex items-center gap-1"
           >
-            <span>View Complete Health History</span>
-            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+            <span>View Full Health Record</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 bg-light-surface-variant rounded-xl border border-light-outline">
-            <span className="text-[10px] uppercase font-bold text-secondary block mb-1">Last Consultation</span>
-            <div className="font-headline text-sm font-bold text-light-primary">15 Oct 2026</div>
-            <div className="text-light-on-surface-variant mt-0.5">Acute Viral Pharyngitis • Dr. Rajesh Sharma</div>
+          <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-[#0F766E] block mb-1">Last Consultation</span>
+            <div className="text-sm font-bold text-slate-900">15 Oct 2026</div>
+            <div className="text-slate-500 mt-0.5">Acute Viral Pharyngitis • Dr. Rajesh Sharma</div>
           </div>
 
-          <div className="p-4 bg-light-surface-variant rounded-xl border border-light-outline">
-            <span className="text-[10px] uppercase font-bold text-purple-600 block mb-1">Diagnostic Report</span>
-            <div className="font-headline text-sm font-bold text-light-primary">CBC &amp; Platelet Count</div>
-            <div className="text-light-on-surface-variant mt-0.5">Verified on 16 Oct • Normal Range</div>
+          <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-purple-700 block mb-1">Diagnostic Report</span>
+            <div className="text-sm font-bold text-slate-900">CBC & Platelet Count</div>
+            <div className="text-slate-500 mt-0.5">Verified on 16 Oct • Normal Range</div>
           </div>
 
-          <div className="p-4 bg-light-surface-variant rounded-xl border border-light-outline">
-            <span className="text-[10px] uppercase font-bold text-success block mb-1">Active Prescription</span>
-            <div className="font-headline text-sm font-bold text-light-primary">Azithromycin + Levocetirizine</div>
-            <div className="text-light-on-surface-variant mt-0.5">Course Completed • Follow-up Optional</div>
+          <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200">
+            <span className="text-[10px] uppercase font-bold text-emerald-700 block mb-1">Active Prescription</span>
+            <div className="text-sm font-bold text-slate-900">Azithromycin + Levocetirizine</div>
+            <div className="text-slate-500 mt-0.5">Course Completed • Follow-up Optional</div>
           </div>
         </div>
-      </div>
+      </BentoCard>
     </div>
   );
 };
