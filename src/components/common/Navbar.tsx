@@ -183,16 +183,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                 <span className="material-symbols-outlined text-xs text-secondary">lock</span>
               </button>
               <NavLink
-                to="/ai/dashboard"
-                className={({ isActive }) =>
-                  `transition-colors ${
-                    isActive ? 'text-secondary font-extrabold' : 'text-secondary font-bold hover:brightness-90'
-                  }`
-                }
-              >
-                {t('nav.ai_digital_twin', 'AI & Digital Twin')}
-              </NavLink>
-              <NavLink
                 to="/feedback"
                 className={({ isActive }) =>
                   `transition-colors ${
@@ -361,14 +351,16 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
             {/* User Session / Authentication Controls */}
             {user ? (
               <div className="flex items-center gap-3">
-                <div className="hidden sm:flex flex-col text-right">
-                  <span className="text-xs font-bold text-light-primary leading-tight">
-                    {user.name}
-                  </span>
-                  <span className="text-[10px] uppercase font-bold text-secondary">
-                    {user.role} • {user.id}
-                  </span>
-                </div>
+                {mode !== 'patient' && user.role !== 'patient' && (
+                  <div className="hidden sm:flex flex-col text-right">
+                    <span className="text-xs font-bold text-light-primary leading-tight">
+                      {user.name}
+                    </span>
+                    <span className="text-[10px] uppercase font-bold text-secondary">
+                      {user.role} • {user.id}
+                    </span>
+                  </div>
+                )}
                 <button
                   onClick={() => {
                     logout();
@@ -494,13 +486,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                 >
                   {t('nav.hospital_command', 'Hospital Command')}
                 </button>
-                <NavLink
-                  to="/ai/dashboard"
-                  onClick={() => setIsMobileNavOpen(false)}
-                  className="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-800 hover:bg-slate-100"
-                >
-                  {t('nav.ai_digital_twin', 'AI & Digital Twin')}
-                </NavLink>
                 <NavLink
                   to="/feedback"
                   onClick={() => setIsMobileNavOpen(false)}
