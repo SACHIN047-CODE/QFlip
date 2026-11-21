@@ -40,4 +40,31 @@ export const protect = async (req, res, next) => {
   }
 };
 
+export const optionalAuth = async (req, res, next) => {
+  try {
+    let token = null;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer ')
+    ) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (token) {
+      try {
+        const decoded = verifyToken(token);
+        const user = await User.findById(decoded.id);
+        if (user && user.isActive) {
+          req.user = user;
+        }
+      } catch (err) {
+        // Silently proceed as guest if token is invalid
+      }
+    }
+    next();
+  } catch (error) {
+    next();
+  }
+};
+
 export default protect;

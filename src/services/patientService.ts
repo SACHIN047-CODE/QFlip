@@ -1,5 +1,5 @@
 import { apiClient, delay, USE_MOCK } from './api';
-import { ConsultationNote, AppNotification, ComplaintFeedback } from '../types';
+import { ConsultationNote, AppNotification, ComplaintFeedback, SupportTicket } from '../types';
 import { INITIAL_NOTIFICATIONS, INITIAL_COMPLAINTS } from './mockData';
 
 export const patientService = {
@@ -70,32 +70,109 @@ export const patientService = {
     return apiClient.patch(`/patient/notifications/${id}/read`);
   },
 
+  async submitTicket(ticket: {
+    subject?: string;
+    description: string;
+    category: SupportTicket['category'];
+    patientName: string;
+    phone: string;
+    rating?: number;
+    userId?: string;
+  }): Promise<SupportTicket> {
+    if (USE_MOCK) {
+      await delay(350);
+      const now = new Date();
+      const formattedDate =
+        now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+        ', ' +
+        now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+      const item: SupportTicket = {
+        id: `tck-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        ticketId: `TCK-${Math.floor(1000 + Math.random() * 9000)}`,
+        userId: ticket.userId || (localStorage.getItem('qflip_user') ? JSON.parse(localStorage.getItem('qflip_user')!).id : undefined),
+        patientId: ticket.userId,
+        patientName: ticket.patientName,
+        userName: ticket.patientName,
+        phone: ticket.phone,
+        subject: ticket.subject || `${ticket.category} Grievance`,
+        description: ticket.description,
+        message: ticket.description,
+        category: ticket.category,
+        rating: ticket.rating || 3,
+        status: 'OPEN',
+        createdAt: now.toISOString(),
+        submittedAt: formattedDate,
+        updatedAt: now.toISOString(),
+        statusHistory: [
+          {
+            status: 'OPEN',
+            timestamp: formattedDate,
+            changedBy: ticket.patientName,
+            note: 'Ticket submitted via Patient Portal'
+          }
+        ],
+        adminUpdates: [],
+        internalNotes: []
+      };
+
+      const stored = localStorage.getItem('qflip_complaints');
+      const list: SupportTicket[] = stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
+      const updatedList = [item, ...list];
+      localStorage.setItem('qflip_complaints', JSON.stringify(updatedList));
+      return item;
+    }
+    return apiClient.post('/tickets', ticket);
+  },
+
   async submitFeedback(feedback: {
-    category: ComplaintFeedback['category'];
+    subject?: string;
+    category: SupportTicket['category'];
     rating: number;
     message: string;
     patientName: string;
     phone: string;
-  }): Promise<ComplaintFeedback> {
+    userId?: string;
+  }): Promise<SupportTicket> {
+    return this.submitTicket({
+      subject: feedback.subject,
+      description: feedback.message,
+      category: feedback.category,
+      patientName: feedback.patientName,
+      phone: feedback.phone,
+      rating: feedback.rating,
+      userId: feedback.userId
+    });
+  },
+
+  async getTicketByTrackingId(ticketId: string): Promise<SupportTicket | null> {
+    if (!ticketId || !ticketId.trim()) return null;
+    const query = ticketId.trim().toUpperCase();
+
     if (USE_MOCK) {
-      await delay(350);
-      const item: ComplaintFeedback = {
-        id: `comp-${Date.now()}`,
-        ticketId: `TCK-${Math.floor(1000 + Math.random() * 9000)}`,
-        patientName: feedback.patientName,
-        phone: feedback.phone,
-        category: feedback.category,
-        rating: feedback.rating,
-        message: feedback.message,
-        status: 'OPEN',
-        submittedAt: 'Just now'
-      };
+      await delay(250);
       const stored = localStorage.getItem('qflip_complaints');
-      const list: ComplaintFeedback[] = stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
-      localStorage.setItem('qflip_complaints', JSON.stringify([item, ...list]));
-      return item;
+      const list: SupportTicket[] = stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
+      const found = list.find(
+        (c) => c.ticketId.toUpperCase() === query || c.id.toUpperCase() === query
+      );
+      if (!found) return null;
+      // Guarantee privacy: never expose internal admin notes to patients
+      const sanitized: SupportTicket = {
+        ...found,
+        internalNotes: undefined
+      };
+      return sanitized;
     }
-    return apiClient.post('/patient/feedback', feedback);
+    try {
+      const ticket: SupportTicket = await apiClient.get(`/tickets/track/${encodeURIComponent(query)}`);
+      if (ticket) {
+        return { ...ticket, internalNotes: undefined };
+      }
+      return null;
+    } catch {
+      return null;
+    }
   }
 };
 

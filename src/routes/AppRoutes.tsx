@@ -7,6 +7,7 @@ import { PatientLayout } from '../layouts/PatientLayout';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 import { DoctorGuard } from './DoctorGuard';
+import { GuestRoute } from './GuestRoute';
 import { useAuth } from '../context/AuthContext';
 
 // Public & Auth Pages
@@ -66,12 +67,18 @@ import {
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Starting Page: Direct Login Page */}
+      {/* Guest-only routes: Login, Register, Forgot Password, and Root Landing */}
+      <Route element={<GuestRoute />}>
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        </Route>
+      </Route>
+
+      {/* Publicly permitted routes accessible by anyone */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/landing" element={<LandingPage />} />
       </Route>

@@ -111,7 +111,7 @@ export const LoginPage: React.FC = () => {
             Hospital SSO &amp; Portal Authentication
           </h2>
           <p className="text-xs text-light-on-surface-variant mt-1">
-            Access role-protected clinical workflows, ABHA gateway, and live OPD dashboards
+            Log in to access your dashboard, manage appointments, track OPD queues, and view your hospital services.
           </p>
         </div>
 

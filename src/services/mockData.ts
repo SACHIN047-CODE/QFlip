@@ -408,37 +408,93 @@ export const INITIAL_COMPLAINTS: ComplaintFeedback[] = [
   {
     id: 'comp-101',
     ticketId: 'TCK-9921',
+    userId: 'PT-10088',
+    patientId: 'PT-10088',
     patientName: 'Sunita Rani',
+    userName: 'Sunita Rani',
     phone: '9812001122',
+    subject: 'Excessive delay after token announcement in OPD Room 12',
+    description: 'Waited more than 45 minutes after my token OPD-045 was announced because doctor went for emergency round.',
+    message: 'Waited more than 45 minutes after my token OPD-045 was announced because doctor went for emergency round.',
     category: 'Long Wait Time',
     rating: 2,
-    message: 'Waited more than 45 minutes after my token OPD-045 was announced because doctor went for emergency round.',
-    status: 'INVESTIGATING',
+    status: 'IN_PROGRESS',
+    createdAt: '2026-11-20T09:30:00.000Z',
     submittedAt: 'Today, 09:30 AM',
-    resolutionNote: 'Explained that emergency trauma patient arrived. Token priority restored.'
+    updatedAt: '2026-11-20T10:00:00.000Z',
+    statusHistory: [
+      { status: 'OPEN', timestamp: '20 Nov 2026, 09:30 AM', changedBy: 'Sunita Rani' },
+      { status: 'IN_PROGRESS', timestamp: '20 Nov 2026, 10:00 AM', changedBy: 'Chief Medical Superintendent', note: 'Contacted OPD Room 12 lead nurse' }
+    ],
+    adminUpdates: [
+      { id: 'upd-1', message: 'Medical officer has acknowledged the delay. Patient token placed at front of queue upon doctor return.', timestamp: '20 Nov 2026, 10:00 AM', author: 'OPD Grievance Desk' }
+    ],
+    resolutionMessage: 'Explained that emergency trauma patient arrived. Token priority restored.',
+    resolutionNote: 'Explained that emergency trauma patient arrived. Token priority restored.',
+    internalNotes: [
+      { id: 'in-1', note: 'Dr. Rajesh was called to ER Trauma Bay for road accident victim resuscitation. Validated delay.', timestamp: '20 Nov 2026, 09:50 AM', author: 'Admin' }
+    ]
   },
   {
     id: 'comp-102',
     ticketId: 'TCK-9922',
+    userId: 'PT-10089',
+    patientId: 'PT-10089',
     patientName: 'Rakesh Verma',
+    userName: 'Rakesh Verma',
     phone: '9876543210',
+    subject: 'Slow dispensing queue at Jan Aushadhi Pharmacy Counter #2',
+    description: 'Medicine counter line was slow, but digital token screen helped track when medicines were ready.',
+    message: 'Medicine counter line was slow, but digital token screen helped track when medicines were ready.',
     category: 'Pharmacy Delay',
     rating: 3,
-    message: 'Medicine counter line was slow, but digital token screen helped track when medicines were ready.',
     status: 'RESOLVED',
+    createdAt: '2026-11-19T15:15:00.000Z',
     submittedAt: 'Yesterday, 03:15 PM',
-    resolutionNote: 'Added extra pharmacist to dispensing desk #2 during afternoon rush.'
+    updatedAt: '2026-11-19T16:30:00.000Z',
+    resolvedAt: '2026-11-19T16:30:00.000Z',
+    statusHistory: [
+      { status: 'OPEN', timestamp: '19 Nov 2026, 03:15 PM', changedBy: 'Rakesh Verma' },
+      { status: 'IN_PROGRESS', timestamp: '19 Nov 2026, 03:45 PM', changedBy: 'Pharmacy Superintendent' },
+      { status: 'RESOLVED', timestamp: '19 Nov 2026, 04:30 PM', changedBy: 'Chief Pharmacist', note: 'Added extra pharmacist to dispensing desk #2 during afternoon rush.' }
+    ],
+    adminUpdates: [
+      { id: 'upd-2', message: 'Additional pharmacist deployed to counter #2 to clear evening medicine peak.', timestamp: '19 Nov 2026, 04:00 PM', author: 'Jan Aushadhi Lead' }
+    ],
+    resolutionMessage: 'Added extra pharmacist to dispensing desk #2 during afternoon rush. Issue resolved.',
+    resolutionNote: 'Added extra pharmacist to dispensing desk #2 during afternoon rush.',
+    internalNotes: [
+      { id: 'in-2', note: 'Pharmacist on counter #1 had shift handover delay. Roster adjusted.', timestamp: '19 Nov 2026, 03:40 PM', author: 'Admin' }
+    ]
   },
   {
     id: 'comp-103',
     ticketId: 'TCK-9923',
+    userId: 'PT-10090',
+    patientId: 'PT-10090',
     patientName: 'Balwinder Kaur',
+    userName: 'Balwinder Kaur',
     phone: '9416098765',
+    subject: 'Feedback on OPD Hall AC and water hygiene',
+    description: 'OPD waiting hall air conditioning was comfortable and drinking water available.',
+    message: 'OPD waiting hall air conditioning was comfortable and drinking water available.',
     category: 'Cleanliness',
     rating: 4,
-    message: 'OPD waiting hall air conditioning was comfortable and drinking water available.',
     status: 'CLOSED',
-    submittedAt: 'Yesterday, 11:45 AM'
+    createdAt: '2026-11-19T11:45:00.000Z',
+    submittedAt: 'Yesterday, 11:45 AM',
+    updatedAt: '2026-11-19T12:00:00.000Z',
+    resolvedAt: '2026-11-19T12:00:00.000Z',
+    statusHistory: [
+      { status: 'OPEN', timestamp: '19 Nov 2026, 11:45 AM', changedBy: 'Balwinder Kaur' },
+      { status: 'CLOSED', timestamp: '19 Nov 2026, 12:00 PM', changedBy: 'Admin', note: 'Compliment recorded in quality log' }
+    ],
+    adminUpdates: [
+      { id: 'upd-3', message: 'Thank you for your valuable feedback. Our housekeeping staff has been commended.', timestamp: '19 Nov 2026, 12:00 PM', author: 'Admin Redressal Officer' }
+    ],
+    resolutionMessage: 'Positive feedback recorded and shared with hospital sanitation department.',
+    resolutionNote: 'Positive feedback recorded and shared with hospital sanitation department.',
+    internalNotes: []
   }
 ];
 

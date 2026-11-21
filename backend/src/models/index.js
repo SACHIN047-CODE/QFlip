@@ -12,4 +12,5 @@ export { PharmacyOrder } from './PharmacyOrder.js';
 export { Notification } from './Notification.js';
 export { Feedback } from './Feedback.js';
 export { HospitalResource } from './HospitalResource.js';
+export { SupportTicket } from './SupportTicket.js';
 export { AuditLog } from './AuditLog.js';

@@ -183,19 +183,55 @@ export interface DigitalTwinSimulationResult {
   recommendedInterventions: string[];
 }
 
-export interface ComplaintFeedback {
+export type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'AWAITING_USER' | 'RESOLVED' | 'CLOSED';
+
+export interface TicketStatusUpdate {
+  status: TicketStatus;
+  timestamp: string;
+  changedBy: string;
+  note?: string;
+}
+
+export interface TicketAdminUpdate {
+  id: string;
+  message: string;
+  timestamp: string;
+  author: string;
+}
+
+export interface TicketInternalNote {
+  id: string;
+  note: string;
+  timestamp: string;
+  author: string;
+}
+
+export interface SupportTicket {
   id: string;
   ticketId: string;
+  userId?: string;
   patientId?: string;
   patientName: string;
+  userName?: string;
   phone: string;
-  category: 'Long Wait Time' | 'Doctor Unavailability' | 'Cleanliness' | 'Staff Behavior' | 'Pharmacy Delay' | 'App Issue' | 'Other';
-  rating: number; // 1 to 5
+  subject: string;
+  description: string;
   message: string;
-  status: 'OPEN' | 'INVESTIGATING' | 'RESOLVED' | 'CLOSED';
+  category: 'Long Wait Time' | 'Doctor Unavailability' | 'Cleanliness' | 'Staff Behavior' | 'Pharmacy Delay' | 'App Issue' | 'Other';
+  rating?: number;
+  status: TicketStatus;
+  createdAt: string;
   submittedAt: string;
+  updatedAt: string;
+  resolvedAt?: string;
+  statusHistory: TicketStatusUpdate[];
+  adminUpdates: TicketAdminUpdate[];
+  resolutionMessage?: string;
   resolutionNote?: string;
+  internalNotes?: TicketInternalNote[];
 }
+
+export type ComplaintFeedback = SupportTicket;
 
 export interface AppNotification {
   id: string;

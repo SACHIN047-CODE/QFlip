@@ -23,6 +23,12 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
     e.preventDefault();
     if (role === 'admin') {
       navigate('/admin/dashboard');
+    } else if (user) {
+      if (role === 'doctor') navigate('/doctor/dashboard');
+      else if (role === 'staff') navigate('/staff/dashboard');
+      else if (role === 'lab') navigate('/lab/dashboard');
+      else if (role === 'pharmacy') navigate('/pharmacy/dashboard');
+      else navigate('/patient/dashboard');
     } else {
       navigate('/login');
     }
@@ -284,7 +290,9 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                     {user.name}
                   </span>
                   <span className="text-[10px] uppercase font-bold text-secondary">
-                    {user.role} • {user.id}
+                    {user.id === 'doc-rajesh' || user.role === 'doctor'
+                      ? 'Doctor'
+                      : `${user.role} • ${user.id}`}
                   </span>
                 </div>
                 <button

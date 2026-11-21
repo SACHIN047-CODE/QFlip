@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { patientService } from '../../services/patientService';
-import { ComplaintFeedback } from '../../types';
+import { SupportTicket } from '../../types';
 
 export const FeedbackPage: React.FC = () => {
   const [rating, setRating] = useState<number>(4);
-  const [category, setCategory] = useState<ComplaintFeedback['category']>('Long Wait Time');
+  const [category, setCategory] = useState<SupportTicket['category']>('Long Wait Time');
   const [patientName, setPatientName] = useState('Manpreet Singh');
   const [phone, setPhone] = useState('9812401824');
+  const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [ticketQuery, setTicketQuery] = useState('');
-  const [trackedResult, setTrackedResult] = useState<ComplaintFeedback | null>(null);
-  const [submittedTicket, setSubmittedTicket] = useState<ComplaintFeedback | null>(null);
+  const [trackedResult, setTrackedResult] = useState<SupportTicket | null>(null);
+  const [trackError, setTrackError] = useState<string | null>(null);
+  const [submittedTicket, setSubmittedTicket] = useState<SupportTicket | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isTracking, setIsTracking] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,48 +22,92 @@ export const FeedbackPage: React.FC = () => {
 
     setLoading(true);
     try {
-      const res = await patientService.submitFeedback({
+      const res = await patientService.submitTicket({
+        subject: subject.trim() || `${category} Grievance`,
+        description: message.trim(),
         category,
         rating,
-        message,
         patientName,
         phone,
       });
       setSubmittedTicket(res);
       setMessage('');
+      setSubject('');
     } catch (err) {
-      console.error(err);
+      console.error('Failed to submit ticket:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleTrackTicket = (e: React.FormEvent) => {
+  const handleTrackTicket = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ticketQuery.trim()) return;
-    const stored = localStorage.getItem('qflip_complaints');
-    const list: ComplaintFeedback[] = stored ? JSON.parse(stored) : [];
-    const found = list.find(
-      (c) => c.ticketId.toLowerCase() === ticketQuery.trim().toLowerCase()
-    );
-    setTrackedResult(
-      found || {
-        id: 'mock',
-        ticketId: ticketQuery.toUpperCase(),
-        patientName: 'Patient Inquirer',
-        phone: '981240XXXX',
-        category: 'Long Wait Time',
-        rating: 3,
-        message: 'Under review by Civil Hospital Grievance Cell',
-        status: 'INVESTIGATING',
-        submittedAt: 'Today, 10:15 AM',
-        resolutionNote: 'Assigned to Medical Officer on duty for verification',
+
+    setIsTracking(true);
+    setTrackError(null);
+    setTrackedResult(null);
+
+    try {
+      const found = await patientService.getTicketByTrackingId(ticketQuery.trim());
+      if (found) {
+        setTrackedResult(found);
+      } else {
+        setTrackError(
+          `No support ticket found with ID "${ticketQuery.trim().toUpperCase()}". Please verify the tracking number and try again, or file a new grievance.`
+        );
       }
-    );
+    } catch (err) {
+      setTrackError('Error querying ticket status. Please check your connection and try again.');
+    } finally {
+      setIsTracking(false);
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'OPEN':
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-warning/15 text-on-warning border border-warning/30">
+            Open
+          </span>
+        );
+      case 'IN_PROGRESS':
+      case 'INVESTIGATING':
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-secondary/15 text-secondary border border-secondary/30">
+            In Progress
+          </span>
+        );
+      case 'AWAITING_USER':
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700 border border-purple-200">
+            Awaiting User Response
+          </span>
+        );
+      case 'RESOLVED':
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-success/15 text-success border border-success/30">
+            Resolved ✓
+          </span>
+        );
+      case 'CLOSED':
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700 border border-slate-300">
+            Closed
+          </span>
+        );
+      default:
+        return (
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-light-surface-variant text-light-primary">
+            {status}
+          </span>
+        );
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4 sm:px-6 space-y-10">
+    <div className="max-w-5xl mx-auto py-10 px-4 sm:px-6 space-y-10">
       <div className="text-center max-w-2xl mx-auto">
         <span className="text-xs font-bold uppercase tracking-wider text-secondary">
           Patient Voice &amp; Accountability
@@ -80,7 +127,7 @@ export const FeedbackPage: React.FC = () => {
           <div className="flex items-center gap-2 pb-3 border-b border-light-outline">
             <span className="material-symbols-outlined text-secondary">rate_review</span>
             <h2 className="font-headline text-title-lg font-bold text-light-primary">
-              Submit Grievance or Compliment
+              Submit Grievance or Support Ticket
             </h2>
           </div>
 
@@ -91,20 +138,39 @@ export const FeedbackPage: React.FC = () => {
                 Grievance Registered Successfully
               </h3>
               <p className="text-xs text-light-on-surface-variant">
-                Your ticket tracking number is:{' '}
+                Your unique ticket tracking number is:{' '}
                 <strong className="font-code text-sm text-light-primary block mt-1">
                   {submittedTicket.ticketId}
                 </strong>
               </p>
+              <div className="p-3 bg-white/70 rounded-xl border border-light-outline/60 text-left text-xs space-y-1">
+                <div><span className="text-light-on-surface-variant">Subject:</span> <strong>{submittedTicket.subject}</strong></div>
+                <div><span className="text-light-on-surface-variant">Status:</span> {getStatusBadge(submittedTicket.status)}</div>
+                <div><span className="text-light-on-surface-variant">Category:</span> <span className="text-light-primary">{submittedTicket.category}</span></div>
+              </div>
               <p className="text-[11px] text-light-on-surface-variant">
-                An SMS confirmation has been dispatched. Our grievance officer will review within 2 business hours.
+                Our hospital grievance officer will review this escalation. You can track status anytime on this portal using your ticket ID.
               </p>
-              <button
-                onClick={() => setSubmittedTicket(null)}
-                className="mt-2 px-4 py-2 bg-light-primary text-white text-xs font-bold rounded-lg"
-              >
-                Submit Another Feedback
-              </button>
+              <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTicketQuery(submittedTicket.ticketId);
+                    setTrackedResult(submittedTicket);
+                    setSubmittedTicket(null);
+                  }}
+                  className="px-4 py-2 bg-secondary text-white text-xs font-bold rounded-lg hover:bg-secondary/90 transition-all"
+                >
+                  Track This Ticket Now
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSubmittedTicket(null)}
+                  className="px-4 py-2 bg-light-primary text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition-all"
+                >
+                  Submit Another Feedback
+                </button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
@@ -152,6 +218,19 @@ export const FeedbackPage: React.FC = () => {
                 </select>
               </div>
 
+              {/* Subject */}
+              <div>
+                <label className="font-bold text-light-primary block mb-1">Subject / Summary</label>
+                <input
+                  type="text"
+                  required
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  placeholder="e.g. Delayed Consultation in OPD Room 12"
+                  className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-secondary/30"
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-light-primary block mb-1">Patient Name</label>
@@ -192,7 +271,7 @@ export const FeedbackPage: React.FC = () => {
                 disabled={loading}
                 className="w-full py-3 bg-accent hover:brightness-95 text-on-accent font-headline font-bold text-xs rounded-lg shadow-sm transition-all flex items-center justify-center gap-2"
               >
-                {loading ? 'Submitting...' : 'Submit Official Grievance'}
+                {loading ? 'Submitting to Grievance Desk...' : 'Submit Official Grievance'}
               </button>
             </form>
           )}
@@ -222,32 +301,125 @@ export const FeedbackPage: React.FC = () => {
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 bg-light-primary text-white text-xs font-bold rounded-lg hover:bg-slate-800"
+                disabled={isTracking}
+                className="px-4 py-2.5 bg-light-primary text-white text-xs font-bold rounded-lg hover:bg-slate-800 disabled:opacity-50"
               >
-                Track
+                {isTracking ? 'Searching...' : 'Track'}
               </button>
             </form>
 
+            {/* Error Message when Ticket Not Found */}
+            {trackError && (
+              <div className="p-3.5 bg-danger/10 border border-danger/30 rounded-xl text-danger text-xs space-y-1">
+                <div className="flex items-center gap-1.5 font-bold">
+                  <span className="material-symbols-outlined text-base">error</span>
+                  Ticket Not Found
+                </div>
+                <p className="text-[11px] leading-relaxed">{trackError}</p>
+              </div>
+            )}
+
+            {/* Tracked Result Card */}
             {trackedResult && (
-              <div className="mt-4 p-4 rounded-xl border border-light-outline bg-light-surface-variant/40 space-y-3 text-xs">
+              <div className="mt-4 p-4 rounded-xl border border-light-outline bg-light-surface-variant/40 space-y-3.5 text-xs">
+                {/* Header: Ticket ID & Status */}
                 <div className="flex items-center justify-between pb-2 border-b border-light-outline">
-                  <span className="font-code font-bold text-light-primary">{trackedResult.ticketId}</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-secondary/15 text-secondary">
-                    {trackedResult.status}
-                  </span>
+                  <div>
+                    <span className="text-[9px] uppercase font-bold text-light-on-surface-variant block">Ticket Tracking ID</span>
+                    <span className="font-code font-bold text-light-primary text-sm">{trackedResult.ticketId}</span>
+                  </div>
+                  <div>
+                    {getStatusBadge(trackedResult.status)}
+                  </div>
                 </div>
+
+                {/* Subject & Category */}
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Category</span>
-                  <div className="font-semibold text-light-primary">{trackedResult.category}</div>
+                  <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Subject</span>
+                  <div className="font-bold text-light-primary text-xs">{trackedResult.subject}</div>
+                  <div className="text-[11px] text-secondary font-medium mt-0.5">{trackedResult.category}</div>
                 </div>
+
+                {/* Submitter & Date */}
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Submitter</span>
+                    <span className="text-light-primary">{trackedResult.patientName}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Date Submitted</span>
+                    <span className="text-light-on-surface-variant">{trackedResult.submittedAt}</span>
+                  </div>
+                </div>
+
+                {/* Description */}
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Submitted</span>
-                  <div className="text-light-on-surface-variant">{trackedResult.submittedAt}</div>
+                  <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block mb-1">Issue Description</span>
+                  <p className="text-[11px] text-light-on-surface bg-white p-2.5 rounded-lg border border-light-outline/70 leading-relaxed">
+                    {trackedResult.description || trackedResult.message}
+                  </p>
                 </div>
-                {trackedResult.resolutionNote && (
-                  <div className="p-3 bg-white rounded-lg border border-light-outline">
-                    <span className="text-[10px] uppercase font-bold text-success block">Official Hospital Note:</span>
-                    <p className="text-[11px] text-light-primary mt-1">{trackedResult.resolutionNote}</p>
+
+                {/* Official Hospital Resolution Note (if present or resolved) */}
+                {(trackedResult.resolutionMessage || trackedResult.resolutionNote) && (
+                  <div className="p-3 bg-success/10 border border-success/30 rounded-xl space-y-1">
+                    <div className="flex items-center gap-1.5 text-success font-bold text-xs">
+                      <span className="material-symbols-outlined text-sm">task_alt</span>
+                      Official Resolution Action
+                    </div>
+                    <p className="text-[11px] text-light-primary leading-relaxed">
+                      {trackedResult.resolutionMessage || trackedResult.resolutionNote}
+                    </p>
+                    {trackedResult.resolvedAt && (
+                      <div className="text-[10px] text-light-on-surface-variant font-code">
+                        Resolved on: {new Date(trackedResult.resolvedAt).toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Patient-Facing Admin Updates */}
+                {trackedResult.adminUpdates && trackedResult.adminUpdates.length > 0 && (
+                  <div className="space-y-1.5 pt-1">
+                    <span className="text-[10px] uppercase font-bold text-light-on-surface-variant flex items-center gap-1">
+                      <span className="material-symbols-outlined text-xs text-secondary">campaign</span>
+                      Hospital Action Updates ({trackedResult.adminUpdates.length})
+                    </span>
+                    <div className="space-y-1.5">
+                      {trackedResult.adminUpdates.map((upd) => (
+                        <div key={upd.id} className="p-2.5 bg-white rounded-lg border border-light-outline/70 text-[11px]">
+                          <div className="flex items-center justify-between text-[10px] text-secondary font-bold mb-0.5">
+                            <span>{upd.author}</span>
+                            <span className="text-light-on-surface-variant font-normal font-code">{upd.timestamp}</span>
+                          </div>
+                          <p className="text-light-primary">{upd.message}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Status Progression History */}
+                {trackedResult.statusHistory && trackedResult.statusHistory.length > 0 && (
+                  <div className="pt-2 border-t border-light-outline/70 space-y-1.5">
+                    <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">
+                      Status Progression Timeline
+                    </span>
+                    <div className="space-y-1 text-[11px]">
+                      {trackedResult.statusHistory.map((step, idx) => (
+                        <div key={idx} className="flex items-start gap-2 text-[10px]">
+                          <span className="material-symbols-outlined text-xs text-secondary mt-0.5">arrow_right</span>
+                          <div className="flex-1">
+                            <span className="font-bold text-light-primary">{step.status}</span>
+                            <span className="text-light-on-surface-variant mx-1">•</span>
+                            <span className="text-light-on-surface-variant font-code">{step.timestamp}</span>
+                            <span className="text-light-on-surface-variant mx-1">by</span>
+                            <span className="text-secondary font-medium">{step.changedBy}</span>
+                            {step.note && <div className="text-[10px] text-light-on-surface italic mt-0.5">"{step.note}"</div>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

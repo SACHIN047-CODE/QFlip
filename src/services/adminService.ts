@@ -1,5 +1,5 @@
 import { apiClient, delay, USE_MOCK } from './api';
-import { HospitalDepartment, HospitalResource, ComplaintFeedback } from '../types';
+import { HospitalDepartment, HospitalResource, ComplaintFeedback, SupportTicket, TicketStatus } from '../types';
 import { INITIAL_DEPARTMENTS, INITIAL_RESOURCES, INITIAL_COMPLAINTS } from './mockData';
 
 export const adminService = {
@@ -30,25 +30,115 @@ export const adminService = {
     return apiClient.patch(`/admin/resources/${id}`, updates);
   },
 
-  async getComplaints(): Promise<ComplaintFeedback[]> {
+  async getTickets(): Promise<SupportTicket[]> {
     if (USE_MOCK) {
       await delay(200);
       const stored = localStorage.getItem('qflip_complaints');
       return stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
     }
-    return apiClient.get('/admin/complaints');
+    return apiClient.get('/admin/tickets');
   },
 
-  async updateComplaintStatus(id: string, status: ComplaintFeedback['status'], resolutionNote?: string): Promise<void> {
+  async getComplaints(): Promise<ComplaintFeedback[]> {
+    return this.getTickets();
+  },
+
+  async updateTicket(
+    id: string,
+    updates: {
+      status?: TicketStatus;
+      resolutionMessage?: string;
+      adminUpdate?: string;
+      internalNote?: string;
+      author?: string;
+    }
+  ): Promise<SupportTicket> {
     if (USE_MOCK) {
       await delay(250);
       const stored = localStorage.getItem('qflip_complaints');
-      const list: ComplaintFeedback[] = stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
-      const updated = list.map(c => c.id === id ? { ...c, status, resolutionNote: resolutionNote || c.resolutionNote } : c);
+      const list: SupportTicket[] = stored ? JSON.parse(stored) : INITIAL_COMPLAINTS;
+
+      const now = new Date();
+      const formattedDate =
+        now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+        ', ' +
+        now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+      const authorName = updates.author || 'Hospital Administration';
+
+      const updated = list.map((c) => {
+        if (c.id === id || c.ticketId === id) {
+          const nextStatus = updates.status || c.status;
+          const statusChanged = updates.status && updates.status !== c.status;
+
+          const history = [...(c.statusHistory || [])];
+          if (statusChanged) {
+            history.push({
+              status: nextStatus,
+              timestamp: formattedDate,
+              changedBy: authorName,
+              note: updates.resolutionMessage || updates.adminUpdate || `Status changed to ${nextStatus}`
+            });
+          }
+
+          const adminUpdates = [...(c.adminUpdates || [])];
+          if (updates.adminUpdate && updates.adminUpdate.trim()) {
+            adminUpdates.push({
+              id: `upd-${Date.now()}`,
+              message: updates.adminUpdate.trim(),
+              timestamp: formattedDate,
+              author: authorName
+            });
+          }
+
+          const internalNotes = [...(c.internalNotes || [])];
+          if (updates.internalNote && updates.internalNote.trim()) {
+            internalNotes.push({
+              id: `in-${Date.now()}`,
+              note: updates.internalNote.trim(),
+              timestamp: formattedDate,
+              author: authorName
+            });
+          }
+
+          const isResolved = nextStatus === 'RESOLVED' || nextStatus === 'CLOSED';
+
+          return {
+            ...c,
+            status: nextStatus,
+            updatedAt: now.toISOString(),
+            resolvedAt: isResolved ? (c.resolvedAt || now.toISOString()) : undefined,
+            resolutionMessage: updates.resolutionMessage !== undefined ? updates.resolutionMessage : c.resolutionMessage,
+            resolutionNote: updates.resolutionMessage !== undefined ? updates.resolutionMessage : c.resolutionNote,
+            statusHistory: history,
+            adminUpdates,
+            internalNotes
+          };
+        }
+        return c;
+      });
+
       localStorage.setItem('qflip_complaints', JSON.stringify(updated));
-      return;
+      const target = updated.find((c) => c.id === id || c.ticketId === id);
+      if (!target) throw new Error('Ticket not found');
+      return target;
     }
-    return apiClient.patch(`/admin/complaints/${id}`, { status, resolutionNote });
+    return apiClient.patch(`/admin/tickets/${id}`, updates);
+  },
+
+  async updateComplaintStatus(
+    id: string,
+    status: TicketStatus,
+    resolutionNote?: string,
+    adminUpdate?: string,
+    internalNote?: string
+  ): Promise<void> {
+    await this.updateTicket(id, {
+      status,
+      resolutionMessage: resolutionNote,
+      adminUpdate,
+      internalNote
+    });
   },
 
   async getDoctorsList(): Promise<any[]> {

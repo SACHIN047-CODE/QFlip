@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Support Tickets Collection
+    match /support_tickets/{ticketId} {
+      // Any patient or public user can create a support ticket with required fields
+      allow create: if request.resource.data.ticketId != null
+                    && request.resource.data.patientName is string
+                    && request.resource.data.phone is string
+                    && (request.resource.data.description is string || request.resource.data.message is string);
+
+      // Single ticket lookup by ticket ID (or creator user access)
+      allow get: if true;
+
+      // Full ticket listing restricted to authenticated administrators
+      allow list: if request.auth != null && (
+        request.auth.token.role == 'admin' ||
+        request.auth.token.admin == true
+      );
+
+      // Only administrators can update or resolve tickets
+      allow update: if request.auth != null && (
+        request.auth.token.role == 'admin' ||
+        request.auth.token.admin == true
+      );
+
+      // Deletion strictly restricted to administrators
+      allow delete: if request.auth != null && request.auth.token.role == 'admin';
+    }
+
+    // Default deny for all other collections
+    match /{document=**} {
+      allow read, write: if request.auth != null && request.auth.token.role == 'admin';
+    }
+  }
+}

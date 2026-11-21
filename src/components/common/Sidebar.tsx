@@ -222,8 +222,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
                 }`
               }
             >
-              <span className="material-symbols-outlined text-lg">feedback</span>
-              <span>Feedback &amp; Grievances</span>
+              <span className="material-symbols-outlined text-lg">confirmation_number</span>
+              <span>Support Tickets &amp; Grievances</span>
             </NavLink>
           </>
         );
@@ -453,7 +453,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
           <div>
             <div className="text-xs font-bold text-light-primary">{user?.name}</div>
             <div className="text-[10px] uppercase font-bold text-secondary">
-              {role} • {user?.id}
+              {user?.id === 'doc-rajesh' || role === 'doctor'
+                ? 'Doctor'
+                : `${role} • ${user?.id}`}
             </div>
           </div>
           <button

@@ -14,7 +14,7 @@ import {
 } from 'recharts';
 import { adminService } from '../../services/adminService';
 import { aiService } from '../../services/aiService';
-import { HospitalDepartment, HospitalResource, AIRecommendation } from '../../types';
+import { HospitalDepartment, HospitalResource, AIRecommendation, SupportTicket } from '../../types';
 import { StatCard } from '../../components/common/StatCard';
 import { ChartContainer } from '../../components/common/LoadingSpinner';
 
@@ -22,11 +22,13 @@ export const AdminDashboard: React.FC = () => {
   const [departments, setDepartments] = useState<HospitalDepartment[]>([]);
   const [resources, setResources] = useState<HospitalResource[]>([]);
   const [recommendations, setRecommendations] = useState<AIRecommendation[]>([]);
+  const [tickets, setTickets] = useState<SupportTicket[]>([]);
 
   useEffect(() => {
     adminService.getDepartments().then(setDepartments);
     adminService.getResources().then(setResources);
     aiService.getRecommendations().then(setRecommendations);
+    adminService.getTickets().then(setTickets);
   }, []);
 
   // Realistic registration & volume data
@@ -355,6 +357,89 @@ export const AdminDashboard: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Support Tickets & Patient Grievances Overview */}
+      <div className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-light-outline">
+          <div>
+            <h3 className="font-headline text-title-md font-bold text-light-primary flex items-center gap-2">
+              <span className="material-symbols-outlined text-secondary">confirmation_number</span>
+              Support Tickets &amp; Grievances Redressal
+            </h3>
+            <p className="text-xs text-light-on-surface-variant mt-0.5">
+              Live patient escalations and operational issues submitted via portal
+            </p>
+          </div>
+          <Link
+            to="/admin/complaints"
+            className="px-3.5 py-1.5 bg-secondary text-white rounded-lg font-bold text-xs hover:bg-secondary/90 transition-all flex items-center gap-1 shadow-sm"
+          >
+            <span>Open Ticket Command</span>
+            <span className="material-symbols-outlined text-xs">arrow_forward</span>
+          </Link>
+        </div>
+
+        {/* Quick Ticket Stats & Recent List */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-4 grid grid-cols-3 lg:grid-cols-1 gap-2.5">
+            <div className="p-3 bg-warning/10 border border-warning/30 rounded-xl">
+              <div className="text-[10px] uppercase font-bold text-on-warning">Open Tickets</div>
+              <div className="text-xl font-headline font-bold text-on-warning mt-0.5">
+                {tickets.filter((t) => t.status === 'OPEN').length}
+              </div>
+            </div>
+            <div className="p-3 bg-secondary/10 border border-secondary/30 rounded-xl">
+              <div className="text-[10px] uppercase font-bold text-secondary">In Progress</div>
+              <div className="text-xl font-headline font-bold text-secondary mt-0.5">
+                {tickets.filter((t) => t.status === 'IN_PROGRESS' || (t.status as any) === 'INVESTIGATING').length}
+              </div>
+            </div>
+            <div className="p-3 bg-success/10 border border-success/30 rounded-xl">
+              <div className="text-[10px] uppercase font-bold text-success">Resolved</div>
+              <div className="text-xl font-headline font-bold text-success mt-0.5">
+                {tickets.filter((t) => t.status === 'RESOLVED' || t.status === 'CLOSED').length}
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-8 space-y-2">
+            {tickets.slice(0, 3).map((t) => (
+              <div
+                key={t.id}
+                className="p-3.5 bg-light-surface-variant/50 rounded-xl border border-light-outline flex items-center justify-between text-xs gap-3"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-code font-bold text-secondary">{t.ticketId}</span>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                        t.status === 'OPEN'
+                          ? 'bg-warning/15 text-on-warning'
+                          : t.status === 'RESOLVED' || t.status === 'CLOSED'
+                          ? 'bg-success/15 text-success'
+                          : 'bg-secondary/15 text-secondary'
+                      }`}
+                    >
+                      {t.status}
+                    </span>
+                    <span className="text-[10px] text-light-on-surface-variant">• {t.category}</span>
+                  </div>
+                  <div className="font-bold text-light-primary truncate mt-0.5">{t.subject || t.message}</div>
+                  <div className="text-[10px] text-light-on-surface-variant truncate">
+                    From {t.patientName} • {t.submittedAt}
+                  </div>
+                </div>
+                <Link
+                  to="/admin/complaints"
+                  className="px-2.5 py-1 bg-white border border-light-outline rounded text-light-primary text-[11px] font-bold hover:bg-light-surface-variant whitespace-nowrap"
+                >
+                  Manage
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
