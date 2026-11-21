@@ -61,11 +61,11 @@ export const DigitalPrescriptionsPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Patient ID / Gender</span>
-            <span className="font-bold text-light-primary">{user?.id || 'PT-10088'} • Active</span>
+            <span className="font-bold text-light-primary">{user?.id || 'PT-Registered'} • Active</span>
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">ABHA ID</span>
-            <span className="font-code font-bold text-secondary">{user?.abhaId || '91-8274-1049-9812'}</span>
+            <span className="font-code font-bold text-secondary">{user?.abhaId || 'Linked via NHM'}</span>
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Prescribing Doctor</span>
@@ -78,7 +78,7 @@ export const DigitalPrescriptionsPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="font-headline text-2xl font-extrabold text-secondary font-code">Rx</span>
             <span className="text-xs font-semibold text-light-on-surface-variant">
-              (Directly Synced to Jan Aushadhi Chemist Desk #3)
+              (Generic Medicines Directly Synced to Jan Aushadhi Chemist Desk #3)
             </span>
           </div>
 
@@ -89,6 +89,8 @@ export const DigitalPrescriptionsPage: React.FC = () => {
                   <th className="p-3">#</th>
                   <th className="p-3">Medicine &amp; Strength</th>
                   <th className="p-3">Dosage</th>
+                  <th className="p-3">Qty</th>
+                  <th className="p-3">Consumption Timing</th>
                   <th className="p-3">Frequency</th>
                   <th className="p-3">Duration</th>
                   <th className="p-3">Instructions</th>
@@ -100,9 +102,15 @@ export const DigitalPrescriptionsPage: React.FC = () => {
                   <td className="p-3 font-bold">1</td>
                   <td className="p-3 font-bold text-light-primary">Amoxicillin + Clavulanate 625mg</td>
                   <td className="p-3">1 Tablet</td>
+                  <td className="p-3 font-code">10</td>
+                  <td className="p-3">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                      After breakfast
+                    </span>
+                  </td>
                   <td className="p-3 font-semibold text-secondary">Twice daily</td>
                   <td className="p-3">5 Days</td>
-                  <td className="p-3">After Food</td>
+                  <td className="p-3">After Food with warm water</td>
                   <td className="p-3">
                     <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
                       Available in Jan Aushadhi
@@ -113,9 +121,15 @@ export const DigitalPrescriptionsPage: React.FC = () => {
                   <td className="p-3 font-bold">2</td>
                   <td className="p-3 font-bold text-light-primary">Paracetamol 650mg Tab</td>
                   <td className="p-3">1 Tablet</td>
-                  <td className="p-3 font-semibold text-secondary">Thrice daily (SOS)</td>
+                  <td className="p-3 font-code">6</td>
+                  <td className="p-3">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                      After dinner
+                    </span>
+                  </td>
+                  <td className="p-3 font-semibold text-secondary">Once daily</td>
                   <td className="p-3">3 Days</td>
-                  <td className="p-3">If fever &gt; 100°F</td>
+                  <td className="p-3">If fever &gt; 100°F (SOS)</td>
                   <td className="p-3">
                     <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
                       Available in Jan Aushadhi
@@ -126,9 +140,15 @@ export const DigitalPrescriptionsPage: React.FC = () => {
                   <td className="p-3 font-bold">3</td>
                   <td className="p-3 font-bold text-light-primary">Pantoprazole 40mg Tab</td>
                   <td className="p-3">1 Tablet</td>
+                  <td className="p-3 font-code">5</td>
+                  <td className="p-3">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                      Before breakfast
+                    </span>
+                  </td>
                   <td className="p-3 font-semibold text-secondary">Once daily</td>
                   <td className="p-3">5 Days</td>
-                  <td className="p-3">30 mins before breakfast</td>
+                  <td className="p-3">30 mins before morning breakfast</td>
                   <td className="p-3">
                     <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
                       Available in Jan Aushadhi

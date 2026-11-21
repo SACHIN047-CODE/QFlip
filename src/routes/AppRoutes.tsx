@@ -26,11 +26,7 @@ import { PharmacyOrderPage, NotificationsPage } from '../pages/patient/PharmacyO
 
 // Doctor Pages
 import { DoctorDashboard } from '../pages/doctor/DoctorDashboard';
-import {
-  PatientQueueList,
-  DoctorSchedule,
-  PrescriptionManager,
-} from '../pages/doctor/PatientQueueList';
+import { PatientQueueList } from '../pages/doctor/PatientQueueList';
 
 // Staff Pages
 import { StaffDashboard } from '../pages/staff/StaffDashboard';
@@ -104,8 +100,6 @@ export const AppRoutes: React.FC = () => {
             <Route path="dashboard" element={<DoctorDashboard />} />
             <Route path="patients" element={<PatientQueueList />} />
             <Route path="consultation" element={<DoctorDashboard />} />
-            <Route path="prescriptions" element={<PrescriptionManager />} />
-            <Route path="schedule" element={<DoctorSchedule />} />
           </Route>
         </Route>
       </Route>
