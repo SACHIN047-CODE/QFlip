@@ -4,6 +4,7 @@ import { useQueue } from '../../context/QueueContext';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
 import { TokenCard } from '../../components/common/TokenCard';
 import { PatientToken, PriorityLevel } from '../../types';
+import { firestoreService } from '../../services/firestoreService';
 
 export const PatientRegistration: React.FC = () => {
   const navigate = useNavigate();
@@ -94,6 +95,21 @@ export const PatientRegistration: React.FC = () => {
       });
       setCreatedToken(token);
       setStep('success');
+
+      // Sync record directly into Firebase Cloud Firestore
+      try {
+        await firestoreService.saveQueueToken({
+          tokenNumber: token.tokenNumber,
+          patientName: token.patientName,
+          phone: token.phone,
+          department: token.department,
+          status: token.status,
+          priority: token.priority,
+          symptoms: token.symptoms,
+        });
+      } catch (fErr) {
+        console.warn('Optional Firestore sync note:', fErr);
+      }
     } catch (err) {
       console.error(err);
     } finally {

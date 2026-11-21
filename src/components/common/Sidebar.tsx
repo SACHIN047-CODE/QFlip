@@ -167,6 +167,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
             </NavLink>
 
             <NavLink
+              to="/admin/firestore"
+              onClick={onCloseMobile}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2.5 rounded-lg text-label-md font-label transition-colors ${
+                  isActive
+                    ? 'bg-amber-600 text-white font-semibold shadow-sm'
+                    : 'text-amber-800 bg-amber-500/10 hover:bg-amber-500/20 font-bold border border-amber-300/40'
+                }`
+              }
+            >
+              <span className="material-symbols-outlined text-lg">database</span>
+              <span>Cloud Firestore (CRUD)</span>
+            </NavLink>
+
+            <NavLink
               to="/ai/dashboard"
               onClick={onCloseMobile}
               className={({ isActive }) =>
