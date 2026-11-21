@@ -7,20 +7,20 @@ export const StaffDashboard: React.FC = () => {
   const { tokens, generateToken } = useQueue();
 
   const [voiceOpen, setVoiceOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('9812401824');
   const [isEmergency, setIsEmergency] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    patientName: '',
-    phone: '',
-    age: 30,
+    patientName: 'Ramesh Chander Gupta',
+    phone: '9812401824',
+    age: 58,
     gender: 'Male' as 'Male' | 'Female' | 'Other',
-    abhaId: '',
+    abhaId: '91-8274-1049-3321',
     department: 'General Medicine',
     priority: 'Normal' as PriorityLevel,
-    symptoms: [] as string[],
-    symptomSummary: '',
+    symptoms: ['Chest Congestion', 'Mild Fever for 3 days', 'Dry Cough'],
+    symptomSummary: 'Chronic chest heaviness with productive cough for 4 days.',
   });
 
   const [lastIssuedToken, setLastIssuedToken] = useState<PatientToken | null>(() => tokens[tokens.length - 1] || null);

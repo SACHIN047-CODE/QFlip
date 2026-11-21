@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useQueue } from '../../context/QueueContext';
-import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
 import { TokenCard } from '../../components/common/TokenCard';
@@ -11,7 +10,6 @@ import { firestoreService } from '../../services/firestoreService';
 export const PatientRegistration: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
   const { generateToken } = useQueue();
   const { t } = useLanguage();
 
@@ -19,32 +17,18 @@ export const PatientRegistration: React.FC = () => {
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [createdToken, setCreatedToken] = useState<PatientToken | null>(null);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [alternativeDoctors, setAlternativeDoctors] = useState<any[]>([]);
 
   const [formData, setFormData] = useState({
-    patientName: user?.name || '',
-    phone: user?.phone || '',
-    age: (user as any)?.age || 35,
-    gender: ((user as any)?.gender || 'Male') as 'Male' | 'Female' | 'Other',
-    abhaId: user?.abhaId || '',
+    patientName: 'Manpreet Singh',
+    phone: '9812401824',
+    age: 38,
+    gender: 'Male' as 'Male' | 'Female' | 'Other',
+    abhaId: '91-8274-1049-9812',
     department: 'General Medicine',
     priority: 'Normal' as PriorityLevel,
-    symptoms: [] as string[],
-    symptomSummary: '',
+    symptoms: ['Sore Throat', 'Persistent Dry Cough'],
+    symptomSummary: 'Mild throat congestion and fever for 3 days.',
   });
-
-  // Sync with logged-in user profile if it loads later
-  useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        patientName: prev.patientName || user.name || '',
-        phone: prev.phone || user.phone || '',
-        abhaId: prev.abhaId || user.abhaId || '',
-      }));
-    }
-  }, [user]);
 
   // Check if routed with voice transcript from homepage or navbar
   useEffect(() => {
@@ -100,8 +84,6 @@ export const PatientRegistration: React.FC = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    setErrorMessage(null);
-    setAlternativeDoctors([]);
     try {
       const token = await generateToken({
         patientName: formData.patientName,
@@ -115,13 +97,23 @@ export const PatientRegistration: React.FC = () => {
       });
       setCreatedToken(token);
       setStep('success');
-    } catch (err: any) {
-      console.error(err);
-      const msg = err.message || 'Failed to issue queue token.';
-      setErrorMessage(msg);
-      if (err.response?.data?.data?.alternativeDoctors) {
-        setAlternativeDoctors(err.response.data.data.alternativeDoctors);
+
+      // Sync record directly into Firebase Cloud Firestore
+      try {
+        await firestoreService.saveQueueToken({
+          tokenNumber: token.tokenNumber,
+          patientName: token.patientName,
+          phone: token.phone,
+          department: token.department,
+          status: token.status,
+          priority: token.priority,
+          symptoms: token.symptoms,
+        });
+      } catch (fErr) {
+        console.warn('Optional Firestore sync note:', fErr);
       }
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -422,49 +414,10 @@ export const PatientRegistration: React.FC = () => {
             </div>
           </div>
 
-          {/* Capacity Error Banner & Alternatives */}
-          {errorMessage && (
-            <div className="p-4 bg-danger/10 border-2 border-danger/30 rounded-xl text-xs text-danger space-y-3">
-              <div className="flex items-center gap-2 font-bold">
-                <span className="material-symbols-outlined text-base">error</span>
-                <span>{errorMessage}</span>
-              </div>
-
-              {alternativeDoctors.length > 0 && (
-                <div className="pt-2 border-t border-danger/20 space-y-2">
-                  <span className="font-bold text-light-primary block">
-                    Available Alternative Doctors with Open Capacity:
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {alternativeDoctors.map((doc: any) => (
-                      <div
-                        key={doc.id}
-                        className="p-2.5 bg-white rounded-lg border border-light-outline text-light-primary text-[11px] flex justify-between items-center"
-                      >
-                        <div>
-                          <div className="font-bold">{doc.name}</div>
-                          <div className="text-[10px] text-light-on-surface-variant">
-                            {doc.specialization} • {doc.roomNumber}
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-bold text-success">
-                          Est. wait ~{doc.estimatedWaitMinutes || 15}m
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
           <div className="flex items-center justify-between gap-4 pt-4 border-t border-light-outline">
             <button
               type="button"
-              onClick={() => {
-                setErrorMessage(null);
-                setStep('form');
-              }}
+              onClick={() => setStep('form')}
               className="px-5 py-2.5 text-xs font-semibold rounded-lg border border-light-outline bg-white hover:bg-light-surface-variant text-light-primary"
             >
               Back to Edit
@@ -489,11 +442,6 @@ export const PatientRegistration: React.FC = () => {
             <h2 className="font-headline text-title-lg font-bold text-success">
               OPD Token Successfully Issued!
             </h2>
-            {createdToken.isBuffer && (
-              <span className="inline-block px-3 py-1 rounded-full bg-purple-100 text-purple-700 font-bold text-xs border border-purple-300">
-                Issued Under Extended Buffer Capacity Quota
-              </span>
-            )}
             <p className="text-xs text-light-on-surface-variant max-w-md mx-auto">
               SMS dispatch confirmation sent to <strong>{createdToken.phone}</strong>. Please proceed to the waiting hall.
             </p>
@@ -501,8 +449,8 @@ export const PatientRegistration: React.FC = () => {
 
           <TokenCard
             token={createdToken}
-            currentServingTokenNumber="In Session"
-            patientsAhead={Math.max(0, Math.round(createdToken.estimatedWaitMinutes / 5))}
+            currentServingTokenNumber="OPD-098"
+            patientsAhead={6}
             onPrint={() => window.print()}
             onViewDetails={() => navigate('/patient/queue')}
           />

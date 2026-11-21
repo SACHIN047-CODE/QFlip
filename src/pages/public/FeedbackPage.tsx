@@ -5,8 +5,8 @@ import { ComplaintFeedback } from '../../types';
 export const FeedbackPage: React.FC = () => {
   const [rating, setRating] = useState<number>(4);
   const [category, setCategory] = useState<ComplaintFeedback['category']>('Long Wait Time');
-  const [patientName, setPatientName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [patientName, setPatientName] = useState('Manpreet Singh');
+  const [phone, setPhone] = useState('9812401824');
   const [message, setMessage] = useState('');
   const [ticketQuery, setTicketQuery] = useState('');
   const [trackedResult, setTrackedResult] = useState<ComplaintFeedback | null>(null);

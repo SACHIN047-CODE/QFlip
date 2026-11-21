@@ -64,18 +64,9 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, priority, clas
         </span>
       );
     case 'SKIPPED':
-    case 'SKIPPED_AWAITING_RECEPTION':
       return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300 ${className}`}>
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-          Skipped – Awaiting Reception Check-in
-        </span>
-      );
-    case 'REJOINED':
-      return (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 border border-blue-300 ${className}`}>
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-          Rejoined Main Queue
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-light-surface-variant text-light-on-surface-variant line-through ${className}`}>
+          Skipped
         </span>
       );
     case 'PROCESSING':

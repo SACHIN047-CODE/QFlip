@@ -1,96 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useQueue } from '../../context/QueueContext';
-import { patientService } from '../../services/patientService';
 import { TokenCard } from '../../components/common/TokenCard';
-import { ConsultationNote } from '../../types';
+import { StatCard } from '../../components/common/StatCard';
 
 export const PatientDashboard: React.FC = () => {
   const { user } = useAuth();
   const { myToken, currentServingToken, tokens } = useQueue();
-  const [medicalHistory, setMedicalHistory] = useState<ConsultationNote[]>([]);
-  const [loadingHistory, setLoadingHistory] = useState(false);
 
-  useEffect(() => {
-    if (!user) return;
-    setLoadingHistory(true);
-    patientService
-      .getMedicalHistory(user.id)
-      .then((records) => {
-        // Filter strictly for this logged-in user
-        const userRecords = records.filter(
-          (r) =>
-            r.patientId === user.id ||
-            (user.name && r.patientName && r.patientName.toLowerCase().includes(user.name.toLowerCase()))
-        );
-        setMedicalHistory(userRecords);
-      })
-      .catch((err) => console.error('Failed to load medical history', err))
-      .finally(() => setLoadingHistory(false));
-  }, [user]);
-
-  // Calculate actual waiting order
-  const waitingTokens = tokens.filter((t) => t.status === 'WAITING');
-  const myIndex = myToken ? waitingTokens.findIndex((t) => t.id === myToken.id) : -1;
-  const patientsAhead = myIndex >= 0 ? myIndex : 0;
-
-  const isSkipped = myToken?.status === 'SKIPPED' || myToken?.status === 'SKIPPED_AWAITING_RECEPTION';
-  const isRejoined = myToken?.reentryPenaltyApplied && myToken?.status === 'WAITING';
+  const patientsAhead = myToken && currentServingToken
+    ? Math.max(
+        0,
+        tokens.findIndex((t) => t.id === myToken.id) -
+          tokens.findIndex((t) => t.id === currentServingToken.id)
+      )
+    : 6;
 
   return (
     <div className="space-y-8">
       {/* Welcome & Live Queue Status Row */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left: Active Token Card */}
+        {/* Left: Active Token Card (Stitch Live Token Tracker layout) */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Prominent Skipped Banner */}
-          {isSkipped && (
-            <div className="bg-amber-500 text-white rounded-2xl p-5 shadow-lg flex items-center gap-4">
-              <span className="material-symbols-outlined text-3xl animate-pulse">warning</span>
-              <div>
-                <div className="font-headline font-bold text-sm">
-                  Skipped – Awaiting Reception Check-in
-                </div>
-                <div className="text-xs text-amber-100 mt-0.5">
-                  Waiting for physical verification. Your token was skipped. Please visit reception and scan your token to rejoin the queue.
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Prominent Rejoined Banner */}
-          {isRejoined && (
-            <div className="bg-blue-600 text-white rounded-2xl p-4 shadow-md flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-base">check_circle</span>
-                <span className="font-bold">Rejoined Main Queue</span>
-                <span className="text-blue-100">
-                  (Physical arrival verified at reception. Three-place penalty applied)
-                </span>
-              </div>
-              <span className="font-code font-bold bg-white/20 px-2 py-0.5 rounded">
-                Position #{patientsAhead + 1}
-              </span>
-            </div>
-          )}
-
           {myToken ? (
             <TokenCard
               token={myToken}
-              currentServingTokenNumber={currentServingToken?.tokenNumber || 'None'}
+              currentServingTokenNumber={currentServingToken?.tokenNumber || 'OPD-098'}
               patientsAhead={patientsAhead}
               onPrint={() => window.print()}
               onViewDetails={() => (window.location.href = '/patient/queue')}
             />
           ) : (
-            <div className="p-8 bg-light-surface rounded-2xl border border-light-outline text-center space-y-4 shadow-card">
+            <div className="p-8 bg-light-surface rounded-2xl border border-light-outline text-center space-y-4">
               <span className="material-symbols-outlined text-4xl text-secondary">local_activity</span>
               <h3 className="font-headline text-title-lg font-bold text-light-primary">
-                No active patient records available.
+                No Active OPD Token Found
               </h3>
               <p className="text-xs text-light-on-surface-variant max-w-sm mx-auto">
-                You do not have an active OPD consultation token. Generate an OPD slip online in 10 seconds or speak your symptoms using our Multi-lingual Voice intake.
+                Generate an OPD slip online in 10 seconds or speak your symptoms using our Multi-lingual Voice intake.
               </p>
               <Link
                 to="/patient/registration"
@@ -123,7 +71,7 @@ export const PatientDashboard: React.FC = () => {
                 <span className="material-symbols-outlined">prescriptions</span>
               </div>
               <span className="font-headline text-xs font-bold text-light-primary">Prescriptions</span>
-              <span className="text-[10px] text-light-on-surface-variant">Generic Digital Rx</span>
+              <span className="text-[10px] text-light-on-surface-variant">Digital QR Rx</span>
             </Link>
 
             <Link
@@ -134,7 +82,7 @@ export const PatientDashboard: React.FC = () => {
                 <span className="material-symbols-outlined">biotech</span>
               </div>
               <span className="font-headline text-xs font-bold text-light-primary">Lab Reports</span>
-              <span className="text-[10px] text-light-on-surface-variant">Diagnostics</span>
+              <span className="text-[10px] text-light-on-surface-variant">2 reports ready</span>
             </Link>
 
             <Link
@@ -150,7 +98,7 @@ export const PatientDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Hospital Status & Clinical Alerts */}
+        {/* Right: Hospital Status & Clinical Alerts (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Doctor On Duty Card */}
           <div className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4">
@@ -171,11 +119,9 @@ export const PatientDashboard: React.FC = () => {
               />
               <div>
                 <h4 className="font-headline text-title-md font-bold text-light-primary">
-                  {myToken?.assignedDoctorName || 'Dr. Rajesh Sharma, MD'}
+                  Dr. Rajesh Sharma, MD
                 </h4>
-                <div className="text-xs text-secondary font-semibold">
-                  {myToken?.department || 'General Medicine'} • {myToken?.roomNumber || 'OPD Room 12'}
-                </div>
+                <div className="text-xs text-secondary font-semibold">General Medicine • OPD Room 12</div>
                 <div className="text-[11px] text-light-on-surface-variant mt-0.5">
                   Shift: 08:30 AM – 02:00 PM (Civil Hospital Ambala)
                 </div>
@@ -185,7 +131,7 @@ export const PatientDashboard: React.FC = () => {
             <div className="p-3 bg-light-surface-variant rounded-xl border border-light-outline text-xs space-y-2">
               <div className="flex justify-between text-light-on-surface-variant">
                 <span>Patients in Queue:</span>
-                <strong className="text-light-primary font-code">{waitingTokens.length} Patients</strong>
+                <strong className="text-light-primary font-code">24 Patients</strong>
               </div>
               <div className="flex justify-between text-light-on-surface-variant">
                 <span>Avg. Consultation Time:</span>
@@ -205,49 +151,32 @@ export const PatientDashboard: React.FC = () => {
                 <span className="material-symbols-outlined text-secondary text-base">sms</span>
                 Live Token SMS Updates
               </h4>
-              <span className="text-[10px] text-light-on-surface-variant font-medium">NHM Gateway</span>
+              <span className="text-[10px] text-light-on-surface-variant">Simulated Telco Stream</span>
             </div>
 
-            {myToken && myToken.statusHistory && myToken.statusHistory.length > 0 ? (
-              <div className="space-y-3 text-xs">
-                {myToken.statusHistory.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className={`p-3 rounded-xl border ${
-                      item.status === 'SKIPPED'
-                        ? 'bg-amber-50 border-amber-300 text-amber-900'
-                        : 'bg-secondary/5 border-secondary/20 text-light-primary'
-                    }`}
-                  >
-                    <div className="flex justify-between text-[10px] font-bold mb-1">
-                      <span className={item.status === 'SKIPPED' ? 'text-amber-800' : 'text-secondary'}>
-                        GOV-AMBALA-OPD • {item.status.toUpperCase()}
-                      </span>
-                      <span className="text-light-on-surface-variant">
-                        {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                    <p className="text-[11px]">{item.note}</p>
-                  </div>
-                ))}
-              </div>
-            ) : myToken ? (
-              <div className="space-y-3 text-xs">
-                <div className="p-3 bg-secondary/5 rounded-xl border border-secondary/20">
-                  <div className="flex justify-between text-[10px] text-secondary font-bold mb-1">
-                    <span>GOV-AMBALA-OPD</span>
-                    <span>{myToken.registeredAt}</span>
-                  </div>
-                  <p className="text-light-primary text-[11px]">
-                    Token {myToken.tokenNumber} issued for {myToken.department} ({myToken.roomNumber || 'Room 12'}). Est wait: {myToken.estimatedWaitMinutes} mins.
-                  </p>
+            <div className="space-y-3 text-xs">
+              <div className="p-3 bg-secondary/5 rounded-xl border border-secondary/20">
+                <div className="flex justify-between text-[10px] text-secondary font-bold mb-1">
+                  <span>GOV-AMBALA-OPD</span>
+                  <span>10:02 AM</span>
                 </div>
+                <p className="text-light-primary text-[11px]">
+                  "Dear Manpreet Singh, Token OPD-098 is in consultation. 6 patients ahead of OPD-104. Please take seat
+                  in 1st Floor Waiting Hall 2."
+                </p>
               </div>
-            ) : (
-              <div className="p-4 text-center text-xs text-light-on-surface-variant">
-                No active patient records available.
+
+              <div className="p-3 bg-light-surface-variant rounded-xl border border-light-outline">
+                <div className="flex justify-between text-[10px] text-light-on-surface-variant font-bold mb-1">
+                  <span>GOV-AMBALA-OPD</span>
+                  <span>09:48 AM</span>
+                </div>
+                <p className="text-light-on-surface-variant text-[11px]">
+                  "Token OPD-104 booked successfully for General Medicine (Room 12). Est wait 25 mins. Show QR code to
+                  OPD door attendant."
+                </p>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
@@ -260,7 +189,7 @@ export const PatientDashboard: React.FC = () => {
               Ayushman Bharat Health Locker Summary
             </h3>
             <p className="text-xs text-light-on-surface-variant">
-              Linked to ABHA: <strong>{user?.abhaId || 'Not Linked'}</strong>
+              Linked to ABHA: <strong>{user?.abhaId || '91-8274-1049-9812'}</strong>
             </p>
           </div>
           <Link
@@ -272,43 +201,26 @@ export const PatientDashboard: React.FC = () => {
           </Link>
         </div>
 
-        {medicalHistory.length === 0 ? (
-          <div className="p-8 text-center bg-light-surface-variant/40 rounded-xl border border-light-outline text-xs text-light-on-surface-variant space-y-1">
-            <p className="font-semibold text-light-primary">No active patient records available.</p>
-            <p className="text-[11px]">
-              Past consultations, lab reports, and active prescriptions will appear here once issued by your doctor.
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 bg-light-surface-variant rounded-xl border border-light-outline">
+            <span className="text-[10px] uppercase font-bold text-secondary block mb-1">Last Consultation</span>
+            <div className="font-headline text-sm font-bold text-light-primary">15 Oct 2026</div>
+            <div className="text-light-on-surface-variant mt-0.5">Acute Viral Pharyngitis • Dr. Rajesh Sharma</div>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            {medicalHistory.slice(0, 3).map((record) => (
-              <div key={record.id} className="p-4 bg-light-surface-variant rounded-xl border border-light-outline space-y-2">
-                <span className="text-[10px] uppercase font-bold text-secondary block">
-                  {record.department} • {record.date}
-                </span>
-                <div className="font-headline text-sm font-bold text-light-primary">
-                  {record.diagnosis}
-                </div>
-                <div className="text-light-on-surface-variant text-[11px]">
-                  Dr: {record.doctorName}
-                </div>
-                {record.prescriptions && record.prescriptions.length > 0 && (
-                  <div className="pt-2 border-t border-light-outline text-[11px]">
-                    <span className="font-bold text-light-primary block mb-0.5">Prescribed Medicines:</span>
-                    {record.prescriptions.slice(0, 2).map((rx) => (
-                      <div key={rx.id} className="text-light-on-surface-variant">
-                        • {rx.name} ({rx.dosage}) - <span className="text-secondary font-semibold">{rx.consumptionTiming}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+
+          <div className="p-4 bg-light-surface-variant rounded-xl border border-light-outline">
+            <span className="text-[10px] uppercase font-bold text-purple-600 block mb-1">Diagnostic Report</span>
+            <div className="font-headline text-sm font-bold text-light-primary">CBC &amp; Platelet Count</div>
+            <div className="text-light-on-surface-variant mt-0.5">Verified on 16 Oct • Normal Range</div>
           </div>
-        )}
+
+          <div className="p-4 bg-light-surface-variant rounded-xl border border-light-outline">
+            <span className="text-[10px] uppercase font-bold text-success block mb-1">Active Prescription</span>
+            <div className="font-headline text-sm font-bold text-light-primary">Azithromycin + Levocetirizine</div>
+            <div className="text-light-on-surface-variant mt-0.5">Course Completed • Follow-up Optional</div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
-export default PatientDashboard;

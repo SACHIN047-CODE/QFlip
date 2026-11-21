@@ -2,7 +2,6 @@ import { Queue } from '../models/Queue.js';
 import { Patient } from '../models/Patient.js';
 import { Department } from '../models/Department.js';
 import { QueueService } from '../services/queueService.js';
-import { QueueCapacityService } from '../services/queueCapacityService.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiError } from '../utils/ApiError.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
@@ -47,10 +46,9 @@ export const getMyActiveToken = asyncHandler(async (req, res) => {
     throw ApiError.notFound('Patient record not found');
   }
 
-  // Include skipped status so patient can see their skipped state & reception instructions
   const activeToken = await Queue.findOne({
     patientId: patient._id,
-    status: { $in: ['waiting', 'called', 'in_consultation', 'skipped'] }
+    status: { $in: ['waiting', 'called', 'in_consultation'] }
   })
     .sort({ createdAt: -1 })
     .populate('departmentId doctorId');
@@ -66,15 +64,7 @@ export const getMyActiveToken = asyncHandler(async (req, res) => {
 
   return ApiResponse.success(
     res,
-    {
-      activeToken,
-      patientsAhead,
-      isSkipped: activeToken?.status === 'skipped',
-      instruction:
-        activeToken?.status === 'skipped'
-          ? 'Your token was skipped. Please visit reception and scan your token to rejoin the queue.'
-          : null
-    },
+    { activeToken, patientsAhead },
     activeToken ? 'Active token retrieved' : 'No active token currently waiting'
   );
 });
@@ -100,7 +90,7 @@ export const updateQueueStatus = asyncHandler(async (req, res) => {
   const updatedQueue = await QueueService.updateQueueStatus(
     queueId,
     status,
-    doctorId || req.user._id,
+    doctorId,
     delayReason
   );
 
@@ -133,46 +123,4 @@ export const transferQueue = asyncHandler(async (req, res) => {
     { previousToken: currentQueue.tokenNumber, newToken: newQueueEntry },
     'Patient successfully transferred to new department queue'
   );
-});
-
-/**
- * Reception re-entry verification:
- * Scans token / QR code, confirms physical arrival, reinserts patient into active main queue with 3-position penalty.
- */
-export const rejoinQueue = asyncHandler(async (req, res) => {
-  const { tokenNumber, queueId } = req.body;
-
-  if (!tokenNumber && !queueId) {
-    throw ApiError.badRequest('Either tokenNumber or queueId is required for re-entry verification.');
-  }
-
-  const result = await QueueService.rejoinPatient({
-    tokenNumber,
-    queueId,
-    verifiedByStaffId: req.user._id
-  });
-
-  return ApiResponse.success(
-    res,
-    result,
-    `Patient verified at reception. Rejoined active main queue at position #${result.newPosition} with 3-place penalty applied.`
-  );
-});
-
-/**
- * Get all patients in the separate Skipped Patients Queue
- */
-export const getSkippedQueue = asyncHandler(async (req, res) => {
-  const { departmentId } = req.query;
-  const skippedList = await QueueService.getSkippedQueue(departmentId);
-  return ApiResponse.success(res, skippedList, 'Skipped patients queue retrieved');
-});
-
-/**
- * Get doctor-wise live queue capacity and remaining buffer limit
- */
-export const getDoctorCapacity = asyncHandler(async (req, res) => {
-  const { doctorId } = req.params;
-  const capacity = await QueueCapacityService.calculateDoctorCapacity(doctorId);
-  return ApiResponse.success(res, capacity, 'Doctor queue capacity retrieved');
 });

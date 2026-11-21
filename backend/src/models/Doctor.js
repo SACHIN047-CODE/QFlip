@@ -49,10 +49,6 @@ const doctorSchema = new mongoose.Schema(
     averageConsultationTimeMinutes: {
       type: Number,
       default: 10
-    },
-    bufferCapacityLimit: {
-      type: Number,
-      default: 5
     }
   },
   {

@@ -1,21 +1,18 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { PatientToken, PriorityLevel, TokenStatus, DoctorCapacityInfo } from '../types';
+import { PatientToken, PriorityLevel, TokenStatus } from '../types';
 import { queueService } from '../services/queueService';
 import { useAuth } from './AuthContext';
 
 interface QueueContextType {
   tokens: PatientToken[];
-  skippedTokens: PatientToken[];
   loading: boolean;
   departmentFilter: string;
   setDepartmentFilter: (dept: string) => void;
-  myToken: PatientToken | null;
+  myToken: PatientToken | null; // e.g. OPD-104 for patient Manpreet Singh
   currentServingToken: PatientToken | null;
   refreshTokens: () => Promise<void>;
   callNext: (department?: string) => Promise<PatientToken | null>;
-  skip: (tokenId: string, reason?: string) => Promise<void>;
-  rejoin: (tokenNumberOrId: string, staffId?: string) => Promise<{ token: PatientToken; newPosition: number }>;
-  checkCapacity: (doctorId?: string, department?: string) => Promise<DoctorCapacityInfo>;
+  skip: (tokenId: string) => Promise<void>;
   updateStatus: (tokenId: string, status: TokenStatus) => Promise<void>;
   generateToken: (payload: {
     patientName: string;
@@ -27,7 +24,6 @@ interface QueueContextType {
     symptoms: string[];
     priority?: PriorityLevel;
     voiceNoteUrl?: string;
-    doctorId?: string;
   }) => Promise<PatientToken>;
   addDemoPatients: () => Promise<void>;
   resetDemoQueue: () => Promise<void>;
@@ -63,19 +59,9 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return next;
   };
 
-  const skip = async (tokenId: string, reason?: string) => {
-    await queueService.skipToken(tokenId, reason);
+  const skip = async (tokenId: string) => {
+    await queueService.skipToken(tokenId);
     await refreshTokens();
-  };
-
-  const rejoin = async (tokenNumberOrId: string, staffId?: string) => {
-    const res = await queueService.rejoinToken(tokenNumberOrId, staffId);
-    await refreshTokens();
-    return res;
-  };
-
-  const checkCapacity = async (doctorId?: string, department?: string) => {
-    return queueService.checkDoctorCapacity(doctorId, department);
   };
 
   const updateStatus = async (tokenId: string, status: TokenStatus) => {
@@ -93,29 +79,32 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     symptoms: string[];
     priority?: PriorityLevel;
     voiceNoteUrl?: string;
-    doctorId?: string;
   }) => {
     const created = await queueService.createToken(payload);
     await refreshTokens();
     return created;
   };
 
-  // Active serving token
-  const currentServingToken = tokens.find((t) => t.status === 'IN_CONSULTATION') || null;
+  const addDemoPatients = async () => {
+    await queueService.addDemoPatients();
+    await refreshTokens();
+  };
 
-  // Separate skipped patients queue
-  const skippedTokens = tokens.filter(
-    (t) => t.status === 'SKIPPED' || t.status === 'SKIPPED_AWAITING_RECEPTION'
-  );
+  const resetDemoQueue = async () => {
+    await queueService.resetDemoQueue();
+    await refreshTokens();
+  };
 
-  // Find private token of logged-in patient (checks active, skipped, or waiting)
+  // Find current token being served
+  const currentServingToken = tokens.find(t => t.status === 'IN_CONSULTATION') || null;
+
+  // Find only logged-in user's private token (never fall back to other patients' tokens)
   const myToken = user
     ? tokens.find(
         (t) =>
-          (t.patientId === user.id ||
-            (user.phone && t.phone === user.phone) ||
-            (user.name && t.patientName.toLowerCase().includes(user.name.toLowerCase()))) &&
-          t.status !== 'COMPLETED'
+          t.patientId === user.id ||
+          (user.phone && t.phone === user.phone) ||
+          (user.name && t.patientName.toLowerCase().includes(user.name.toLowerCase()))
       ) || null
     : null;
 
@@ -123,7 +112,6 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     <QueueContext.Provider
       value={{
         tokens,
-        skippedTokens,
         loading,
         departmentFilter,
         setDepartmentFilter,
@@ -132,8 +120,6 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         refreshTokens,
         callNext,
         skip,
-        rejoin,
-        checkCapacity,
         updateStatus,
         generateToken,
         addDemoPatients,
@@ -145,7 +131,7 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
-export const useQueue = (): QueueContextType => {
+export const useQueue = () => {
   const context = useContext(QueueContext);
   if (!context) {
     throw new Error('useQueue must be used within a QueueProvider');
