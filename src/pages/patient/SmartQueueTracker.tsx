@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueue } from '../../context/QueueContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { HospitalMapModal } from '../../components/common/HospitalMapModal';
 
 export const SmartQueueTracker: React.FC = () => {
   const { myToken, currentServingToken, tokens, refreshTokens } = useQueue();
+  const { t } = useLanguage();
   const [mapOpen, setMapOpen] = useState(false);
   const [audioAnnouncementPlaying, setAudioAnnouncementPlaying] = useState(false);
 
@@ -75,7 +77,7 @@ export const SmartQueueTracker: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4 text-center">
           <div className="p-4 bg-light-surface-variant/60 rounded-2xl border border-light-outline">
             <span className="text-xs text-light-on-surface-variant font-bold uppercase block mb-1">
-              Your Token
+              {t('queue.token_number', 'Your Token')}
             </span>
             <div className="font-headline text-3xl sm:text-4xl font-black text-secondary font-code">
               {tokenNumber}
@@ -85,7 +87,7 @@ export const SmartQueueTracker: React.FC = () => {
 
           <div className="p-4 bg-light-surface-variant/60 rounded-2xl border border-light-outline">
             <span className="text-xs text-light-on-surface-variant font-bold uppercase block mb-1">
-              Current Token
+              {t('queue.currently_serving', 'Current Token')}
             </span>
             <div className="font-headline text-3xl sm:text-4xl font-black text-light-primary font-code">
               {currentToken}
@@ -105,10 +107,10 @@ export const SmartQueueTracker: React.FC = () => {
 
           <div className="p-4 bg-accent/20 rounded-2xl border-2 border-accent/50">
             <span className="text-xs text-on-accent font-bold uppercase block mb-1">
-              Estimated Waiting
+              {t('queue.estimated_wait', 'Estimated Waiting')}
             </span>
             <div className="font-headline text-3xl sm:text-4xl font-black text-on-accent font-code">
-              {estimatedWait} mins
+              {estimatedWait} {t('queue.mins', 'mins')}
             </div>
             <span className="text-[11px] text-on-accent/80 font-medium mt-1 block">AI Recalculated</span>
           </div>
@@ -167,7 +169,7 @@ export const SmartQueueTracker: React.FC = () => {
               className="flex-1 sm:flex-initial px-4 py-2 bg-light-surface border-2 border-light-primary text-light-primary text-xs font-bold rounded-lg hover:bg-light-primary hover:text-white transition-colors flex items-center justify-center gap-1.5"
             >
               <span className="material-symbols-outlined text-sm">map</span>
-              <span>Find Room On Map</span>
+              <span>{t('queue.view_map', 'Find Room On Map')}</span>
             </button>
             <button
               onClick={() => window.print()}

@@ -208,3 +208,15 @@ export interface AppNotification {
   actionUrl?: string;
 }
 
+export interface TriageResult {
+  department: string;
+  departmentCode: string;
+  urgency: 'normal' | 'urgent' | 'emergency';
+  triageColor: 'green' | 'yellow' | 'red';
+  confidence: number;
+  summary: string;
+  disclaimer: string;
+  symptoms?: string[];
+}
+
+

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { VoiceInputModal } from './VoiceInputModal';
 import { HospitalMapModal } from './HospitalMapModal';
 
@@ -11,13 +12,15 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle }) => {
-  const { user, role, switchRole, logout } = useAuth();
+  const { user, role, logout } = useAuth();
   const { notifications, unreadCount, markAsRead } = useNotifications();
+  const { language, toggleLanguage, t } = useLanguage();
   const navigate = useNavigate();
 
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const handleHospitalCommandClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -30,61 +33,119 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
 
   return (
     <>
-      {/* Top Utility Bar (inspired by Wavenet designs) */}
-      <aside className="border-b border-light-outline/70 bg-light-surface-variant/40 py-2 px-6 sm:px-12 text-xs text-light-on-surface-variant hidden md:block">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5 font-medium">
-              <span className="material-symbols-outlined text-sm text-secondary">support_agent</span>
-              Emergency Helplines: <strong>108 / 102</strong>
+      {/* Top Utility & Emergency Helpline Bar */}
+      <aside className="border-b border-light-outline/70 bg-light-surface-variant/60 py-1.5 px-3 sm:px-6 lg:px-12 text-xs text-light-on-surface-variant">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 sm:gap-4">
+          {/* Emergency Helpline Numbers */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <span className="flex items-center gap-1 font-bold text-light-primary">
+              <span className="material-symbols-outlined text-sm text-danger animate-pulse">sos</span>
+              <span className="hidden sm:inline">{t('emergency.title', 'Emergency Helplines')}:</span>
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-sm text-success">verified</span>
-              National Health Mission &amp; Ayushman Bharat ABHA Enabled
-            </span>
+
+            {/* 112: Main Emergency Helpline (Highest Visual Priority) */}
+            <a
+              href="tel:112"
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-danger text-white font-bold font-code text-xs shadow-sm hover:bg-danger/90 active:scale-95 transition-all border border-danger/30"
+              title="Click to Call 112 National Emergency Helpline"
+            >
+              <span className="material-symbols-outlined text-xs">emergency</span>
+              <span>112</span>
+              <span className="text-[10px] uppercase font-semibold hidden md:inline ml-0.5">
+                (Main Emergency)
+              </span>
+            </a>
+
+            {/* 108: Ambulance Emergency Service */}
+            <a
+              href="tel:108"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-800 dark:text-amber-300 font-bold font-code text-xs hover:bg-amber-500/25 active:scale-95 transition-colors border border-amber-500/30"
+              title="Click to Call 108 Ambulance Emergency Service"
+            >
+              <span className="material-symbols-outlined text-xs text-amber-600">ambulance</span>
+              <span>108</span>
+              <span className="text-[10px] text-light-on-surface-variant hidden lg:inline">
+                (Ambulance)
+              </span>
+            </a>
+
+            {/* 102: Ambulance Service */}
+            <a
+              href="tel:102"
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-secondary/15 text-secondary font-bold font-code text-xs hover:bg-secondary/25 active:scale-95 transition-colors border border-secondary/30"
+              title="Click to Call 102 Maternal & Child Ambulance Service"
+            >
+              <span className="material-symbols-outlined text-xs">local_hospital</span>
+              <span>102</span>
+              <span className="text-[10px] text-light-on-surface-variant hidden lg:inline">
+                (Ambulance)
+              </span>
+            </a>
           </div>
-          <div className="flex items-center gap-6">
-            <span className="font-code text-light-primary font-semibold">Toll Free: 1800 180 2026</span>
+
+          {/* Right Utilities: Map, Voice, and One-Click English-Hindi Language Conversion */}
+          <div className="flex items-center gap-3 sm:gap-5 ml-auto">
             <button
               onClick={() => setIsMapOpen(true)}
-              className="hover:text-secondary flex items-center gap-1 transition-colors"
+              className="hover:text-secondary flex items-center gap-1 transition-colors text-light-primary font-medium"
             >
               <span className="material-symbols-outlined text-sm text-secondary">map</span>
-              Hospital Map
+              <span className="hidden sm:inline">{t('nav.hospital_map', 'Hospital Map')}</span>
             </button>
+
             <button
               onClick={() => setIsVoiceOpen(true)}
               className="hover:text-secondary flex items-center gap-1 transition-colors text-secondary font-bold"
             >
               <span className="material-symbols-outlined text-sm">mic</span>
-              Voice OPD (बोलकर पर्ची बनाएं)
+              <span className="hidden md:inline">{t('nav.voice_opd_sub', 'Voice OPD (बोलकर पर्ची बनाएं)')}</span>
+              <span className="md:hidden">Voice OPD</span>
+            </button>
+
+            {/* Single Visible Language Conversion Button */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-secondary/40 bg-secondary/10 hover:bg-secondary/20 text-secondary font-bold text-xs transition-all shadow-sm"
+              title={language === 'en' ? 'हिन्दी में बदलें (Switch to Hindi)' : 'Switch to English'}
+            >
+              <span className="material-symbols-outlined text-sm">translate</span>
+              <span>{language === 'en' ? 'हिन्दी' : 'English'}</span>
             </button>
           </div>
         </div>
       </aside>
 
       {/* Main Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-light-surface/95 backdrop-blur-none border-b border-light-outline/80 px-6 sm:px-12 py-3.5">
+      <header className="sticky top-0 z-40 bg-light-surface/95 backdrop-blur-none border-b border-light-outline/80 px-4 sm:px-6 lg:px-12 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Logo & Mobile Menu Button */}
+          {/* Logo & Mobile Menu Toggle */}
           <div className="flex items-center gap-3">
-            {onMenuToggle && (
-              <button
-                onClick={onMenuToggle}
-                className="md:hidden p-2 rounded-lg text-light-primary hover:bg-light-surface-variant"
-              >
-                <span className="material-symbols-outlined text-xl">menu</span>
-              </button>
-            )}
+            <button
+              onClick={() => {
+                if (onMenuToggle) {
+                  onMenuToggle();
+                } else {
+                  setIsMobileNavOpen(!isMobileNavOpen);
+                }
+              }}
+              className="md:hidden p-2 rounded-lg text-light-primary hover:bg-light-surface-variant"
+              aria-label="Toggle Navigation"
+            >
+              <span className="material-symbols-outlined text-xl">
+                {isMobileNavOpen ? 'close' : 'menu'}
+              </span>
+            </button>
+
             <Link to="/" className="flex items-center gap-2.5 group">
               <div className="relative w-8 h-8 flex items-center justify-center">
                 <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8">
                   <path
                     d="M4 18L10 6L18 28L24 14L30 22"
                     stroke="#2585E8"
-                    stroke-width="3.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   ></path>
                   <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
                 </svg>
@@ -94,13 +155,13 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   Q<span className="text-secondary font-medium">Flip</span>
                 </span>
                 <span className="text-[9px] uppercase tracking-wider text-light-on-surface-variant font-bold">
-                  Health Logistics AI
+                  Health Logistics
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* Navigation Links based on mode */}
+          {/* Desktop Navigation Links based on mode */}
           {mode === 'public' && (
             <nav className="hidden lg:flex items-center gap-8 text-label-md font-label text-light-on-surface">
               <NavLink
@@ -111,14 +172,14 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Patient Services
+                {t('nav.patient_services', 'Patient Services')}
               </NavLink>
               <button
                 type="button"
                 onClick={handleHospitalCommandClick}
                 className="hover:text-secondary transition-colors flex items-center gap-1 font-semibold"
               >
-                <span>Hospital Command</span>
+                <span>{t('nav.hospital_command', 'Hospital Command')}</span>
                 <span className="material-symbols-outlined text-xs text-secondary">lock</span>
               </button>
               <NavLink
@@ -129,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                AI &amp; Digital Twin
+                {t('nav.ai_digital_twin', 'AI & Digital Twin')}
               </NavLink>
               <NavLink
                 to="/feedback"
@@ -139,7 +200,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Feedback &amp; Grievance
+                {t('nav.feedback', 'Feedback & Grievance')}
               </NavLink>
             </nav>
           )}
@@ -210,15 +271,26 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
             </nav>
           )}
 
-          {/* Right Action Buttons */}
+          {/* Right Action Controls */}
           <div className="flex items-center gap-3">
+            {/* Header Language Toggle Pill */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-light-outline bg-light-surface hover:bg-light-surface-variant text-light-primary text-xs font-bold transition-all shadow-sm"
+              title={language === 'en' ? 'Switch to Hindi' : 'Switch to English'}
+            >
+              <span className="material-symbols-outlined text-sm text-secondary">translate</span>
+              <span>{language === 'en' ? 'हिन्दी' : 'English'}</span>
+            </button>
+
             {/* Voice Input Quick Button */}
             <button
               onClick={() => setIsVoiceOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-secondary/30 bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-bold transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-secondary/30 bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-bold transition-colors"
             >
               <span className="material-symbols-outlined text-sm">mic</span>
-              <span>Voice OPD</span>
+              <span className="hidden sm:inline">{t('nav.voice_opd', 'Voice OPD')}</span>
             </button>
 
             {/* Notification Bell */}
@@ -296,28 +368,87 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-danger/10 hover:bg-danger/20 text-danger text-xs font-bold rounded-lg border border-danger/30 transition-all"
                 >
                   <span className="material-symbols-outlined text-sm">logout</span>
-                  <span className="hidden sm:inline">Logout</span>
+                  <span className="hidden sm:inline">{t('nav.logout', 'Logout')}</span>
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-1.5 bg-light-primary hover:bg-slate-800 text-white font-label text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-all"
+                  className="inline-flex items-center gap-1.5 bg-light-primary hover:bg-slate-800 text-white font-label text-xs font-bold px-3.5 py-2 rounded-lg shadow-sm transition-all"
                 >
                   <span className="material-symbols-outlined text-sm">lock</span>
-                  <span>Portal Login</span>
+                  <span>{t('nav.login', 'Portal Login')}</span>
                 </Link>
                 <Link
                   to="/register"
                   className="hidden sm:inline-flex items-center gap-1.5 border border-light-outline hover:bg-light-surface-variant text-light-primary font-label text-xs font-bold px-3 py-2 rounded-lg transition-all"
                 >
-                  <span>Register</span>
+                  <span>{t('nav.register', 'Register')}</span>
                 </Link>
               </div>
             )}
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer Dropdown */}
+        {isMobileNavOpen && (
+          <div className="md:hidden mt-3 pt-3 border-t border-light-outline space-y-2">
+            <div className="flex items-center justify-between px-2 pb-2">
+              <span className="text-xs font-bold text-light-on-surface-variant uppercase">
+                Language
+              </span>
+              <button
+                type="button"
+                onClick={toggleLanguage}
+                className="px-3 py-1 rounded bg-secondary/10 border border-secondary/30 text-secondary text-xs font-bold"
+              >
+                {language === 'en' ? 'Switch to हिन्दी' : 'Switch to English'}
+              </button>
+            </div>
+
+            <NavLink
+              to="/patient/dashboard"
+              onClick={() => setIsMobileNavOpen(false)}
+              className="block px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              {t('nav.patient_services', 'Patient Services')}
+            </NavLink>
+            <button
+              onClick={(e) => {
+                setIsMobileNavOpen(false);
+                handleHospitalCommandClick(e);
+              }}
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              {t('nav.hospital_command', 'Hospital Command')}
+            </button>
+            <NavLink
+              to="/ai/dashboard"
+              onClick={() => setIsMobileNavOpen(false)}
+              className="block px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              {t('nav.ai_digital_twin', 'AI & Digital Twin')}
+            </NavLink>
+            <NavLink
+              to="/feedback"
+              onClick={() => setIsMobileNavOpen(false)}
+              className="block px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              {t('nav.feedback', 'Feedback & Grievance')}
+            </NavLink>
+            <button
+              onClick={() => {
+                setIsMobileNavOpen(false);
+                setIsMapOpen(true);
+              }}
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-secondary hover:bg-light-surface-variant flex items-center gap-1.5"
+            >
+              <span className="material-symbols-outlined text-sm">map</span>
+              <span>{t('nav.hospital_map', 'Hospital Map')}</span>
+            </button>
+          </div>
+        )}
       </header>
 
       {/* Voice Input Modal */}
