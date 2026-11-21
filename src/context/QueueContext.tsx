@@ -25,6 +25,8 @@ interface QueueContextType {
     priority?: PriorityLevel;
     voiceNoteUrl?: string;
   }) => Promise<PatientToken>;
+  addDemoPatients: () => Promise<void>;
+  resetDemoQueue: () => Promise<void>;
 }
 
 const QueueContext = createContext<QueueContextType | undefined>(undefined);
@@ -83,6 +85,16 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return created;
   };
 
+  const addDemoPatients = async () => {
+    await queueService.addDemoPatients();
+    await refreshTokens();
+  };
+
+  const resetDemoQueue = async () => {
+    await queueService.resetDemoQueue();
+    await refreshTokens();
+  };
+
   // Find current token being served
   const currentServingToken = tokens.find(t => t.status === 'IN_CONSULTATION') || null;
 
@@ -110,6 +122,8 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         skip,
         updateStatus,
         generateToken,
+        addDemoPatients,
+        resetDemoQueue,
       }}
     >
       {children}

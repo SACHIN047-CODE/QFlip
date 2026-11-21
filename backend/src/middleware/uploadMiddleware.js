@@ -3,22 +3,14 @@ import path from 'path';
 import fs from 'fs';
 import { ApiError } from '../utils/ApiError.js';
 
-// Ensure local uploads directory exists
+// Ensure local uploads directory exists for fallback
 const uploadDir = path.resolve('uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-  }
-});
+// Memory storage keeps file buffer in memory for streaming to Firebase Cloud Storage
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = [
@@ -50,5 +42,18 @@ export const upload = multer({
     fileSize: 10 * 1024 * 1024 // 10MB limit
   }
 });
+
+/**
+ * Fallback helper to save buffer to local uploads directory when Firebase is not active.
+ */
+export const saveBufferToLocalDisk = async (buffer, originalname) => {
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+  const ext = path.extname(originalname);
+  const fileName = `report-${uniqueSuffix}${ext}`;
+  const filePath = path.join(uploadDir, fileName);
+
+  await fs.promises.writeFile(filePath, buffer);
+  return `/uploads/${fileName}`;
+};
 
 export default upload;
