@@ -130,6 +130,24 @@ const seedDatabase = async () => {
       role: 'admin'
     });
 
+    // 10 Official Demo Users: Administrators
+    await User.create([
+      {
+        name: 'Sachin Sharma',
+        email: 'sachin@example.com',
+        phone: '+91 98100 12345',
+        password: 'Demo@12345',
+        role: 'admin'
+      },
+      {
+        name: 'Rohan Kapoor',
+        email: 'rohan@example.com',
+        phone: '+91 98100 12353',
+        password: 'Demo@12353',
+        role: 'admin'
+      }
+    ]);
+
     const staffUser = await User.create({
       name: 'Anita Devi',
       email: 'staff@careflow.gov.in',
@@ -178,6 +196,50 @@ const seedDatabase = async () => {
 
     logger.info('3. Creating Doctors across Departments...');
     const doctorsData = [
+      {
+        name: 'Rahul Verma',
+        email: 'rahul@example.com',
+        phone: '+91 98100 12346',
+        password: 'Demo@12346',
+        specialization: 'Senior Consultant Physician',
+        qualification: 'MBBS, MD (General Medicine)',
+        deptCode: 'GEN',
+        roomNumber: 'Room 101',
+        avgTime: 12
+      },
+      {
+        name: 'Priya Singh',
+        email: 'priya@example.com',
+        phone: '+91 98100 12348',
+        password: 'Demo@12348',
+        specialization: 'Interventional Cardiologist',
+        qualification: 'MBBS, MD, DM (Cardiology)',
+        deptCode: 'CARD',
+        roomNumber: 'Room 201',
+        avgTime: 15
+      },
+      {
+        name: 'Dr. Karan Malhotra',
+        email: 'karan@example.com',
+        phone: '+91 98100 12351',
+        password: 'Demo@12351',
+        specialization: 'Consultant Orthopedic Surgeon',
+        qualification: 'MBBS, MS (Orthopedics)',
+        deptCode: 'ORTHO',
+        roomNumber: 'Room 108',
+        avgTime: 15
+      },
+      {
+        name: 'Dr. Simran Kaur',
+        email: 'simran@example.com',
+        phone: '+91 98100 12354',
+        password: 'Demo@12354',
+        specialization: 'Head of Pediatric Medicine',
+        qualification: 'MBBS, MD (Pediatrics)',
+        deptCode: 'PED',
+        roomNumber: 'Room 301',
+        avgTime: 10
+      },
       {
         name: 'Dr. Rajesh Sharma',
         email: 'doctor@careflow.gov.in',
@@ -236,7 +298,7 @@ const seedDatabase = async () => {
         name: d.name,
         email: d.email,
         phone: d.phone,
-        password: defaultPassword,
+        password: d.password || defaultPassword,
         role: 'doctor'
       });
 
@@ -256,6 +318,10 @@ const seedDatabase = async () => {
 
     logger.info('4. Creating 30+ Realistic Indian Patients...');
     const patientRawList = [
+      { name: 'Amit Kumar', email: 'amit@example.com', phone: '+91 98100 12347', password: 'Demo@12347', age: 36, gender: 'Male', blood: 'B+' },
+      { name: 'Neha Gupta', email: 'neha@example.com', phone: '+91 98100 12349', password: 'Demo@12349', age: 29, gender: 'Female', blood: 'O+' },
+      { name: 'Arjun Mehta', email: 'arjun@example.com', phone: '+91 98100 12350', password: 'Demo@12350', age: 42, gender: 'Male', blood: 'A+' },
+      { name: 'Anjali Sharma', email: 'anjali@example.com', phone: '+91 98100 12352', password: 'Demo@12352', age: 33, gender: 'Female', blood: 'AB+' },
       { name: 'Aarav Patel', email: 'patient@careflow.gov.in', phone: '+91 98201 11221', age: 34, gender: 'Male', blood: 'B+' },
       { name: 'Kavita Singh', email: 'kavita.s@example.com', phone: '+91 98201 11222', age: 28, gender: 'Female', blood: 'O+' },
       { name: 'Rohan Verma', email: 'rohan.v@example.com', phone: '+91 98201 11223', age: 45, gender: 'Male', blood: 'A+' },
@@ -297,7 +363,7 @@ const seedDatabase = async () => {
         name: p.name,
         email: p.email,
         phone: p.phone,
-        password: defaultPassword,
+        password: p.password || defaultPassword,
         role: 'patient'
       });
 
