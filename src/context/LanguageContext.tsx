@@ -24,7 +24,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.feedback': 'Patient Grievance',
     'nav.voice_opd': 'Voice OPD',
     'nav.voice_opd_sub': 'Voice OPD (बोलकर पर्ची बनाएं)',
-    'nav.hospital_map': 'Hospital Map',
     'nav.login': 'Sign In',
     'nav.register': 'Register',
     'nav.logout': 'Sign Out',
@@ -58,17 +57,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'voice.sample_pediatric': 'Baby has high persistent fever and crying continuously.',
     'voice.sample_tamil': 'எனக்கு 3 நாட்களாக கடுமையான காய்ச்சல் மற்றும் தொண்டை வலி உள்ளது.',
 
-    // Hospital Map
-    'map.title': 'Hospital Indoor Navigation & Wayfinding',
-    'map.select_floor': 'Select Floor:',
-    'map.ground_floor': 'Ground Floor (Triage, Reg, Lab, Pharmacy)',
-    'map.first_floor': '1st Floor (General OPDs, Ortho, Peds)',
-    'map.second_floor': '2nd Floor (Cardio, ICU, Admin)',
-    'map.target': 'Target Department:',
-    'map.edit_layout': 'Edit Map Layout',
-    'map.save_layout': 'Save Layout',
-    'map.reset_layout': 'Reset to Default',
-
     // Registration Page
     'reg.title': 'Online OPD Registration & Token Slip',
     'reg.subtitle': 'Civil Hospital • Ayushman Bharat Digital Mission (ABDM)',
@@ -94,7 +82,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'queue.mins': 'mins',
     'queue.dept_room': 'Consultation Room',
     'queue.doctor_on_duty': 'Doctor on Duty',
-    'queue.view_map': 'View Indoor Hospital Map',
 
     // Landing Page
     'landing.badge': 'Civil Hospital OPD & Patient-Flow Management System',
@@ -118,7 +105,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'nav.feedback': 'मरीज़ शिकायत एवं सुझाव',
     'nav.voice_opd': 'वॉयस ओपीडी',
     'nav.voice_opd_sub': 'वॉयस ओपीडी (बोलकर पर्ची बनाएं)',
-    'nav.hospital_map': 'अस्पताल का नक्शा',
     'nav.login': 'लॉग इन',
     'nav.register': 'पंजीकरण',
     'nav.logout': 'लॉग आउट',
@@ -152,17 +138,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'voice.sample_pediatric': 'Baby has high persistent fever and crying continuously.',
     'voice.sample_tamil': 'எனக்கு 3 நாட்களாக கடுமையான காய்ச்சல் மற்றும் தொண்டை வலி உள்ளது.',
 
-    // Hospital Map
-    'map.title': 'अस्पताल आंतरिक दिशा-निर्देश एवं नक्शा',
-    'map.select_floor': 'मंज़िल चुनें:',
-    'map.ground_floor': 'भूतल (ट्राइएज, पंजीकरण, लैब, दवाखाना)',
-    'map.first_floor': 'प्रथम तल (सामान्य ओपीडी, हड्डी रोग, शिशु रोग)',
-    'map.second_floor': 'द्वितीय तल (हृदय रोग, आईसीयू, प्रशासन)',
-    'map.target': 'गंतव्य विभाग:',
-    'map.edit_layout': 'नक्शा संपादित करें',
-    'map.save_layout': 'नक्शा सहेजें',
-    'map.reset_layout': 'डिफ़ॉल्ट पर रीसेट करें',
-
     // Registration Page
     'reg.title': 'ऑनलाइन ओपीडी पंजीकरण एवं टोकन पर्ची',
     'reg.subtitle': 'नागरिक अस्पताल • आयुष्मान भारत डिजिटल मिशन (ABDM)',
@@ -188,7 +163,6 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
     'queue.mins': 'मिनट',
     'queue.dept_room': 'परामर्श कक्ष',
     'queue.doctor_on_duty': 'ड्यूटी पर डॉक्टर',
-    'queue.view_map': 'अस्पताल का आंतरिक नक्शा देखें',
 
     // Landing Page
     'landing.badge': 'नागरिक अस्पताल ओपीडी एवं मरीज़ प्रवाह प्रबंधन प्रणाली',

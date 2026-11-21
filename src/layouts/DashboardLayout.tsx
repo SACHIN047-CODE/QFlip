@@ -3,7 +3,6 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Sidebar } from '../components/common/Sidebar';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import { HospitalMapModal } from '../components/common/HospitalMapModal';
 import { VoiceInputModal } from '../components/common/VoiceInputModal';
 
 interface DashboardLayoutProps {
@@ -13,7 +12,6 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitle }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mapOpen, setMapOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
     try {
@@ -102,14 +100,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
             </button>
 
             <button
-              onClick={() => setMapOpen(true)}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-light-outline text-xs font-semibold text-light-primary hover:bg-light-surface-variant transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm text-secondary">map</span>
-              <span>Hospital Map</span>
-            </button>
-
-            <button
               onClick={() => setVoiceOpen(true)}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-secondary/30 bg-secondary/10 text-secondary text-xs font-bold hover:bg-secondary/20 transition-colors"
             >
@@ -140,7 +130,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
         </main>
       </div>
 
-      <HospitalMapModal isOpen={mapOpen} onClose={() => setMapOpen(false)} />
       <VoiceInputModal
         isOpen={voiceOpen}
         onClose={() => setVoiceOpen(false)}

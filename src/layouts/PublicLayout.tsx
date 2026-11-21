@@ -1,8 +1,11 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 
 export const PublicLayout: React.FC = () => {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/landing' || location.pathname === '/';
+
   return (
     <div className="bg-light-surface text-light-on-surface font-body min-h-screen flex flex-col selection:bg-accent selection:text-on-accent">
       <Navbar mode="public" />
@@ -11,8 +14,9 @@ export const PublicLayout: React.FC = () => {
         <Outlet />
       </main>
 
-      {/* Enterprise Footer as designed in Stitch Home */}
-      <footer className="bg-light-primary text-white pt-16 pb-12 border-t border-light-outline">
+      {/* Footer rendered for secondary public pages (login, register, feedback) */}
+      {!isLandingPage && (
+        <footer className="bg-light-primary text-white pt-16 pb-12 border-t border-light-outline">
         <div className="max-w-7xl mx-auto px-6 sm:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-light-outline/20">
             {/* Col 1: Brand & Mission */}
@@ -164,6 +168,7 @@ export const PublicLayout: React.FC = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    )}
+  </div>
+);
 };

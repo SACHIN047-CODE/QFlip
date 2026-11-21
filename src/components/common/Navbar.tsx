@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { VoiceInputModal } from './VoiceInputModal';
-import { HospitalMapModal } from './HospitalMapModal';
 
 interface NavbarProps {
   mode?: 'public' | 'patient' | 'dashboard';
@@ -16,11 +15,25 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
   const { notifications, unreadCount, markAsRead } = useNotifications();
   const { language, toggleLanguage, t } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isLandingPage = location.pathname === '/landing' || location.pathname === '/';
 
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
-  const [isMapOpen, setIsMapOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  const scrollToSection = (sectionId: string) => {
+    setIsMobileNavOpen(false);
+    if (isLandingPage) {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+    navigate(`/landing#${sectionId}`);
+  };
 
   const handleHospitalCommandClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -83,16 +96,8 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
             </a>
           </div>
 
-          {/* Right Utilities: Map, Voice, and One-Click English-Hindi Language Conversion */}
+          {/* Right Utilities: Voice and One-Click English-Hindi Language Conversion */}
           <div className="flex items-center gap-3 sm:gap-5 ml-auto">
-            <button
-              onClick={() => setIsMapOpen(true)}
-              className="hover:text-secondary flex items-center gap-1 transition-colors text-light-primary font-medium"
-            >
-              <span className="material-symbols-outlined text-sm text-secondary">map</span>
-              <span className="hidden sm:inline">{t('nav.hospital_map', 'Hospital Map')}</span>
-            </button>
-
             <button
               onClick={() => setIsVoiceOpen(true)}
               className="hover:text-secondary flex items-center gap-1 transition-colors text-secondary font-bold"
@@ -163,45 +168,42 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
 
           {/* Desktop Navigation Links based on mode */}
           {mode === 'public' && (
-            <nav className="hidden lg:flex items-center gap-8 text-label-md font-label text-light-on-surface">
-              <NavLink
-                to="/patient/dashboard"
-                className={({ isActive }) =>
-                  `transition-colors ${
-                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
-                  }`
-                }
-              >
-                {t('nav.patient_services', 'Patient Services')}
-              </NavLink>
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-label-md font-label text-light-on-surface">
               <button
                 type="button"
-                onClick={handleHospitalCommandClick}
-                className="hover:text-secondary transition-colors flex items-center gap-1 font-semibold"
+                onClick={() => scrollToSection('home')}
+                className="hover:text-secondary font-semibold transition-colors"
               >
-                <span>{t('nav.hospital_command', 'Hospital Command')}</span>
-                <span className="material-symbols-outlined text-xs text-secondary">lock</span>
+                Home
               </button>
-              <NavLink
-                to="/ai/dashboard"
-                className={({ isActive }) =>
-                  `transition-colors ${
-                    isActive ? 'text-secondary font-extrabold' : 'text-secondary font-bold hover:brightness-90'
-                  }`
-                }
+              <button
+                type="button"
+                onClick={() => scrollToSection('features')}
+                className="hover:text-secondary font-semibold transition-colors"
               >
-                {t('nav.ai_digital_twin', 'AI & Digital Twin')}
-              </NavLink>
-              <NavLink
-                to="/feedback"
-                className={({ isActive }) =>
-                  `transition-colors ${
-                    isActive ? 'text-secondary font-bold' : 'hover:text-secondary'
-                  }`
-                }
+                Features
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection('how-it-works')}
+                className="hover:text-secondary font-semibold transition-colors"
               >
-                {t('nav.feedback', 'Feedback & Grievance')}
-              </NavLink>
+                How It Works
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection('hospital-intelligence')}
+                className="hover:text-secondary font-semibold transition-colors"
+              >
+                Hospital Intelligence
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection('contact')}
+                className="hover:text-secondary font-semibold transition-colors"
+              >
+                Contact
+              </button>
             </nav>
           )}
 
@@ -381,10 +383,10 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   <span>{t('nav.login', 'Portal Login')}</span>
                 </Link>
                 <Link
-                  to="/register"
-                  className="hidden sm:inline-flex items-center gap-1.5 border border-light-outline hover:bg-light-surface-variant text-light-primary font-label text-xs font-bold px-3 py-2 rounded-lg transition-all"
+                  to="/patient/registration"
+                  className="inline-flex items-center gap-1.5 bg-secondary hover:bg-secondary/90 text-white font-label text-xs font-bold px-3.5 py-2 rounded-lg shadow-sm transition-all"
                 >
-                  <span>{t('nav.register', 'Register')}</span>
+                  <span>Get Started</span>
                 </Link>
               </div>
             )}
@@ -407,46 +409,62 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               </button>
             </div>
 
-            <NavLink
-              to="/patient/dashboard"
-              onClick={() => setIsMobileNavOpen(false)}
-              className="block px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            <button
+              onClick={() => scrollToSection('home')}
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
             >
-              {t('nav.patient_services', 'Patient Services')}
-            </NavLink>
+              Home
+            </button>
+            <button
+              onClick={() => scrollToSection('features')}
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              Features
+            </button>
+            <button
+              onClick={() => scrollToSection('how-it-works')}
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              How It Works
+            </button>
+            <button
+              onClick={() => scrollToSection('hospital-intelligence')}
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              Hospital Intelligence
+            </button>
+            <button
+              onClick={() => scrollToSection('contact')}
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+            >
+              Contact
+            </button>
             <button
               onClick={(e) => {
                 setIsMobileNavOpen(false);
                 handleHospitalCommandClick(e);
               }}
-              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
+              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant flex items-center justify-between"
             >
-              {t('nav.hospital_command', 'Hospital Command')}
+              <span>{t('nav.hospital_command', 'Hospital Command')}</span>
+              <span className="material-symbols-outlined text-xs text-secondary">lock</span>
             </button>
-            <NavLink
-              to="/ai/dashboard"
-              onClick={() => setIsMobileNavOpen(false)}
-              className="block px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
-            >
-              {t('nav.ai_digital_twin', 'AI & Digital Twin')}
-            </NavLink>
-            <NavLink
-              to="/feedback"
-              onClick={() => setIsMobileNavOpen(false)}
-              className="block px-3 py-2 rounded-lg text-xs font-semibold text-light-primary hover:bg-light-surface-variant"
-            >
-              {t('nav.feedback', 'Feedback & Grievance')}
-            </NavLink>
-            <button
-              onClick={() => {
-                setIsMobileNavOpen(false);
-                setIsMapOpen(true);
-              }}
-              className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-secondary hover:bg-light-surface-variant flex items-center gap-1.5"
-            >
-              <span className="material-symbols-outlined text-sm">map</span>
-              <span>{t('nav.hospital_map', 'Hospital Map')}</span>
-            </button>
+            <div className="pt-2 border-t border-light-outline flex items-center gap-2 px-1">
+              <Link
+                to="/login"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="flex-1 text-center py-2 bg-light-primary text-white text-xs font-bold rounded-lg"
+              >
+                Login
+              </Link>
+              <Link
+                to="/patient/registration"
+                onClick={() => setIsMobileNavOpen(false)}
+                className="flex-1 text-center py-2 bg-secondary text-white text-xs font-bold rounded-lg"
+              >
+                Get Started
+              </Link>
+            </div>
           </div>
         )}
       </header>
@@ -461,9 +479,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
           });
         }}
       />
-
-      {/* Hospital Interactive Navigation Modal */}
-      <HospitalMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
     </>
   );
 };
