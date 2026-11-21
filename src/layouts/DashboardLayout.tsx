@@ -15,6 +15,26 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('qflip_sidebar_collapsed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const toggleSidebarCollapse = () => {
+    setIsCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('qflip_sidebar_collapsed', String(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
   const { user, role, logout } = useAuth();
   const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
@@ -22,8 +42,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
   return (
     <div className="bg-light-bg text-light-on-surface font-body min-h-screen flex antialiased">
       {/* Desktop Sidebar */}
-      <div className="hidden md:block">
-        <Sidebar />
+      <div className="hidden md:block h-full">
+        <Sidebar
+          isCollapsed={isCollapsed}
+          onToggleCollapse={toggleSidebarCollapse}
+        />
       </div>
 
       {/* Mobile Drawer Sidebar */}
@@ -34,7 +57,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
             onClick={() => setMobileMenuOpen(false)}
           ></div>
           <div className="relative z-10 w-64 bg-light-surface shadow-2xl h-full flex flex-col">
-            <Sidebar onCloseMobile={() => setMobileMenuOpen(false)} />
+            <Sidebar
+              isCollapsed={false}
+              onCloseMobile={() => setMobileMenuOpen(false)}
+            />
           </div>
         </div>
       )}
