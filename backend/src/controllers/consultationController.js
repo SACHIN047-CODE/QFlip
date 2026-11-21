@@ -146,6 +146,13 @@ export const getConsultationById = asyncHandler(async (req, res) => {
     throw ApiError.notFound('Consultation not found');
   }
 
+  // Strict Data Privacy: A patient can only view their own consultation
+  if (req.user.role === 'patient') {
+    if (!consultation.patientId?.userId || consultation.patientId.userId._id.toString() !== req.user._id.toString()) {
+      throw ApiError.forbidden('Access denied. You can only view your own consultation records.');
+    }
+  }
+
   const prescription = await Prescription.findOne({ consultationId: consultation._id });
   const labTests = await LabTest.find({ consultationId: consultation._id });
 

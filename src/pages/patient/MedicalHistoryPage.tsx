@@ -2,19 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { patientService } from '../../services/patientService';
 import { ConsultationNote } from '../../types';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
+import { useAuth } from '../../context/AuthContext';
 
 export const MedicalHistoryPage: React.FC = () => {
+  const { user } = useAuth();
   const [history, setHistory] = useState<ConsultationNote[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    patientService.getMedicalHistory('PT-10088').then((data) => {
-      setHistory(data);
+    if (!user) return;
+    patientService.getMedicalHistory(user.id).then((data) => {
+      // Strict Data Privacy: only display records belonging to this logged in user
+      const userRecords = data.filter(
+        (record) =>
+          record.patientId === user.id ||
+          (user.name && record.patientName && record.patientName.toLowerCase().includes(user.name.toLowerCase()))
+      );
+      setHistory(userRecords);
       setLoading(false);
     });
-  }, []);
+  }, [user]);
 
-  if (loading) return <LoadingSpinner message="Retrieving ABHA Health Records..." />;
+  if (loading) return <LoadingSpinner message="Retrieving your private ABHA Health Records..." />;
 
   return (
     <div className="space-y-6">
@@ -36,8 +45,17 @@ export const MedicalHistoryPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="space-y-6">
-        {history.map((record) => (
+      {history.length === 0 ? (
+        <div className="p-12 bg-light-surface rounded-2xl border border-light-outline text-center space-y-3">
+          <span className="material-symbols-outlined text-4xl text-light-on-surface-variant">folder_shared</span>
+          <h3 className="font-headline text-title-md font-bold text-light-primary">No Past Consultations Found</h3>
+          <p className="text-xs text-light-on-surface-variant max-w-sm mx-auto">
+            You do not have any past clinical notes under patient ID <strong>{user?.id}</strong>. New consultation summaries will be saved here automatically after your doctor appointments.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {history.map((record) => (
           <div
             key={record.id}
             className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4"
@@ -111,6 +129,7 @@ export const MedicalHistoryPage: React.FC = () => {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 };

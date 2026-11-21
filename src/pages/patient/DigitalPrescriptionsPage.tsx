@@ -1,6 +1,9 @@
 import React from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 export const DigitalPrescriptionsPage: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-light-outline">
@@ -54,15 +57,15 @@ export const DigitalPrescriptionsPage: React.FC = () => {
         <div className="p-6 bg-light-surface-variant/40 border-b border-light-outline grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
           <div>
             <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Patient Name</span>
-            <span className="font-bold text-light-primary">Manpreet Singh</span>
+            <span className="font-bold text-light-primary">{user?.name || 'Registered Patient'}</span>
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Age / Gender</span>
-            <span className="font-bold text-light-primary">38 Yrs / Male</span>
+            <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Patient ID / Gender</span>
+            <span className="font-bold text-light-primary">{user?.id || 'PT-10088'} • Active</span>
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">ABHA ID</span>
-            <span className="font-code font-bold text-secondary">91-8274-1049-9812</span>
+            <span className="font-code font-bold text-secondary">{user?.abhaId || '91-8274-1049-9812'}</span>
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Prescribing Doctor</span>

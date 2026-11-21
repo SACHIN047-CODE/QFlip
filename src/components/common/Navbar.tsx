@@ -280,56 +280,45 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               )}
             </div>
 
-            {/* Quick Role Switcher Pill for Demo Ease */}
-            <div className="hidden lg:flex items-center gap-1 bg-light-surface-variant px-2.5 py-1 rounded-lg border border-light-outline text-xs">
-              <span className="text-[10px] text-light-on-surface-variant font-semibold">Role:</span>
-              <select
-                value={role}
-                onChange={(e) => {
-                  const r = e.target.value as any;
-                  if (r === 'doctor' || r === 'admin') {
-                    if (sessionStorage.getItem('qflip_doctor_verified') !== 'true') {
-                      setDoctorTargetRoute(r === 'admin' ? '/admin/dashboard' : '/doctor/dashboard');
-                      setIsDoctorModalOpen(true);
-                      return;
-                    }
-                  }
-                  switchRole(r);
-                  if (r === 'doctor') navigate('/doctor/dashboard');
-                  else if (r === 'admin') navigate('/admin/dashboard');
-                  else if (r === 'staff') navigate('/staff/dashboard');
-                  else if (r === 'lab') navigate('/lab/dashboard');
-                  else if (r === 'pharmacy') navigate('/pharmacy/dashboard');
-                  else navigate('/patient/dashboard');
-                }}
-                className="bg-transparent font-bold text-light-primary text-xs focus:outline-none cursor-pointer"
-              >
-                <option value="patient">Patient</option>
-                <option value="doctor">Doctor 🔒</option>
-                <option value="staff">Staff Desk</option>
-                <option value="admin">Administrator 🔒</option>
-                <option value="lab">Lab Staff</option>
-                <option value="pharmacy">Chemist</option>
-              </select>
-            </div>
-
-            {/* Main CTA */}
-            {mode === 'public' ? (
-              <Link
-                to="/patient/registration"
-                className="inline-flex items-center gap-2 bg-accent hover:brightness-95 text-on-accent font-label text-label-md font-bold px-5 py-2.5 rounded-md shadow-sm transition-all"
-              >
-                <span>Book Token</span>
-                <span className="material-symbols-outlined text-sm">arrow_forward</span>
-              </Link>
+            {/* User Session / Authentication Controls */}
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:flex flex-col text-right">
+                  <span className="text-xs font-bold text-light-primary leading-tight">
+                    {user.name}
+                  </span>
+                  <span className="text-[10px] uppercase font-bold text-secondary">
+                    {user.role} • {user.id}
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate('/login');
+                  }}
+                  title="Sign Out"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-danger/10 hover:bg-danger/20 text-danger text-xs font-bold rounded-lg border border-danger/30 transition-all"
+                >
+                  <span className="material-symbols-outlined text-sm">logout</span>
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+              </div>
             ) : (
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-1.5 bg-light-primary hover:bg-slate-800 text-white font-label text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-all"
-              >
-                <span className="material-symbols-outlined text-sm">lock</span>
-                <span>Portal Login</span>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/login"
+                  className="inline-flex items-center gap-1.5 bg-light-primary hover:bg-slate-800 text-white font-label text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-all"
+                >
+                  <span className="material-symbols-outlined text-sm">lock</span>
+                  <span>Portal Login</span>
+                </Link>
+                <Link
+                  to="/register"
+                  className="hidden sm:inline-flex items-center gap-1.5 border border-light-outline hover:bg-light-surface-variant text-light-primary font-label text-xs font-bold px-3 py-2 rounded-lg transition-all"
+                >
+                  <span>Register</span>
+                </Link>
+              </div>
             )}
           </div>
         </div>

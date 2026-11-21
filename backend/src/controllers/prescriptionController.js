@@ -9,9 +9,10 @@ export const getPatientPrescriptions = asyncHandler(async (req, res) => {
 
   if (req.user.role === 'patient') {
     const patientProfile = await Patient.findOne({ userId: req.user._id });
-    if (patientProfile) {
-      patientId = patientProfile._id;
+    if (!patientProfile) {
+      return ApiResponse.success(res, [], 'Prescriptions list');
     }
+    patientId = patientProfile._id;
   }
 
   const prescriptions = await Prescription.find({ patientId })
@@ -29,6 +30,13 @@ export const getPrescriptionById = asyncHandler(async (req, res) => {
 
   if (!prescription) {
     throw ApiError.notFound('Prescription record not found');
+  }
+
+  // Strict Data Privacy: A patient can only view their own prescription
+  if (req.user.role === 'patient') {
+    if (!prescription.patientId?.userId || prescription.patientId.userId._id.toString() !== req.user._id.toString()) {
+      throw ApiError.forbidden('Access denied. You can only view your own prescriptions.');
+    }
   }
 
   return ApiResponse.success(res, prescription, 'Prescription details');

@@ -98,11 +98,11 @@ export const authService = {
 
   getCurrentUser(): User | null {
     const raw = localStorage.getItem('qflip_user');
-    if (!raw) return MOCK_USERS.patient; // Default to patient for seamless demo experience
+    if (!raw) return null;
     try {
       return JSON.parse(raw);
     } catch {
-      return MOCK_USERS.patient;
+      return null;
     }
   },
 

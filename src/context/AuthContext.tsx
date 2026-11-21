@@ -17,12 +17,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => authService.getCurrentUser());
 
-  useEffect(() => {
-    if (!user) {
-      setUser(MOCK_USERS.patient);
-    }
-  }, [user]);
-
   const login = async (email: string, role?: UserRole) => {
     const res = await authService.login(email, role);
     setUser(res.user);

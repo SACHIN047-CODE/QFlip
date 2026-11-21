@@ -1,40 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole } from '../../types';
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { user, isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
 
-  const [role, setRole] = useState<UserRole>('doctor');
-  const [email, setEmail] = useState('doctor@qflip.gov.in');
-  const [password, setPassword] = useState('qflip2026');
+  const [role, setRole] = useState<UserRole>('patient');
+  const [email, setEmail] = useState('patient@careflow.gov.in');
+  const [password, setPassword] = useState('Careflow@2026');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // If already authenticated, redirect to active dashboard immediately
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'doctor') navigate('/doctor/dashboard', { replace: true });
+      else if (user.role === 'admin') navigate('/admin/dashboard', { replace: true });
+      else if (user.role === 'staff') navigate('/staff/dashboard', { replace: true });
+      else if (user.role === 'lab') navigate('/lab/dashboard', { replace: true });
+      else if (user.role === 'pharmacy') navigate('/pharmacy/dashboard', { replace: true });
+      else navigate('/patient/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
+
   const handleRoleChange = (selectedRole: UserRole) => {
     setRole(selectedRole);
     switch (selectedRole) {
       case 'patient':
-        setEmail('patient@qflip.gov.in');
+        setEmail('patient@careflow.gov.in');
+        setPassword('Careflow@2026');
         break;
       case 'doctor':
-        setEmail('doctor@qflip.gov.in');
+        setEmail('doctor@careflow.gov.in');
+        setPassword('Careflow@2026');
         break;
       case 'staff':
-        setEmail('staff@qflip.gov.in');
+        setEmail('staff@careflow.gov.in');
+        setPassword('Careflow@2026');
         break;
       case 'admin':
-        setEmail('admin@qflip.gov.in');
+        setEmail('admin@careflow.gov.in');
+        setPassword('Careflow@2026');
         break;
       case 'lab':
-        setEmail('lab@qflip.gov.in');
+        setEmail('lab@careflow.gov.in');
+        setPassword('Careflow@2026');
         break;
       case 'pharmacy':
-        setEmail('pharmacy@qflip.gov.in');
+        setEmail('pharmacy@careflow.gov.in');
+        setPassword('Careflow@2026');
         break;
     }
   };

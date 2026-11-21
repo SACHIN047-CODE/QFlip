@@ -3,19 +3,28 @@ import { pharmacyService } from '../../services/pharmacyService';
 import { PharmacyOrder } from '../../types';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { useAuth } from '../../context/AuthContext';
 
 export const PharmacyOrderPage: React.FC = () => {
+  const { user } = useAuth();
   const [orders, setOrders] = useState<PharmacyOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) return;
     pharmacyService.getOrders().then((data) => {
-      setOrders(data);
+      // Strict Data Privacy: only display pharmacy dispensing orders for this logged in patient
+      const userOrders = data.filter(
+        (o) =>
+          o.patientId === user.id ||
+          (user.name && o.patientName && o.patientName.toLowerCase().includes(user.name.toLowerCase()))
+      );
+      setOrders(userOrders);
       setLoading(false);
     });
-  }, []);
+  }, [user]);
 
-  if (loading) return <LoadingSpinner message="Checking pharmacy queue..." />;
+  if (loading) return <LoadingSpinner message="Checking your private pharmacy prescriptions..." />;
 
   return (
     <div className="space-y-6">
@@ -33,8 +42,17 @@ export const PharmacyOrderPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="space-y-6">
-        {orders.map((order) => (
+      {orders.length === 0 ? (
+        <div className="p-12 bg-light-surface rounded-2xl border border-light-outline text-center space-y-3">
+          <span className="material-symbols-outlined text-4xl text-light-on-surface-variant">medication</span>
+          <h3 className="font-headline text-title-md font-bold text-light-primary">No Pharmacy Orders</h3>
+          <p className="text-xs text-light-on-surface-variant max-w-sm mx-auto">
+            You do not have any pending pharmacy orders under patient ID <strong>{user?.id}</strong>. Doctor-prescribed medicines will appear here automatically for pickup.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          {orders.map((order) => (
           <div
             key={order.id}
             className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4"
@@ -90,6 +108,7 @@ export const PharmacyOrderPage: React.FC = () => {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 };

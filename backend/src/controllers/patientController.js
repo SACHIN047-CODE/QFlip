@@ -86,7 +86,14 @@ export const getPatientMedicalHistory = asyncHandler(async (req, res) => {
   }
 
   if (!patient) {
-    throw ApiError.notFound('Patient not found');
+    throw ApiError.notFound('Patient record not found');
+  }
+
+  // Strict Data Privacy Check: A patient can ONLY view their own records
+  if (req.user.role === 'patient') {
+    if (patient.userId && patient.userId._id.toString() !== req.user._id.toString()) {
+      throw ApiError.forbidden('Access denied. You are strictly permitted to view only your own medical records.');
+    }
   }
 
   const appointments = await Appointment.find({ patientId: patient._id })

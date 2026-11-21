@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { PatientToken, PriorityLevel, TokenStatus } from '../types';
 import { queueService } from '../services/queueService';
+import { useAuth } from './AuthContext';
 
 interface QueueContextType {
   tokens: PatientToken[];
@@ -29,6 +30,7 @@ interface QueueContextType {
 const QueueContext = createContext<QueueContextType | undefined>(undefined);
 
 export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user } = useAuth();
   const [tokens, setTokens] = useState<PatientToken[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [departmentFilter, setDepartmentFilter] = useState<string>('All');
@@ -84,8 +86,15 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Find current token being served
   const currentServingToken = tokens.find(t => t.status === 'IN_CONSULTATION') || null;
 
-  // Find user's token (OPD-104 or patientId PT-10088)
-  const myToken = tokens.find(t => t.patientId === 'PT-10088' || t.tokenNumber === 'OPD-104') || tokens[tokens.length - 1] || null;
+  // Find only logged-in user's private token (never fall back to other patients' tokens)
+  const myToken = user
+    ? tokens.find(
+        (t) =>
+          t.patientId === user.id ||
+          (user.phone && t.phone === user.phone) ||
+          (user.name && t.patientName.toLowerCase().includes(user.name.toLowerCase()))
+      ) || null
+    : null;
 
   return (
     <QueueContext.Provider

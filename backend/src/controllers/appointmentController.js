@@ -39,9 +39,10 @@ export const getAppointments = asyncHandler(async (req, res) => {
 
   if (req.user.role === 'patient') {
     const patientProfile = await Patient.findOne({ userId: req.user._id });
-    if (patientProfile) {
-      filter.patientId = patientProfile._id;
+    if (!patientProfile) {
+      return ApiResponse.success(res, [], 'No appointments scheduled');
     }
+    filter.patientId = patientProfile._id;
   } else if (req.user.role === 'doctor') {
     // If doctor, filter by their doctor record
     const { Doctor } = await import('../models/Doctor.js');

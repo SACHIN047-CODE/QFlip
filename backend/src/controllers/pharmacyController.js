@@ -23,6 +23,23 @@ export const getPharmacyOrders = asyncHandler(async (req, res) => {
   return ApiResponse.success(res, orders, 'Pharmacy orders');
 });
 
+export const getMyPharmacyOrders = asyncHandler(async (req, res) => {
+  const { Patient } = await import('../models/Patient.js');
+  const patientProfile = await Patient.findOne({ userId: req.user._id });
+  if (!patientProfile) {
+    return ApiResponse.success(res, [], 'No pharmacy orders found');
+  }
+
+  const orders = await PharmacyOrder.find({ patientId: patientProfile._id })
+    .populate({
+      path: 'prescriptionId',
+      populate: { path: 'doctorId', populate: { path: 'userId', select: 'name' } }
+    })
+    .sort({ createdAt: -1 });
+
+  return ApiResponse.success(res, orders, 'Your personal pharmacy orders');
+});
+
 export const dispensePharmacyOrder = asyncHandler(async (req, res) => {
   const { id } = req.params;
 

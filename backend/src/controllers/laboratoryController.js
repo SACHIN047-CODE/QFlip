@@ -22,6 +22,20 @@ export const getLabRequests = asyncHandler(async (req, res) => {
   return ApiResponse.success(res, requests, 'Laboratory test requests');
 });
 
+export const getMyLabReports = asyncHandler(async (req, res) => {
+  const { Patient } = await import('../models/Patient.js');
+  const patientProfile = await Patient.findOne({ userId: req.user._id });
+  if (!patientProfile) {
+    return ApiResponse.success(res, [], 'No lab reports found');
+  }
+
+  const reports = await LabTest.find({ patientId: patientProfile._id })
+    .populate({ path: 'doctorId', populate: { path: 'userId', select: 'name' } })
+    .sort({ createdAt: -1 });
+
+  return ApiResponse.success(res, reports, 'Your personal lab reports');
+});
+
 export const updateLabTestStatus = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { status, resultSummary, resultParameters, remarks } = req.body;
