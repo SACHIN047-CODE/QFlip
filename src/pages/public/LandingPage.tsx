@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
 import { HospitalMapModal } from '../../components/common/HospitalMapModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
 
@@ -53,10 +55,10 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <div>
                   <div className="font-headline text-xs font-bold text-light-primary">
-                    बोलकर पर्ची बनाएं (Voice OPD Booking)
+                    {t('landing.voice_banner_title', 'बोलकर पर्ची बनाएं (Voice OPD Booking)')}
                   </div>
                   <div className="text-[11px] text-light-on-surface-variant">
-                    Hindi, Punjabi &amp; English instant symptom triage
+                    {t('landing.voice_banner_sub', 'English, Hindi, Punjabi & Tamil instant symptom triage')}
                   </div>
                 </div>
               </div>
@@ -64,7 +66,7 @@ export const LandingPage: React.FC = () => {
                 onClick={() => setIsVoiceOpen(true)}
                 className="px-4 py-2 bg-secondary text-white font-headline text-xs font-bold rounded-lg hover:bg-secondary/90 shadow-sm"
               >
-                Try Voice OPD
+                {t('landing.try_voice', 'Try Voice OPD')}
               </button>
             </div>
 

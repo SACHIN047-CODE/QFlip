@@ -26,11 +26,7 @@ import { PharmacyOrderPage, NotificationsPage } from '../pages/patient/PharmacyO
 
 // Doctor Pages
 import { DoctorDashboard } from '../pages/doctor/DoctorDashboard';
-import {
-  PatientQueueList,
-  DoctorSchedule,
-  PrescriptionManager,
-} from '../pages/doctor/PatientQueueList';
+import { PatientQueueList } from '../pages/doctor/PatientQueueList';
 
 // Staff Pages
 import { StaffDashboard } from '../pages/staff/StaffDashboard';
@@ -48,6 +44,7 @@ import {
   ReportsPage,
   ComplaintsManagement,
 } from '../pages/admin/AnalyticsPage';
+import { FirestoreManagerPage } from '../pages/admin/FirestoreManagerPage';
 
 // Lab Pages
 import { LabDashboard } from '../pages/lab/LabDashboard';
@@ -103,8 +100,6 @@ export const AppRoutes: React.FC = () => {
             <Route path="dashboard" element={<DoctorDashboard />} />
             <Route path="patients" element={<PatientQueueList />} />
             <Route path="consultation" element={<DoctorDashboard />} />
-            <Route path="prescriptions" element={<PrescriptionManager />} />
-            <Route path="schedule" element={<DoctorSchedule />} />
           </Route>
         </Route>
       </Route>
@@ -139,6 +134,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="complaints" element={<ComplaintsManagement />} />
+            <Route path="firestore" element={<FirestoreManagerPage />} />
           </Route>
         </Route>
       </Route>
