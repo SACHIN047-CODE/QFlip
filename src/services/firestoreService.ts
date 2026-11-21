@@ -6,6 +6,7 @@ import {
   updateDoc, 
   deleteDoc, 
   getDoc,
+  setDoc,
   query,
   orderBy,
   serverTimestamp 
@@ -170,6 +171,44 @@ export const firestoreService = {
 
   async deleteQueueToken(id: string) {
     return this.deleteRecord('queue_tokens', id);
+  },
+
+  // --------------------------------------------------------------------------
+  // Users & Authentication Verification (Collection: "users")
+  // --------------------------------------------------------------------------
+  async getUserByEmail(email: string): Promise<any | null> {
+    try {
+      const normalizedEmail = email.toLowerCase().trim();
+      const userDocRef = doc(db, 'users', normalizedEmail);
+      const snapshot = await getDoc(userDocRef);
+      if (snapshot.exists()) {
+        return { id: snapshot.id, ...snapshot.data() };
+      }
+      return null;
+    } catch (err: any) {
+      console.warn('Firestore getUserByEmail note:', err.message);
+      return null;
+    }
+  },
+
+  async registerPatient(userData: {
+    name: string;
+    email: string;
+    phone: string;
+    password?: string;
+    abhaId?: string;
+  }): Promise<void> {
+    const normalizedEmail = userData.email.toLowerCase().trim();
+    const userDocRef = doc(db, 'users', normalizedEmail);
+    await setDoc(userDocRef, {
+      name: userData.name,
+      email: normalizedEmail,
+      password: userData.password || 'Careflow@2026',
+      role: 'patient',
+      phone: userData.phone,
+      abhaId: userData.abhaId || `91-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`,
+      createdAt: new Date().toISOString()
+    }, { merge: true });
   }
 };
 

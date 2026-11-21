@@ -37,9 +37,10 @@ export const RegisterPage: React.FC = () => {
         phone: formData.phone,
         email: formData.email,
         abhaId: formData.abhaId,
-        role: formData.role,
+        role: 'patient',
+        password: formData.password || 'Careflow@2026',
       });
-      setSuccess('ABHA Patient Account verified and created! Redirecting to Patient Portal...');
+      setSuccess('Patient account created and stored in Firebase database with role="patient"! Redirecting...');
       setTimeout(() => navigate('/patient/dashboard'), 800);
     } catch (err: any) {
       setError(err.message || 'Registration failed');

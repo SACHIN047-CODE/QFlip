@@ -7,7 +7,7 @@ interface AuthContextType {
   role: UserRole;
   isAuthenticated: boolean;
   login: (email: string, role?: UserRole, password?: string) => Promise<void>;
-  register: (data: { name: string; phone: string; abhaId?: string; role: UserRole; email: string }) => Promise<void>;
+  register: (data: { name: string; phone: string; abhaId?: string; role?: UserRole; email: string; password?: string }) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
 }

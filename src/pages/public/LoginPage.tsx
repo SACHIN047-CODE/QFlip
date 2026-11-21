@@ -197,9 +197,23 @@ export const LoginPage: React.FC = () => {
 
         {/* Feedback alerts */}
         {error && (
-          <div className="p-3 bg-danger/10 border border-danger/30 rounded-xl text-xs text-danger flex items-center gap-2 animate-fadeIn">
-            <span className="material-symbols-outlined text-sm">error</span>
-            <span>{error}</span>
+          <div className="p-3.5 bg-danger/10 border border-danger/30 rounded-xl text-xs text-danger space-y-2 animate-fadeIn">
+            <div className="flex items-center gap-2 font-bold">
+              <span className="material-symbols-outlined text-sm">warning</span>
+              <span>{error}</span>
+            </div>
+            {(error.toLowerCase().includes('register first') || error.toLowerCase().includes('not found')) && (
+              <div className="pt-2 border-t border-danger/20 flex items-center justify-between">
+                <span className="text-[11px] text-light-on-surface-variant">Not registered in Firebase database?</span>
+                <Link
+                  to="/register"
+                  className="px-3 py-1.5 bg-secondary text-white font-bold rounded-lg text-xs hover:brightness-110 shadow-xs inline-flex items-center gap-1"
+                >
+                  <span className="material-symbols-outlined text-xs">how_to_reg</span>
+                  Register Now (role="patient")
+                </Link>
+              </div>
+            )}
           </div>
         )}
 
