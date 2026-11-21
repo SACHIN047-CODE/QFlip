@@ -5,184 +5,220 @@ import { useQueue } from '../../context/QueueContext';
 
 interface SidebarProps {
   onCloseMobile?: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  onCloseMobile,
+  isCollapsed = false,
+  onToggleCollapse,
+}) => {
   const { user, role, logout } = useAuth();
   const { tokens } = useQueue();
   const navigate = useNavigate();
 
   const waitingCount = tokens.filter((t) => t.status === 'WAITING').length;
 
-  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-3 py-2 rounded-xl text-xs transition-all duration-200 ${
-      isActive
-        ? 'nav-active bg-[#E6F4F1] text-[#0F766E] font-semibold shadow-xs'
-        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
-    }`;
+  const NavItem = ({
+    to,
+    icon,
+    label,
+    badge,
+    end = false,
+  }: {
+    to: string;
+    icon: string;
+    label: string;
+    badge?: React.ReactNode;
+    end?: boolean;
+  }) => (
+    <div className="relative group">
+      <NavLink
+        to={to}
+        end={end}
+        onClick={onCloseMobile}
+        className={({ isActive }) =>
+          `flex items-center ${
+            isCollapsed ? 'justify-center p-3' : 'gap-3 px-3 py-2.5'
+          } rounded-xl text-label-md font-label transition-all ${
+            isActive
+              ? 'bg-secondary text-white font-semibold shadow-sm'
+              : 'text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary'
+          }`
+        }
+      >
+        <div className="relative flex items-center justify-center flex-shrink-0">
+          <span className="material-symbols-outlined text-xl">{icon}</span>
+          {isCollapsed && badge && (
+            <span className="absolute -top-1.5 -right-2 px-1 py-0.2 min-w-4 h-4 rounded-full bg-accent text-on-accent text-[9px] font-bold font-code flex items-center justify-center ring-2 ring-white">
+              {badge}
+            </span>
+          )}
+        </div>
+        {!isCollapsed && <span className="truncate flex-1">{label}</span>}
+        {!isCollapsed && badge && <span>{badge}</span>}
+      </NavLink>
+
+      {/* Floating Tooltip in Collapsed Mode */}
+      {isCollapsed && (
+        <div className="hidden group-hover:flex absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xl whitespace-nowrap z-50 items-center gap-2 pointer-events-none border border-slate-700">
+          <span>{label}</span>
+          {badge && (
+            <span className="px-1.5 py-0.5 rounded bg-accent text-on-accent text-[10px] font-bold">
+              {badge}
+            </span>
+          )}
+          <span className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45 border-l border-b border-slate-700"></span>
+        </div>
+      )}
+    </div>
+  );
 
   const renderNavLinks = () => {
     switch (role) {
       case 'doctor':
         return (
           <>
-            <div className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Clinical Workspace
-            </div>
-            <NavLink to="/doctor/dashboard" end onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">clinical_notes</span>
-              <span>Live Consultation</span>
-            </NavLink>
-
-            <NavLink to="/doctor/patients" onClick={onCloseMobile} className={navLinkClass}>
-              <div className="flex items-center gap-3 flex-1">
-                <span className="material-symbols-outlined text-lg">format_list_numbered</span>
-                <span>Waiting Queue</span>
-              </div>
-              <span className="px-2 py-0.5 rounded-full bg-[#0F766E] text-white text-[11px] font-semibold font-mono">
-                {waitingCount}
-              </span>
-            </NavLink>
-
-            <NavLink to="/doctor/prescriptions" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">prescriptions</span>
-              <span>Rx Templates</span>
-            </NavLink>
-
-            <NavLink to="/doctor/schedule" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">calendar_month</span>
-              <span>Doctor Schedule</span>
-            </NavLink>
+            <NavItem
+              to="/doctor/dashboard"
+              end
+              icon="clinical_notes"
+              label="Live Consultation"
+            />
+            <NavItem
+              to="/doctor/patients"
+              icon="format_list_numbered"
+              label="Waiting Queue"
+              badge={
+                <span className="px-2 py-0.5 rounded-full bg-accent text-on-accent text-xs font-bold font-code">
+                  {waitingCount}
+                </span>
+              }
+            />
           </>
         );
 
       case 'admin':
         return (
           <>
-            <div className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Command &amp; Operations
-            </div>
-            <NavLink to="/admin/dashboard" end onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">dashboard</span>
-              <span>Operations Overview</span>
-            </NavLink>
-
-            <NavLink to="/admin/departments" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">apartment</span>
-              <span>Department Flow</span>
-            </NavLink>
-
-            <NavLink to="/admin/doctors" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">stethoscope</span>
-              <span>Doctor Management</span>
-            </NavLink>
-
-            <NavLink to="/admin/staff" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">badge</span>
-              <span>Staff Management</span>
-            </NavLink>
-
-            <NavLink to="/admin/resources" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">hotel</span>
-              <span>Beds &amp; Stretchers</span>
-            </NavLink>
-
-            <div className="px-3 pb-1 pt-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Intelligence &amp; Reports
-            </div>
-            <NavLink to="/ai/dashboard" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg text-[#7C3AED]">psychology</span>
-              <span className="text-[#7C3AED] font-semibold">AI &amp; Digital Twin</span>
-            </NavLink>
-
-            <NavLink to="/admin/analytics" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">analytics</span>
-              <span>Analytics &amp; Graphs</span>
-            </NavLink>
-
-            <NavLink to="/admin/reports" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">description</span>
-              <span>Daily Reports</span>
-            </NavLink>
-
-            <NavLink to="/admin/complaints" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">feedback</span>
-              <span>Feedback &amp; Grievances</span>
-            </NavLink>
+            <NavItem
+              to="/admin/dashboard"
+              end
+              icon="dashboard"
+              label="Operations Overview"
+            />
+            <NavItem
+              to="/admin/departments"
+              icon="apartment"
+              label="Department Flow"
+            />
+            <NavItem
+              to="/admin/doctors"
+              icon="stethoscope"
+              label="Doctor Management"
+            />
+            <NavItem
+              to="/admin/staff"
+              icon="badge"
+              label="Staff Management"
+            />
+            <NavItem
+              to="/admin/resources"
+              icon="hotel"
+              label="Beds & Stretchers"
+            />
+            <NavItem
+              to="/ai/dashboard"
+              icon="psychology"
+              label="AI & Digital Twin"
+            />
+            <NavItem
+              to="/admin/analytics"
+              icon="analytics"
+              label="Analytics & Graphs"
+            />
+            <NavItem
+              to="/admin/reports"
+              icon="description"
+              label="Daily Reports"
+            />
+            <NavItem
+              to="/admin/complaints"
+              icon="feedback"
+              label="Feedback & Grievances"
+            />
           </>
         );
 
       case 'staff':
         return (
           <>
-            <div className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Front Desk Operations
-            </div>
-            <NavLink to="/staff/dashboard" end onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">how_to_reg</span>
-              <span>Counter Desk</span>
-            </NavLink>
-
-            <NavLink to="/staff/register-patient" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">person_add</span>
-              <span>Rapid Registration</span>
-            </NavLink>
-
-            <NavLink to="/staff/patient-search" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">search</span>
-              <span>Search &amp; ABHA Lookup</span>
-            </NavLink>
-
-            <NavLink to="/staff/token-management" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">receipt_long</span>
-              <span>Token Management</span>
-            </NavLink>
+            <NavItem
+              to="/staff/dashboard"
+              end
+              icon="how_to_reg"
+              label="Counter Desk"
+            />
+            <NavItem
+              to="/staff/register-patient"
+              icon="person_add"
+              label="Rapid Registration"
+            />
+            <NavItem
+              to="/staff/patient-search"
+              icon="search"
+              label="Search & ABHA Lookup"
+            />
+            <NavItem
+              to="/staff/token-management"
+              icon="receipt_long"
+              label="Token Management"
+            />
           </>
         );
 
       case 'lab':
         return (
           <>
-            <div className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Laboratory Diagnostics
-            </div>
-            <NavLink to="/lab/dashboard" end onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">biotech</span>
-              <span>Lab Overview</span>
-            </NavLink>
-
-            <NavLink to="/lab/test-requests" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">pending_actions</span>
-              <span>Incoming Test Requests</span>
-            </NavLink>
-
-            <NavLink to="/lab/results" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">task</span>
-              <span>Completed Reports</span>
-            </NavLink>
+            <NavItem
+              to="/lab/dashboard"
+              end
+              icon="biotech"
+              label="Lab Overview"
+            />
+            <NavItem
+              to="/lab/test-requests"
+              icon="pending_actions"
+              label="Incoming Test Requests"
+            />
+            <NavItem
+              to="/lab/results"
+              icon="task"
+              label="Completed Reports"
+            />
           </>
         );
 
       case 'pharmacy':
         return (
           <>
-            <div className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Jan Aushadhi Pharmacy
-            </div>
-            <NavLink to="/pharmacy/dashboard" end onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">local_pharmacy</span>
-              <span>Pharmacy Overview</span>
-            </NavLink>
-
-            <NavLink to="/pharmacy/orders" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">receipt_long</span>
-              <span>Dispensing Orders</span>
-            </NavLink>
-
-            <NavLink to="/pharmacy/medicines" onClick={onCloseMobile} className={navLinkClass}>
-              <span className="material-symbols-outlined text-lg">inventory_2</span>
-              <span>Medicine Stock &amp; Rack</span>
-            </NavLink>
+            <NavItem
+              to="/pharmacy/dashboard"
+              end
+              icon="local_pharmacy"
+              label="Pharmacy Overview"
+            />
+            <NavItem
+              to="/pharmacy/orders"
+              icon="receipt_long"
+              label="Dispensing Orders"
+            />
+            <NavItem
+              to="/pharmacy/medicines"
+              icon="inventory_2"
+              label="Medicine Stock & Rack"
+            />
           </>
         );
 
@@ -192,46 +228,81 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
   };
 
   return (
-    <aside className="w-[250px] min-w-[250px] glass-sidebar flex-shrink-0 flex flex-col justify-between h-full min-h-screen">
+    <aside
+      className={`${
+        isCollapsed ? 'w-20' : 'w-64'
+      } bg-light-surface border-r border-light-outline flex-shrink-0 flex flex-col justify-between h-full min-h-screen transition-all duration-300 ease-in-out select-none`}
+    >
       <div>
-        {/* Brand Header */}
-        <div className="p-5 border-b border-slate-200/70">
-          <Link to="/" className="flex items-center gap-2.5 mb-3 group">
-            <div className="w-8 h-8 rounded-lg bg-[#E6F4F1] flex items-center justify-center text-[#0F766E] flex-shrink-0">
-              <svg viewBox="0 0 36 36" fill="none" className="w-6 h-6">
+        {/* Brand & Doctor/Staff Identity */}
+        <div className="p-4 sm:p-5 border-b border-light-outline">
+          <div className="flex items-center justify-between mb-4">
+            <Link
+              to="/"
+              className={`flex items-center ${isCollapsed ? 'justify-center w-full' : 'gap-2.5'} group`}
+              title="QFlip - Civil Hospital Ambala"
+            >
+              <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8 flex-shrink-0">
                 <path
                   d="M4 18L10 6L18 28L24 14L30 22"
-                  stroke="#0F766E"
+                  stroke="#2585E8"
                   strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                />
-                <circle cx="30" cy="22" r="3.5" fill="#14B8A6" />
+                ></path>
+                <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
               </svg>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-base font-bold tracking-tight text-slate-900 leading-none">
-                CARE<span className="text-[#0F766E]">FLOW</span>
-              </span>
-              <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mt-0.5">
-                Hospital OS
-              </span>
-            </div>
-          </Link>
+              {!isCollapsed && (
+                <div className="flex flex-col min-w-0">
+                  <span className="font-headline text-headline-sm font-extrabold tracking-tight text-light-primary leading-none">
+                    Q<span className="text-secondary font-medium">Flip</span>
+                  </span>
+                  <span className="text-[9px] uppercase tracking-wider text-light-on-surface-variant font-bold truncate">
+                    Civil Hospital Ambala
+                  </span>
+                </div>
+              )}
+            </Link>
+
+            {/* Collapse / Expand Toggle Button (Desktop only) */}
+            {onToggleCollapse && (
+              <button
+                type="button"
+                onClick={onToggleCollapse}
+                aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                className="hidden md:flex p-1.5 rounded-lg border border-light-outline text-light-on-surface-variant hover:text-light-primary hover:bg-light-surface-variant transition-colors"
+              >
+                <span className="material-symbols-outlined text-base">
+                  {isCollapsed ? 'chevron_right' : 'chevron_left'}
+                </span>
+              </button>
+            )}
+          </div>
 
           {/* User profile snippet */}
-          <div className="flex items-center gap-2.5 pt-2 border-t border-slate-100">
+          <div
+            className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} pt-1`}
+            title={`${user?.name || 'Authorized Staff'} (${role})`}
+          >
             <img
-              src={user?.avatar || 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&q=80'}
-              alt={user?.name}
-              className="w-8 h-8 rounded-full object-cover border border-slate-200 flex-shrink-0"
+              src={
+                user?.avatar ||
+                'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&q=80'
+              }
+              alt={user?.name || 'User avatar'}
+              className="w-10 h-10 rounded-full object-cover border border-light-outline flex-shrink-0"
             />
-            <div className="min-w-0 flex-1">
-              <div className="text-xs font-semibold text-slate-900 truncate">{user?.name}</div>
-              <div className="text-[11px] text-slate-500 truncate capitalize">
-                {role} • {user?.department || 'Civil Hospital'}
+            {!isCollapsed && (
+              <div className="min-w-0 flex-1">
+                <div className="font-headline text-xs font-bold text-light-primary truncate">
+                  {user?.name}
+                </div>
+                <div className="text-[11px] text-light-on-surface-variant truncate">
+                  {user?.department || 'Civil Hospital Ambala'}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -240,31 +311,47 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
       </div>
 
       {/* User Session & Status Footer */}
-      <div className="p-4 border-t border-slate-200 bg-slate-50/70 space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-xs font-semibold text-slate-800">{user?.name}</div>
-            <div className="text-[10px] uppercase font-bold text-[#0F766E]">
-              {role} • {user?.id}
+      <div className="p-3 border-t border-light-outline bg-light-surface-variant/30 space-y-2">
+        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+          {!isCollapsed && (
+            <div className="min-w-0 pr-2">
+              <div className="text-xs font-bold text-light-primary truncate">{user?.name}</div>
+              <div className="text-[10px] uppercase font-bold text-secondary truncate">
+                {role} • {user?.id}
+              </div>
             </div>
-          </div>
+          )}
           <button
             onClick={() => {
               logout();
               navigate('/login');
             }}
-            title="Sign out"
-            className="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:text-red-600 hover:border-red-200 transition-colors"
+            title="Sign out of hospital session"
+            className="p-1.5 rounded-lg border border-danger/30 bg-danger/10 text-danger hover:bg-danger/20 transition-colors flex items-center justify-center flex-shrink-0"
           >
-            <span className="material-symbols-outlined text-xs">logout</span>
+            <span className="material-symbols-outlined text-sm">logout</span>
           </button>
         </div>
 
-        <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-[#16A34A] inline-block flex-shrink-0"></span>
-          <span className="truncate">ABHA Gateway Live</span>
-        </div>
+        {/* Status indicator */}
+        {!isCollapsed ? (
+          <div className="text-[11px] text-light-on-surface-variant pt-1 border-t border-light-outline/60">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <span className="w-2 h-2 rounded-full bg-success inline-block"></span>
+              <span className="font-semibold text-light-primary text-[10px]">
+                ABHA Gateway Live
+              </span>
+            </div>
+            <div className="text-[10px]">Telemetry sync: active</div>
+          </div>
+        ) : (
+          <div className="flex justify-center pt-1" title="ABHA Gateway Live">
+            <span className="w-2.5 h-2.5 rounded-full bg-success inline-block"></span>
+          </div>
+        )}
       </div>
     </aside>
   );
 };
+
+export default Sidebar;

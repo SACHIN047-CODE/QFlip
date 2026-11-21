@@ -19,9 +19,9 @@ export const patientService = {
           clinicalFindings: 'Throat congestion (+), Chest clear on auscultation, Vitals stable.',
           diagnosis: 'Acute Viral Pharyngitis (J02.9)',
           prescriptions: [
-            { id: 'rx-1', name: 'Azithromycin 500mg', dosage: '1 Tablet', frequency: 'Once daily', duration: '3 days', instructions: 'After Food' },
-            { id: 'rx-2', name: 'Levocetirizine + Montelukast', dosage: '1 Tablet', frequency: 'Once daily', duration: '5 days', instructions: 'Before Food' },
-            { id: 'rx-3', name: 'Dextromethorphan Syrup', dosage: '10 ml', frequency: 'Thrice daily', duration: '5 days', instructions: 'With Water' },
+            { id: 'rx-1', name: 'Azithromycin 500mg', dosage: '1 Tablet', consumptionTiming: 'After breakfast', frequency: 'Once daily', duration: '3 days', instructions: 'After Food' },
+            { id: 'rx-2', name: 'Levocetirizine + Montelukast', dosage: '1 Tablet', consumptionTiming: 'At bedtime', frequency: 'Once daily', duration: '5 days', instructions: 'Before Food' },
+            { id: 'rx-3', name: 'Dextromethorphan Syrup', dosage: '10 ml', consumptionTiming: 'After lunch', frequency: 'Thrice daily', duration: '5 days', instructions: 'With Water' },
           ],
           labTestsOrdered: ['Complete Blood Count (CBC)'],
           followUpDays: 5,
@@ -39,7 +39,7 @@ export const patientService = {
           clinicalFindings: 'BP 128/84 mmHg, S1 S2 heard normal, no murmurs.',
           diagnosis: 'Essential Hypertension - Pre-hypertensive State',
           prescriptions: [
-            { id: 'rx-4', name: 'Telmisartan 20mg', dosage: '1 Tablet', frequency: 'Once daily', duration: '30 days', instructions: 'Before Food' }
+            { id: 'rx-4', name: 'Telmisartan 20mg', dosage: '1 Tablet', consumptionTiming: 'Before breakfast', frequency: 'Once daily', duration: '30 days', instructions: 'Before Food' }
           ],
           labTestsOrdered: ['Lipid Profile', 'Serum Creatinine', 'ECG 12 Lead'],
           followUpDays: 30,

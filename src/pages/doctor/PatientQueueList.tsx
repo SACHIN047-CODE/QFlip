@@ -3,7 +3,6 @@ import { useQueue } from '../../context/QueueContext';
 import { DataTable, Column } from '../../components/common/DataTable';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { SearchBar } from '../../components/common/SearchBar';
-import { BentoCard } from '../../components/common/BentoCard';
 import { PatientToken } from '../../types';
 
 export const PatientQueueList: React.FC = () => {
@@ -104,21 +103,21 @@ export const PatientQueueList: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-light-outline">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
+          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
             OPD Roster Management
           </span>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold text-light-primary">
             Patient Queue Registry
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500">Filter Priority:</span>
+          <span className="text-xs font-semibold text-light-on-surface-variant">Filter Priority:</span>
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="text-xs rounded-xl border border-slate-200 bg-white px-3 py-1.5 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
+            className="text-xs rounded-lg border border-light-outline bg-white px-2.5 py-1.5 font-bold text-light-primary"
           >
             <option value="ALL">All Patients</option>
             <option value="Emergency">Emergency Only</option>
@@ -129,114 +128,14 @@ export const PatientQueueList: React.FC = () => {
         </div>
       </div>
 
-      <div className="glass-card p-4">
-        <SearchBar
-          value={search}
-          onChange={setSearch}
-          placeholder="Filter by patient name, token number, or mobile..."
-        />
-      </div>
+      <SearchBar
+        value={search}
+        onChange={setSearch}
+        placeholder="Filter by patient name, token number, or mobile..."
+      />
 
-      <BentoCard variant="solid" padding="none" className="overflow-hidden">
-        <DataTable columns={columns} data={filtered} />
-      </BentoCard>
+      <DataTable columns={columns} data={filtered} />
     </div>
   );
 };
 
-export const DoctorSchedule: React.FC = () => {
-  return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="pb-3 border-b border-slate-200">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
-          Clinical Duty Management
-        </span>
-        <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-          Doctor Schedule &amp; Roster
-        </h1>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <BentoCard variant="glass" padding="md" className="space-y-3">
-          <span className="text-[10px] uppercase font-bold text-[#0F766E] block">Today's Shift</span>
-          <div className="text-base font-bold text-slate-900">Morning OPD (OPD-12)</div>
-          <div className="text-xs text-slate-500">08:30 AM – 02:00 PM</div>
-          <div className="p-2.5 bg-green-50 border border-green-200 rounded-xl text-[#16A34A] text-xs font-bold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#16A34A]"></span> Currently On Duty
-          </div>
-        </BentoCard>
-
-        <BentoCard variant="glass" padding="md" className="space-y-3">
-          <span className="text-[10px] uppercase font-bold text-[#0F766E] block">Upcoming Ward Round</span>
-          <div className="text-base font-bold text-slate-900">Male Medical Ward 3</div>
-          <div className="text-xs text-slate-500">02:30 PM – 04:00 PM</div>
-          <div className="text-xs text-slate-500">18 Inpatients Assigned</div>
-        </BentoCard>
-
-        <BentoCard variant="glass" padding="md" className="space-y-3">
-          <span className="text-[10px] uppercase font-bold text-[#0F766E] block">On-Call Trauma Reserve</span>
-          <div className="text-base font-bold text-slate-900">Emergency Trauma Wing</div>
-          <div className="text-xs text-slate-500">Night Emergency Backup</div>
-          <div className="text-xs text-slate-500">Cluster Tele-Call Active</div>
-        </BentoCard>
-      </div>
-    </div>
-  );
-};
-
-export const PrescriptionManager: React.FC = () => {
-  return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="pb-3 border-b border-slate-200">
-        <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
-          Clinical Prescribing Engine
-        </span>
-        <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-          Standard Rx Bundles &amp; Templates
-        </h1>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <BentoCard variant="solid" padding="md" className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-slate-900">
-              Acute Viral Upper Respiratory Kit
-            </h3>
-            <span className="px-2 py-0.5 rounded-lg bg-teal-50 text-[#0F766E] font-bold text-[10px] border border-[#0F766E]/20">
-              Template #1
-            </span>
-          </div>
-          <p className="text-slate-600">
-            Standard 3-drug bundle: Amoxicillin-Clav 625mg + Paracetamol 650mg + Pantoprazole 40mg.
-          </p>
-          <button
-            onClick={() => alert('Template #1 applied to current patient!')}
-            className="px-4 py-2 bg-[#0F766E] text-white font-bold rounded-xl hover:bg-[#115E59] transition-colors"
-          >
-            Load into Active Consultation
-          </button>
-        </BentoCard>
-
-        <BentoCard variant="solid" padding="md" className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-slate-900">
-              Pre-Hypertension Starter Kit
-            </h3>
-            <span className="px-2 py-0.5 rounded-lg bg-teal-50 text-[#0F766E] font-bold text-[10px] border border-[#0F766E]/20">
-              Template #2
-            </span>
-          </div>
-          <p className="text-slate-600">
-            Standard 30-day bundle: Telmisartan 40mg + Amlodipine 5mg + Low Sodium Diet Advice.
-          </p>
-          <button
-            onClick={() => alert('Template #2 applied to current patient!')}
-            className="px-4 py-2 bg-[#0F766E] text-white font-bold rounded-xl hover:bg-[#115E59] transition-colors"
-          >
-            Load into Active Consultation
-          </button>
-        </BentoCard>
-      </div>
-    </div>
-  );
-};

@@ -3,6 +3,8 @@ import { sendNotification } from '../services/notificationService.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiError } from '../utils/ApiError.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { isFirebaseConfigured, uploadToFirebase } from '../config/firebase.js';
+import { saveBufferToLocalDisk } from '../middleware/uploadMiddleware.js';
 
 export const getLabRequests = asyncHandler(async (req, res) => {
   const { status, testCategory, priority } = req.query;
@@ -78,7 +80,7 @@ export const updateLabTestStatus = asyncHandler(async (req, res) => {
 
 export const uploadLabReport = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  if (!req.file) {
+  if (!req.file || !req.file.buffer) {
     throw ApiError.badRequest('Please upload a lab report file (PDF or Image)');
   }
 
@@ -87,7 +89,20 @@ export const uploadLabReport = asyncHandler(async (req, res) => {
     throw ApiError.notFound('Lab test not found');
   }
 
-  labTest.reportUrl = `/uploads/${req.file.filename}`;
+  let fileUrl = '';
+  if (isFirebaseConfigured()) {
+    fileUrl = await uploadToFirebase(
+      req.file.buffer,
+      req.file.originalname,
+      req.file.mimetype,
+      'lab-reports'
+    );
+  } else {
+    // Safe local disk fallback if Firebase is not yet configured
+    fileUrl = await saveBufferToLocalDisk(req.file.buffer, req.file.originalname);
+  }
+
+  labTest.reportUrl = fileUrl;
   labTest.status = 'completed';
   labTest.completedAt = new Date();
   await labTest.save();

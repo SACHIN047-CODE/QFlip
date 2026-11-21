@@ -6,8 +6,8 @@ interface AuthContextType {
   user: User | null;
   role: UserRole;
   isAuthenticated: boolean;
-  login: (email: string, role?: UserRole) => Promise<void>;
-  register: (data: { name: string; phone: string; abhaId?: string; role: UserRole; email: string }) => Promise<void>;
+  login: (email: string, role?: UserRole, password?: string) => Promise<void>;
+  register: (data: { name: string; phone: string; abhaId?: string; role?: UserRole; email: string; password?: string }) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
 }
@@ -17,8 +17,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => authService.getCurrentUser());
 
-  const login = async (email: string, role?: UserRole) => {
-    const res = await authService.login(email, role);
+  const login = async (email: string, role?: UserRole, password?: string) => {
+    const res = await authService.login(email, role, password);
     setUser(res.user);
   };
 

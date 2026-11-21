@@ -3,7 +3,8 @@ import {
   CrowdForecastHour, 
   AIRecommendation, 
   DigitalTwinSimulationParams, 
-  DigitalTwinSimulationResult 
+  DigitalTwinSimulationResult,
+  TriageResult
 } from '../types';
 import { CROWD_FORECAST_DATA, INITIAL_AI_RECOMMENDATIONS } from './mockData';
 
@@ -97,5 +98,137 @@ export const aiService = {
       };
     }
     return apiClient.post('/ai/digital-twin/simulate', params);
+  },
+
+  async triageSymptoms(symptoms: string, language: string = 'en'): Promise<TriageResult> {
+    const text = (symptoms || '').toLowerCase().trim();
+
+    if (!USE_MOCK) {
+      try {
+        const response: any = await apiClient.post('/ai/triage', { symptoms, language });
+        if (response && response.department) {
+          return response;
+        }
+      } catch (err) {
+        console.warn('Backend triage API failed, using intelligent client-side fallback:', err);
+      }
+    }
+
+    await delay(300);
+
+    // Multi-lingual clinical heuristics supporting English, Hindi, Punjabi, and Tamil
+    let department = 'General Medicine';
+    let departmentCode = 'GEN';
+    let urgency: 'normal' | 'urgent' | 'emergency' = 'normal';
+    let triageColor: 'green' | 'yellow' | 'red' = 'green';
+    let confidence = 0.88;
+    let summary = 'General physician consultation recommended based on symptoms.';
+
+    if (
+      text.includes('chest') ||
+      text.includes('heart') ||
+      text.includes('cardiac') ||
+      text.includes('छाती') ||
+      text.includes('दिल') ||
+      text.includes('ਧੜਕਨ') ||
+      text.includes('ਮਾਰਬੁ') ||
+      text.includes('இதயம்') ||
+      text.includes('marbu') ||
+      text.includes('palpitation')
+    ) {
+      department = 'Cardiology';
+      departmentCode = 'CARD';
+      urgency = text.includes('severe') || text.includes('shoulder') || text.includes('sweat') ? 'emergency' : 'urgent';
+      triageColor = urgency === 'emergency' ? 'red' : 'yellow';
+      confidence = 0.95;
+      summary = 'Cardiovascular indicators detected. Prompt cardiac assessment advised.';
+    } else if (
+      text.includes('bone') ||
+      text.includes('fracture') ||
+      text.includes('joint') ||
+      text.includes('knee') ||
+      text.includes('gitta') ||
+      text.includes('हड्डी') ||
+      text.includes('जोड़ों') ||
+      text.includes('ਗਿੱਟਾ') ||
+      text.includes('ਗੋਡਾ') ||
+      text.includes('எலும்பு') ||
+      text.includes('மூட்டு') ||
+      text.includes('mootu')
+    ) {
+      department = 'Orthopedics';
+      departmentCode = 'ORTHO';
+      confidence = 0.92;
+      summary = 'Musculoskeletal or joint strain aligned with Orthopedic examination.';
+    } else if (
+      text.includes('child') ||
+      text.includes('baby') ||
+      text.includes('infant') ||
+      text.includes('बच्चा') ||
+      text.includes('ਬੱਚਾ') ||
+      text.includes('குழந்தை') ||
+      text.includes('kulanthai') ||
+      text.includes('kid')
+    ) {
+      department = 'Pediatrics';
+      departmentCode = 'PED';
+      urgency = text.includes('high') ? 'urgent' : 'normal';
+      triageColor = urgency === 'urgent' ? 'yellow' : 'green';
+      confidence = 0.96;
+      summary = 'Pediatric care team recommended for child specialist evaluation.';
+    } else if (
+      text.includes('ear') ||
+      text.includes('nose') ||
+      text.includes('throat') ||
+      text.includes('कान') ||
+      text.includes('नाक') ||
+      text.includes('गला') ||
+      text.includes('ਕੰਨ') ||
+      text.includes('ਗਲਾ') ||
+      text.includes('காது') ||
+      text.includes('தொண்டை') ||
+      text.includes('thondai')
+    ) {
+      department = 'ENT & Head Neck';
+      departmentCode = 'ENT';
+      confidence = 0.90;
+      summary = 'ENT examination recommended for ear, nose, or throat irritation.';
+    } else if (
+      text.includes('pregnant') ||
+      text.includes('maternity') ||
+      text.includes('period') ||
+      text.includes('mahila') ||
+      text.includes('गर्भावस्था') ||
+      text.includes('கர்ப்பம்')
+    ) {
+      department = 'Obstetrics & Gynecology';
+      departmentCode = 'OBGYN';
+      confidence = 0.94;
+      summary = 'Maternal and gynecological specialist consultation assigned.';
+    } else if (
+      text.includes('accident') ||
+      text.includes('bleeding heavily') ||
+      text.includes('unconscious') ||
+      text.includes('emergency') ||
+      text.includes('आपातकालीन') ||
+      text.includes('அவசரம்')
+    ) {
+      department = 'Emergency Trauma Care';
+      departmentCode = 'EMG';
+      urgency = 'emergency';
+      triageColor = 'red';
+      confidence = 0.98;
+      summary = 'Critical acute indicators. Immediate emergency room triage required.';
+    }
+
+    return {
+      department,
+      departmentCode,
+      urgency,
+      triageColor,
+      confidence,
+      summary,
+      disclaimer: 'AI operational triage assistance only. Please consult a registered medical practitioner.'
+    };
   }
 };

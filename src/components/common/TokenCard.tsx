@@ -38,6 +38,34 @@ export const TokenCard: React.FC<TokenCardProps> = ({
         </div>
       </div>
 
+      {/* Skipped Alert Banner */}
+      {(token.status === 'SKIPPED' || token.status === 'SKIPPED_AWAITING_RECEPTION') && (
+        <div className="bg-amber-500 text-white p-4 flex items-center gap-3">
+          <span className="material-symbols-outlined text-2xl animate-pulse">warning</span>
+          <div className="text-xs">
+            <div className="font-bold text-sm">Skipped – Awaiting Reception Check-in</div>
+            <div className="font-medium text-amber-100">
+              Waiting for physical verification. Your token was skipped. Please visit reception and scan your token to rejoin the queue.
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rejoined Banner */}
+      {token.reentryPenaltyApplied && token.status === 'WAITING' && (
+        <div className="bg-blue-600 text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-base">check_circle</span>
+            <span>Rejoined Main Queue (+3 place penalty applied)</span>
+          </div>
+          {token.queuePosition && (
+            <span className="font-code font-bold bg-white/20 px-2 py-0.5 rounded">
+              Position #{token.queuePosition}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Main Token Display */}
       <div className="p-6 space-y-5">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-5 border-b border-slate-100">

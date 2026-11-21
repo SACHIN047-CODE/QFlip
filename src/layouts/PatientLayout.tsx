@@ -33,12 +33,12 @@ export const PatientLayout: React.FC = () => {
             <div>
               <div className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <span>Welcome, {user?.name || 'Patient'}</span>
-                <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                <span className="text-[11px] font-code font-bold px-2 py-0.2 rounded bg-light-surface-variant text-light-on-surface-variant border border-light-outline">
                   {user?.id || 'PT-10088'}
                 </span>
               </div>
-              <div className="text-xs text-slate-500">
-                ABHA ID: <strong className="font-mono text-slate-800">{user?.abhaId || '91-8274-1049-9812'}</strong>
+              <div className="text-xs text-light-on-surface-variant">
+                ABHA ID: <strong className="font-code text-light-primary">{user?.abhaId || '91-8274-1049-9812'}</strong>
               </div>
             </div>
           </div>
@@ -72,11 +72,10 @@ export const PatientLayout: React.FC = () => {
         <div className="max-w-7xl mx-auto flex items-center gap-1 text-xs">
           <NavLink
             to="/patient/dashboard"
-            className={`py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              isDashboardActive
+            className={`py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isDashboardActive
                 ? 'border-[#0F766E] text-[#0F766E]'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
+              }`}
           >
             <span className="material-symbols-outlined text-base">dashboard</span>
             <span>Dashboard</span>
@@ -85,10 +84,9 @@ export const PatientLayout: React.FC = () => {
           <NavLink
             to="/patient/queue"
             className={({ isActive }) =>
-              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-[#0F766E] text-[#0F766E]'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isActive
+                ? 'border-[#0F766E] text-[#0F766E]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
               }`
             }
           >
@@ -99,10 +97,9 @@ export const PatientLayout: React.FC = () => {
           <NavLink
             to="/patient/registration"
             className={({ isActive }) =>
-              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-[#0F766E] text-[#0F766E]'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isActive
+                ? 'border-[#0F766E] text-[#0F766E]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
               }`
             }
           >
@@ -113,10 +110,9 @@ export const PatientLayout: React.FC = () => {
           <NavLink
             to="/patient/prescriptions"
             className={({ isActive }) =>
-              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-[#0F766E] text-[#0F766E]'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isActive
+                ? 'border-[#0F766E] text-[#0F766E]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
               }`
             }
           >
@@ -127,10 +123,9 @@ export const PatientLayout: React.FC = () => {
           <NavLink
             to="/patient/lab-tests"
             className={({ isActive }) =>
-              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-[#0F766E] text-[#0F766E]'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isActive
+                ? 'border-[#0F766E] text-[#0F766E]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
               }`
             }
           >
@@ -141,10 +136,9 @@ export const PatientLayout: React.FC = () => {
           <NavLink
             to="/patient/pharmacy"
             className={({ isActive }) =>
-              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-[#0F766E] text-[#0F766E]'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isActive
+                ? 'border-[#0F766E] text-[#0F766E]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
               }`
             }
           >
@@ -155,10 +149,9 @@ export const PatientLayout: React.FC = () => {
           <NavLink
             to="/patient/medical-history"
             className={({ isActive }) =>
-              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-[#0F766E] text-[#0F766E]'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isActive
+                ? 'border-[#0F766E] text-[#0F766E]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
               }`
             }
           >
@@ -169,10 +162,9 @@ export const PatientLayout: React.FC = () => {
           <NavLink
             to="/feedback"
             className={({ isActive }) =>
-              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-[#0F766E] text-[#0F766E]'
-                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              `py-3 px-3.5 border-b-2 font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 ${isActive
+                ? 'border-[#0F766E] text-[#0F766E]'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
               }`
             }
           >

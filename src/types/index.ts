@@ -11,6 +11,7 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+  password?: string;
   phone?: string;
   abhaId?: string;
   department?: string;
@@ -25,7 +26,9 @@ export type TokenStatus =
   | 'CALLED' 
   | 'IN_CONSULTATION' 
   | 'COMPLETED' 
-  | 'SKIPPED' 
+  | 'SKIPPED'
+  | 'SKIPPED_AWAITING_RECEPTION'
+  | 'REJOINED'
   | 'LAB_PENDING' 
   | 'PHARMACY_PENDING';
 
@@ -51,6 +54,19 @@ export interface PatientToken {
   estimatedWaitMinutes: number;
   consultationStartTime?: string;
   consultationEndTime?: string;
+  isBuffer?: boolean;
+  entryType?: 'standard' | 'buffer';
+  skippedAt?: string;
+  rejoinedAt?: string;
+  reentryPenaltyApplied?: boolean;
+  reentryPenaltyPositions?: number;
+  queuePosition?: number;
+  verifiedByStaff?: string;
+  statusHistory?: {
+    status: string;
+    timestamp: string;
+    note?: string;
+  }[];
   vitals?: {
     bp?: string;
     pulse?: number;
@@ -81,9 +97,35 @@ export interface PrescriptionMedicine {
   id: string;
   name: string;
   dosage: string;
-  frequency: 'Once daily' | 'Twice daily' | 'Thrice daily' | 'SOS / As needed';
+  quantity?: number;
+  consumptionTiming: string; // e.g. 'Before breakfast', 'After breakfast', 'Before lunch', 'After lunch', 'Before dinner', 'After dinner', 'At bedtime', 'As required'
+  frequency: string; // e.g. 'Once daily', 'Twice daily', 'Thrice daily', 'SOS / As needed'
   duration: string;
-  instructions: 'Before Food' | 'After Food' | 'With Water';
+  instructions?: string;
+}
+
+export interface DoctorCapacityInfo {
+  canAccept: boolean;
+  isBuffer: boolean;
+  reason: string;
+  remainingOpdMinutes: number;
+  activeWorkload: number;
+  avgConsultationDurationMinutes: number;
+  estimatedCompletionMinutes: number;
+  remainingStandardCapacity: number;
+  currentBufferPatients: number;
+  remainingBufferCapacity: number;
+  bufferLimit: number;
+  isAvailable: boolean;
+  isClosed: boolean;
+  alternativeDoctors: {
+    id: string;
+    name: string;
+    specialization: string;
+    roomNumber: string;
+    activeQueueCount?: number;
+    estimatedWaitMinutes?: number;
+  }[];
 }
 
 export interface LabTestRequest {
@@ -206,4 +248,16 @@ export interface AppNotification {
   read: boolean;
   actionUrl?: string;
 }
+
+export interface TriageResult {
+  department: string;
+  departmentCode: string;
+  urgency: 'normal' | 'urgent' | 'emergency';
+  triageColor: 'green' | 'yellow' | 'red';
+  confidence: number;
+  summary: string;
+  disclaimer: string;
+  symptoms?: string[];
+}
+
 
