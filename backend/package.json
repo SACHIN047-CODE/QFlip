@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "seed": "node src/seed.js",
+    "seed:firebase": "node src/scripts/seedFirebaseUsers.js",
     "test": "vitest run"
   },
   "keywords": [
