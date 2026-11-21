@@ -356,7 +356,7 @@ export const LoginPage: React.FC = () => {
                   demoCategory === 'staff' ? 'bg-white shadow text-secondary' : 'text-light-on-surface-variant'
                 }`}
               >
-                🏥 Staff (3)
+                🏥 Staff / Lab / Chemist (3)
               </button>
             </div>
           </div>
@@ -449,11 +449,12 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {/* STAFF */}
+          {/* STAFF, LAB & CHEMIST */}
           {demoCategory === 'staff' && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 animate-fadeIn text-[11px]">
               {staffList.map((st) => {
                 const isSelected = email.toLowerCase() === st.email.toLowerCase();
+                const roleLabel = st.role === 'staff' ? 'Staff Desk' : st.role === 'lab' ? 'Lab Tech' : 'Chemist';
                 return (
                   <button
                     key={st.id}
@@ -465,7 +466,12 @@ export const LoginPage: React.FC = () => {
                         : 'border-light-outline hover:bg-light-surface-variant/60'
                     }`}
                   >
-                    <div className="font-bold text-light-primary truncate">{st.name}</div>
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <span className="font-bold text-light-primary truncate">{st.name}</span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-teal-50 text-teal-800 border border-teal-200 shrink-0">
+                        {roleLabel}
+                      </span>
+                    </div>
                     <div className="text-[10px] text-secondary font-mono">{st.email}</div>
                     <div className="text-[10px] text-light-on-surface-variant font-mono mt-0.5">
                       Password: <strong>{st.password}</strong>
