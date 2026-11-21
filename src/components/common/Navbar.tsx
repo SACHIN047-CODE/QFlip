@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { VoiceInputModal } from './VoiceInputModal';
 import { HospitalMapModal } from './HospitalMapModal';
-import { DoctorAccessModal } from './DoctorAccessModal';
 
 interface NavbarProps {
   mode?: 'public' | 'patient' | 'dashboard';
@@ -19,16 +18,13 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
-  const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false);
-  const [doctorTargetRoute, setDoctorTargetRoute] = useState('/doctor/dashboard');
 
   const handleHospitalCommandClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (sessionStorage.getItem('qflip_doctor_verified') === 'true') {
+    if (role === 'admin') {
       navigate('/admin/dashboard');
     } else {
-      setDoctorTargetRoute('/admin/dashboard');
-      setIsDoctorModalOpen(true);
+      navigate('/login');
     }
   };
 
@@ -337,13 +333,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
 
       {/* Hospital Interactive Navigation Modal */}
       <HospitalMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
-
-      {/* Doctor Access Security Modal */}
-      <DoctorAccessModal
-        isOpen={isDoctorModalOpen}
-        onClose={() => setIsDoctorModalOpen(false)}
-        targetRoute={doctorTargetRoute}
-      />
     </>
   );
 };

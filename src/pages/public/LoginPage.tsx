@@ -10,6 +10,7 @@ export const LoginPage: React.FC = () => {
   const [role, setRole] = useState<UserRole>('patient');
   const [email, setEmail] = useState('patient@careflow.gov.in');
   const [password, setPassword] = useState('Careflow@2026');
+  const [doctorPin, setDoctorPin] = useState('7788');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -29,6 +30,7 @@ export const LoginPage: React.FC = () => {
 
   const handleRoleChange = (selectedRole: UserRole) => {
     setRole(selectedRole);
+    setError('');
     switch (selectedRole) {
       case 'patient':
         setEmail('patient@careflow.gov.in');
@@ -37,6 +39,7 @@ export const LoginPage: React.FC = () => {
       case 'doctor':
         setEmail('doctor@careflow.gov.in');
         setPassword('Careflow@2026');
+        setDoctorPin('7788');
         break;
       case 'staff':
         setEmail('staff@careflow.gov.in');
@@ -63,17 +66,24 @@ export const LoginPage: React.FC = () => {
     setSuccess('');
 
     if (!email.trim() || !password.trim()) {
-      setError('Please enter both your official email/ID and password.');
+      setError('Please enter your email and password.');
       return;
+    }
+
+    // Doctor clearance PIN check: ONLY required when signing in as Doctor
+    const isDoctorLogin = role === 'doctor' || email.toLowerCase().includes('doctor');
+    if (isDoctorLogin) {
+      if (!doctorPin || doctorPin.trim() !== '7788') {
+        setError('Incorrect Doctor PIN. Please enter your 4-digit doctor authorization PIN (Default: 7788).');
+        return;
+      }
+      sessionStorage.setItem('qflip_doctor_verified', 'true');
     }
 
     try {
       setLoading(true);
       await login(email, role);
-      if (role === 'doctor' || role === 'admin') {
-        sessionStorage.setItem('qflip_doctor_verified', 'true');
-      }
-      setSuccess('Authentication verified! Redirecting to secure dashboard...');
+      setSuccess('Credentials verified! Loading your secure portal...');
       setTimeout(() => {
         if (role === 'doctor') navigate('/doctor/dashboard');
         else if (role === 'admin') navigate('/admin/dashboard');
@@ -81,7 +91,7 @@ export const LoginPage: React.FC = () => {
         else if (role === 'lab') navigate('/lab/dashboard');
         else if (role === 'pharmacy') navigate('/pharmacy/dashboard');
         else navigate('/patient/dashboard');
-      }, 600);
+      }, 500);
     } catch (err: any) {
       setError(err.message || 'Login failed. Please check credentials.');
     } finally {
@@ -239,6 +249,33 @@ export const LoginPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Doctor Clearance PIN: ONLY visible & required for Doctor logins */}
+          {(role === 'doctor' || email.toLowerCase().includes('doctor')) && (
+            <div className="p-3.5 bg-amber-500/10 border-2 border-amber-500/30 rounded-xl space-y-1.5 animate-fadeIn">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm text-amber-600">badge</span>
+                  Doctor Security Clearance PIN
+                </label>
+                <span className="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
+                  Demo PIN: 7788
+                </span>
+              </div>
+              <input
+                type="password"
+                value={doctorPin}
+                onChange={(e) => setDoctorPin(e.target.value)}
+                placeholder="Enter 4-digit PIN (7788)"
+                maxLength={6}
+                required
+                className="w-full px-3.5 py-2 text-xs font-mono font-bold tracking-widest rounded-lg border border-amber-300 bg-white text-light-primary focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+              />
+              <p className="text-[10px] text-amber-700">
+                Authorized clinical clearance required for Doctor OPD consultation queue and prescriptions.
+              </p>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={loading}
@@ -258,8 +295,100 @@ export const LoginPage: React.FC = () => {
           </button>
         </form>
 
+        {/* Demo Credentials Quick Switcher */}
+        <div className="pt-4 border-t border-light-outline space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-light-on-surface-variant block text-center">
+            Demo Credentials (1-Click Fill)
+          </span>
+          <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+            <button
+              type="button"
+              onClick={() => handleRoleChange('patient')}
+              className={`p-2 rounded-lg border text-left transition-all ${
+                role === 'patient' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
+            >
+              <div className="font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">person</span>
+                Patient
+              </div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">patient@careflow.gov.in</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleChange('doctor')}
+              className={`p-2 rounded-lg border text-left transition-all ${
+                role === 'doctor' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
+            >
+              <div className="font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">stethoscope</span>
+                Doctor (PIN: 7788)
+              </div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">doctor@careflow.gov.in</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleChange('staff')}
+              className={`p-2 rounded-lg border text-left transition-all ${
+                role === 'staff' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
+            >
+              <div className="font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">how_to_reg</span>
+                Registration Staff
+              </div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">staff@careflow.gov.in</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleChange('admin')}
+              className={`p-2 rounded-lg border text-left transition-all ${
+                role === 'admin' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
+            >
+              <div className="font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">admin_panel_settings</span>
+                Administrator
+              </div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">admin@careflow.gov.in</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleChange('lab')}
+              className={`p-2 rounded-lg border text-left transition-all ${
+                role === 'lab' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
+            >
+              <div className="font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">biotech</span>
+                Lab Staff
+              </div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">lab@careflow.gov.in</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleRoleChange('pharmacy')}
+              className={`p-2 rounded-lg border text-left transition-all ${
+                role === 'pharmacy' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
+            >
+              <div className="font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">medication</span>
+                Pharmacy Staff
+              </div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">pharmacy@careflow.gov.in</div>
+            </button>
+          </div>
+        </div>
+
         {/* Footer */}
-        <div className="pt-4 border-t border-light-outline text-center text-xs text-light-on-surface-variant">
+        <div className="pt-2 border-t border-light-outline text-center text-xs text-light-on-surface-variant">
           New patient without an account?{' '}
           <Link to="/register" className="text-secondary font-bold hover:underline">
             Register with ABHA

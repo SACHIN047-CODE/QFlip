@@ -92,8 +92,8 @@ export const AppRoutes: React.FC = () => {
         <Route path="/landing" element={<LandingPage />} />
       </Route>
 
-      {/* Patient Portal Pages (Protected - Only Logged-in Patients & Staff/Admin) */}
-      <Route element={<ProtectedRoute allowedRoles={['patient', 'staff', 'admin']} />}>
+      {/* Patient Portal Pages (Protected - Strictly Logged-in Patient Only) */}
+      <Route element={<ProtectedRoute allowedRoles={['patient']} />}>
         <Route path="/patient" element={<PatientLayout />}>
           <Route index element={<Navigate to="/patient/dashboard" replace />} />
           <Route path="dashboard" element={<PatientDashboard />} />
@@ -108,8 +108,8 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Route>
 
-      {/* Doctor Dashboard Pages (Protected - Doctors Only) */}
-      <Route element={<ProtectedRoute allowedRoles={['doctor', 'admin']} />}>
+      {/* Doctor Dashboard Pages (Protected - Strictly Authorized Doctors Only) */}
+      <Route element={<ProtectedRoute allowedRoles={['doctor']} />}>
         <Route element={<DoctorGuard />}>
           <Route
             path="/doctor"
@@ -125,8 +125,8 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Route>
 
-      {/* Registration Staff Dashboard Pages (Protected - Staff Only) */}
-      <Route element={<ProtectedRoute allowedRoles={['staff', 'admin']} />}>
+      {/* Registration Staff Dashboard Pages (Protected - Registration Staff Only) */}
+      <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
         <Route
           path="/staff"
           element={<DashboardLayout title="Front Desk Registration & Triage" subtitle="Registration Counter #02 • OPD Main Hall" />}
@@ -139,7 +139,7 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Route>
 
-      {/* Administrator Dashboard Pages (Protected - Admin Only) */}
+      {/* Administrator Dashboard Pages (Protected - Administrator Only) */}
       <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
         <Route element={<DoctorGuard />}>
           <Route
@@ -159,8 +159,8 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Route>
 
-      {/* Laboratory Dashboard Pages (Protected - Lab Staff & Admin Only) */}
-      <Route element={<ProtectedRoute allowedRoles={['lab', 'admin']} />}>
+      {/* Laboratory Dashboard Pages (Protected - Lab Staff Only) */}
+      <Route element={<ProtectedRoute allowedRoles={['lab']} />}>
         <Route
           path="/lab"
           element={<DashboardLayout title="Clinical Diagnostics & Laboratory" subtitle="Pathology, Hematology & Radiology Stream" />}
@@ -172,8 +172,8 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Route>
 
-      {/* Pharmacy Dashboard Pages (Protected - Chemist / Pharmacy Staff & Admin Only) */}
-      <Route element={<ProtectedRoute allowedRoles={['pharmacy', 'admin']} />}>
+      {/* Pharmacy Dashboard Pages (Protected - Jan Aushadhi Chemist Only) */}
+      <Route element={<ProtectedRoute allowedRoles={['pharmacy']} />}>
         <Route
           path="/pharmacy"
           element={<DashboardLayout title="Jan Aushadhi OPD Pharmacy Desk" subtitle="Dispensing Counters & Central Medicine Formulary" />}
