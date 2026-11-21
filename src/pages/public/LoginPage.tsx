@@ -16,18 +16,6 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // If already authenticated, redirect to active dashboard immediately
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === 'doctor') navigate('/doctor/dashboard', { replace: true });
-      else if (user.role === 'admin') navigate('/admin/dashboard', { replace: true });
-      else if (user.role === 'staff') navigate('/staff/dashboard', { replace: true });
-      else if (user.role === 'lab') navigate('/lab/dashboard', { replace: true });
-      else if (user.role === 'pharmacy') navigate('/pharmacy/dashboard', { replace: true });
-      else navigate('/patient/dashboard', { replace: true });
-    }
-  }, [isAuthenticated, user, navigate]);
-
   const handleRoleChange = (selectedRole: UserRole) => {
     setRole(selectedRole);
     setError('');

@@ -63,28 +63,12 @@ import {
   DigitalTwinSimulation,
 } from '../pages/ai/AiDashboard';
 
-// Root Dispatcher Component
-const RootRedirect: React.FC = () => {
-  const { user, isAuthenticated } = useAuth();
-  if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
-  }
-  if (user.role === 'doctor') return <Navigate to="/doctor/dashboard" replace />;
-  if (user.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
-  if (user.role === 'staff') return <Navigate to="/staff/dashboard" replace />;
-  if (user.role === 'lab') return <Navigate to="/lab/dashboard" replace />;
-  if (user.role === 'pharmacy') return <Navigate to="/pharmacy/dashboard" replace />;
-  return <Navigate to="/patient/dashboard" replace />;
-};
-
 export const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Root Path: Force login first */}
-      <Route path="/" element={<RootRedirect />} />
-
-      {/* Public Auth Pages */}
+      {/* Starting Page: Direct Login Page */}
       <Route element={<PublicLayout />}>
+        <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
