@@ -6,6 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
 import { TokenCard } from '../../components/common/TokenCard';
 import { PatientToken, PriorityLevel } from '../../types';
+import { firestoreService } from '../../services/firestoreService';
 
 export const PatientRegistration: React.FC = () => {
   const navigate = useNavigate();

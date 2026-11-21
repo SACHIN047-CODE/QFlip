@@ -8,7 +8,7 @@ import { PrescriptionMedicine } from '../../types';
 
 export const DoctorDashboard: React.FC = () => {
   const { user } = useAuth();
-  const { tokens, currentServingToken, callNext, skip, updateStatus } = useQueue();
+  const { tokens, currentServingToken, callNext, skip, updateStatus, addDemoPatients, resetDemoQueue } = useQueue();
 
   const [activeTab, setActiveTab] = useState<'consultation' | 'vitals' | 'history'>('consultation');
   const [skipDialogOpen, setSkipDialogOpen] = useState(false);
@@ -175,6 +175,42 @@ export const DoctorDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Demo Queue Quick Actions Banner for Doctor OPD Desk */}
+      <div className="bg-secondary/10 border border-secondary/30 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-secondary text-white flex items-center justify-center shadow-sm">
+            <span className="material-symbols-outlined text-xl">stethoscope</span>
+          </div>
+          <div>
+            <div className="font-headline text-sm font-bold text-light-primary">
+              Live Clinical OPD Consultation Desk (Room 12)
+            </div>
+            <div className="text-[11px] text-light-on-surface-variant">
+              {waitingTokens.length} patients currently waiting in queue • Priority triage sorting active
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={addDemoPatients}
+            className="px-3.5 py-2 bg-secondary text-white font-bold rounded-xl hover:bg-secondary/90 flex items-center gap-1.5 shadow-sm transition-all"
+            title="Populate 6 realistic waiting OPD patients"
+          >
+            <span className="material-symbols-outlined text-sm">person_add</span>
+            <span>+ Add Demo Patients (6 Cases)</span>
+          </button>
+          <button
+            onClick={resetDemoQueue}
+            className="px-3 py-2 border border-light-outline bg-white hover:bg-light-surface-variant text-light-primary font-bold rounded-xl flex items-center gap-1.5 shadow-sm transition-all"
+            title="Reset queue to original demo list"
+          >
+            <span className="material-symbols-outlined text-sm">restart_alt</span>
+            <span>Reset Demo Queue</span>
+          </button>
+        </div>
+      </div>
+
       {/* Top OPD Stats Ribbon */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-light-surface p-4 rounded-xl border border-light-outline shadow-card">

@@ -29,6 +29,8 @@ interface QueueContextType {
     voiceNoteUrl?: string;
     doctorId?: string;
   }) => Promise<PatientToken>;
+  addDemoPatients: () => Promise<void>;
+  resetDemoQueue: () => Promise<void>;
 }
 
 const QueueContext = createContext<QueueContextType | undefined>(undefined);
@@ -134,6 +136,8 @@ export const QueueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         checkCapacity,
         updateStatus,
         generateToken,
+        addDemoPatients,
+        resetDemoQueue,
       }}
     >
       {children}

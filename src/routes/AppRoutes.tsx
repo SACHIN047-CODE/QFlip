@@ -44,6 +44,7 @@ import {
   ReportsPage,
   ComplaintsManagement,
 } from '../pages/admin/AnalyticsPage';
+import { FirestoreManagerPage } from '../pages/admin/FirestoreManagerPage';
 
 // Lab Pages
 import { LabDashboard } from '../pages/lab/LabDashboard';
@@ -133,6 +134,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="complaints" element={<ComplaintsManagement />} />
+            <Route path="firestore" element={<FirestoreManagerPage />} />
           </Route>
         </Route>
       </Route>
