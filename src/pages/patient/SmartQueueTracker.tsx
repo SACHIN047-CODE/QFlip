@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueue } from '../../context/QueueContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { HospitalMapModal } from '../../components/common/HospitalMapModal';
 
 export const SmartQueueTracker: React.FC = () => {
   const { myToken, currentServingToken, tokens, refreshTokens } = useQueue();
   const { t } = useLanguage();
-  const [mapOpen, setMapOpen] = useState(false);
   const [audioAnnouncementPlaying, setAudioAnnouncementPlaying] = useState(false);
 
   // Auto-refresh queue every 10 seconds for real-time live feel
@@ -262,13 +260,6 @@ export const SmartQueueTracker: React.FC = () => {
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <button
-              onClick={() => setMapOpen(true)}
-              className="flex-1 sm:flex-initial px-4 py-2 bg-light-surface border-2 border-light-primary text-light-primary text-xs font-bold rounded-lg hover:bg-light-primary hover:text-white transition-colors flex items-center justify-center gap-1.5"
-            >
-              <span className="material-symbols-outlined text-sm">map</span>
-              <span>{t('queue.view_map', 'Find Room On Map')}</span>
-            </button>
-            <button
               onClick={() => window.print()}
               className="flex-1 sm:flex-initial px-4 py-2 bg-light-surface-variant text-light-primary text-xs font-bold rounded-lg hover:bg-light-outline transition-colors flex items-center justify-center gap-1.5 border border-light-outline"
             >
@@ -336,12 +327,6 @@ export const SmartQueueTracker: React.FC = () => {
           </div>
         )}
       </div>
-
-      <HospitalMapModal
-        isOpen={mapOpen}
-        onClose={() => setMapOpen(false)}
-        destinationDepartment={myToken.roomNumber ? `OPD ${myToken.roomNumber}` : 'OPD Room 12'}
-      />
     </div>
   );
 };
