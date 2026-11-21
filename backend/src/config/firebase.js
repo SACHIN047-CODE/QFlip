@@ -1,4 +1,5 @@
-import admin from 'firebase-admin';
+import { initializeApp, cert, getApps } from 'firebase-admin/app';
+import { getStorage } from 'firebase-admin/storage';
 import dotenv from 'dotenv';
 import logger from './logger.js';
 
@@ -20,18 +21,18 @@ try {
     }
     privateKey = privateKey.replace(/\\n/g, '\n');
 
-    if (!admin.apps.length) {
-      admin.initializeApp({
-        credential: admin.credential.cert({
-          projectId,
-          clientEmail,
-          privateKey
-        }),
-        storageBucket: bucketName
-      });
-    }
+    const app = getApps().length === 0
+      ? initializeApp({
+          credential: cert({
+            projectId,
+            clientEmail,
+            privateKey
+          }),
+          storageBucket: bucketName
+        })
+      : getApps()[0];
 
-    storageBucket = admin.storage().bucket();
+    storageBucket = getStorage(app).bucket();
     isInitialized = true;
     logger.info(`✅ Firebase Cloud Storage initialized with bucket: ${bucketName}`);
   } else {
@@ -72,5 +73,5 @@ export const uploadToFirebase = async (fileBuffer, originalName, mimeType, folde
   return `https://storage.googleapis.com/${storageBucket.name}/${filePath}`;
 };
 
-export { admin };
-export default admin;
+export { getApps, getStorage };
+export default { isFirebaseConfigured, uploadToFirebase };
