@@ -1,0 +1,17 @@
+class: Department
+table: careflow_departments
+fields:
+  name: String
+  code: String
+  description: String?
+  floor: String, default='Ground Floor'
+  roomNumbers: List<String>?
+  averageWaitTimeMinutes: int, default=20
+  maxDailyCapacity: int, default=250
+  isActive: bool, default=true
+  createdAt: DateTime?
+  updatedAt: DateTime?
+indexes:
+  department_code_idx:
+    fields: code
+    unique: true

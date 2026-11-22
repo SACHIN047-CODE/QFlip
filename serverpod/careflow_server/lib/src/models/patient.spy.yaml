@@ -1,0 +1,19 @@
+class: Patient
+table: careflow_patients
+fields:
+  patientId: String
+  userId: int, relation(parent=careflow_users)
+  age: int?
+  gender: String, default='Male'
+  bloodGroup: String, default='Unknown'
+  abhaId: String?
+  emergencyContactName: String?
+  emergencyContactPhone: String?
+  address: String?
+  registrationDate: DateTime?
+  createdAt: DateTime?
+  updatedAt: DateTime?
+indexes:
+  patient_patient_id_idx:
+    fields: patientId
+    unique: true

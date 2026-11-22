@@ -1,0 +1,10 @@
+class: AuthResponse
+fields:
+  success: bool
+  token: String?
+  userId: int?
+  name: String?
+  email: String?
+  role: String?
+  phone: String?
+  message: String?

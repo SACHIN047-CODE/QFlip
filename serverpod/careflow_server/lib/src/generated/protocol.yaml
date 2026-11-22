@@ -1,0 +1,81 @@
+emailIdp:
+  - startOtpLogin:
+  - verifyOtpLoginCode:
+  - finishOtpLogin:
+  - finishOtpRegistration:
+  - login:
+  - startRegistration:
+  - verifyRegistrationCode:
+  - finishRegistration:
+  - startPasswordReset:
+  - verifyPasswordResetCode:
+  - finishPasswordReset:
+  - hasAccount:
+jwtRefresh:
+  - refreshAccessToken:
+ai:
+  - getCrowdForecast:
+  - simulateDigitalTwin:
+  - triageSymptoms:
+analytics:
+  - getHospitalOverview:
+appointment:
+  - bookAppointment:
+  - getAppointments:
+  - updateStatus:
+consultation:
+  - createConsultation:
+  - getConsultations:
+department:
+  - getDepartments:
+  - getDepartmentById:
+  - createDepartment:
+doctor:
+  - getDoctors:
+  - getDoctorById:
+  - updateAvailability:
+feedback:
+  - submitFeedback:
+  - trackTicket:
+  - getAllFeedback:
+laboratory:
+  - getTests:
+  - createTest:
+  - updateTestStatus:
+notification:
+  - getNotifications:
+  - sendNotification:
+  - markAsRead:
+patient:
+  - getPatients:
+  - getPatientById:
+  - getPatientByPatientId:
+  - createPatient:
+pharmacy:
+  - getOrders:
+  - updateOrderStatus:
+prescription:
+  - getPrescriptions:
+  - getPrescriptionItems:
+  - updateStatus:
+queue:
+  - getTokens:
+  - getTokenByNumber:
+  - checkDoctorCapacity:
+  - generateToken:
+  - callNext:
+  - skipPatient:
+  - rejoinPatient:
+  - getSkippedTokens:
+  - updateStatus:
+resource:
+  - getResources:
+  - updateStatus:
+userAuth:
+  - login:
+  - register:
+  - verifyDoctorPin:
+  - getCurrentUser:
+  - forgotPassword:
+greeting:
+  - hello:

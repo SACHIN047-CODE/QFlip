@@ -5,7 +5,7 @@ import { useNotifications } from '../../context/NotificationContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { VoiceInputModal } from './VoiceInputModal';
-import { HospitalMapModal } from './HospitalMapModal';
+import { VoiceChatAssistantModal } from '../assistant/VoiceChatAssistantModal';
 
 interface NavbarProps {
   mode?: 'public' | 'patient' | 'dashboard';
@@ -90,8 +90,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               onClick={() => setIsMapOpen(true)}
               className="hover:text-secondary flex items-center gap-1 transition-colors text-light-primary font-medium"
             >
-              <span className="material-symbols-outlined text-sm text-secondary">map</span>
-              <span className="hidden sm:inline">{t('nav.hospital_map', 'Hospital Map')}</span>
             </button>
 
             <button
@@ -382,13 +380,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               <span className="text-xs font-bold text-slate-400 uppercase">
                 Language
               </span>
-              <button
-                type="button"
-                onClick={toggleLanguage}
-                className="px-3 py-1 rounded bg-[#0F766E]/10 border border-[#0F766E]/30 text-[#0F766E] text-xs font-bold"
-              >
-                {language === 'en' ? 'Switch to हिन्दी' : 'Switch to English'}
-              </button>
+              <LanguageSelector variant="compact" />
             </div>
 
             {mode === 'patient' ? (
@@ -485,26 +477,16 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               }}
               className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-[#0F766E] hover:bg-slate-100 flex items-center gap-1.5"
             >
-              <span className="material-symbols-outlined text-sm">map</span>
-              <span>{t('nav.hospital_map', 'Hospital Map')}</span>
             </button>
           </div>
         )}
       </header>
 
-      {/* Voice Input Modal */}
-      <VoiceInputModal
+      {/* Voice and Chat OPD Assistant Modal */}
+      <VoiceChatAssistantModal
         isOpen={isVoiceOpen}
         onClose={() => setIsVoiceOpen(false)}
-        onComplete={(transcript, dept, symptoms) => {
-          navigate('/patient/registration', {
-            state: { voiceTranscript: transcript, suggestedDepartment: dept, symptoms },
-          });
-        }}
       />
-
-      {/* Hospital Interactive Navigation Modal */}
-      <HospitalMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
     </>
   );
 };

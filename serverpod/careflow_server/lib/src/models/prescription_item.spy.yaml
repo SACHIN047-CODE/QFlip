@@ -1,0 +1,12 @@
+class: PrescriptionItem
+table: careflow_prescription_items
+fields:
+  prescriptionId: int, relation(parent=careflow_prescriptions)
+  medicineName: String
+  dosage: String
+  quantity: int?
+  consumptionTiming: String, default='After breakfast'
+  frequency: String, default='Twice daily'
+  duration: String, default='5 days'
+  instructions: String?
+  isDispensed: bool, default=false

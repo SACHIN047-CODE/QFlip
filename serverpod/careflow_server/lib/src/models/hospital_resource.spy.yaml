@@ -1,0 +1,10 @@
+class: HospitalResource
+table: careflow_hospital_resources
+fields:
+  resourceType: String
+  resourceName: String
+  identifier: String
+  ward: String, default='General Ward A'
+  status: String, default='available'
+  createdAt: DateTime?
+  updatedAt: DateTime?

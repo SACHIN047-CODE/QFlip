@@ -1,0 +1,9 @@
+class: DigitalTwinResult
+fields:
+  avgWaitTimeBefore: int
+  avgWaitTimeAfter: int
+  peakQueueDepthBefore: int
+  peakQueueDepthAfter: int
+  bottleneckDepartment: String
+  burnoutRiskLevel: String
+  recommendedInterventions: List<String>

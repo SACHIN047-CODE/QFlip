@@ -1,0 +1,17 @@
+class: LabTest
+table: careflow_lab_tests
+fields:
+  testRequestId: String
+  consultationId: int?, relation(parent=careflow_consultations)
+  patientId: int, relation(parent=careflow_patients)
+  doctorId: int, relation(parent=careflow_doctors)
+  testCategory: String, default='Hematology'
+  testName: String
+  priority: String, default='routine'
+  status: String, default='requested'
+  sampleCollectedAt: DateTime?
+  resultSummary: String?
+  reportUrl: String?
+  completedAt: DateTime?
+  createdAt: DateTime?
+  updatedAt: DateTime?

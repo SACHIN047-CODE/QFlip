@@ -1,0 +1,22 @@
+class: Doctor
+table: careflow_doctors
+fields:
+  doctorId: String
+  userId: int, relation(parent=careflow_users)
+  departmentId: int, relation(parent=careflow_departments)
+  specialization: String
+  qualification: String, default='MBBS, MD'
+  roomNumber: String, default='Room 101'
+  opdShiftStart: String, default='09:00 AM'
+  opdShiftEnd: String, default='02:00 PM'
+  isAvailable: bool, default=true
+  maxDailyPatients: int, default=50
+  consultationFee: double, default=0.0
+  averageConsultationTimeMinutes: int, default=10
+  bufferCapacityLimit: int, default=5
+  createdAt: DateTime?
+  updatedAt: DateTime?
+indexes:
+  doctor_doctor_id_idx:
+    fields: doctorId
+    unique: true

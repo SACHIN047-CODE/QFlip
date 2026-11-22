@@ -1,0 +1,29 @@
+class: QueueEntry
+table: careflow_queue
+fields:
+  tokenNumber: String
+  sequenceNumber: int
+  patientId: int, relation(parent=careflow_patients)
+  doctorId: int?, relation(parent=careflow_doctors)
+  departmentId: int, relation(parent=careflow_departments)
+  status: String, default='waiting'
+  triageLevel: String, default='green'
+  priorityScore: int, default=10
+  symptoms: String?
+  estimatedWaitTimeMinutes: int, default=15
+  checkInTime: DateTime?
+  callTime: DateTime?
+  consultationStartTime: DateTime?
+  completionTime: DateTime?
+  delayReason: String?
+  isBuffer: bool, default=false
+  entryType: String, default='standard'
+  skippedAt: DateTime?
+  rejoinedAt: DateTime?
+  reentryPenaltyApplied: bool, default=false
+  reentryPenaltyPositions: int, default=3
+  createdAt: DateTime?
+  updatedAt: DateTime?
+indexes:
+  queue_token_number_idx:
+    fields: tokenNumber

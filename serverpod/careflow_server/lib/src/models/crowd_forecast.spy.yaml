@@ -1,0 +1,6 @@
+class: CrowdForecast
+fields:
+  hour: String
+  historicalAverage: int
+  predictedVolume: int
+  riskLevel: String

@@ -1,0 +1,9 @@
+class: TriageResponse
+fields:
+  department: String
+  departmentCode: String
+  urgency: String
+  triageColor: String
+  confidence: double
+  summary: String
+  disclaimer: String

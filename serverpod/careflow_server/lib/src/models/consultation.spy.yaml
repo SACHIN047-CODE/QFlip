@@ -1,0 +1,21 @@
+class: Consultation
+table: careflow_consultations
+fields:
+  consultationId: String
+  patientId: int, relation(parent=careflow_patients)
+  doctorId: int, relation(parent=careflow_doctors)
+  departmentId: int, relation(parent=careflow_departments)
+  queueId: int?, relation(parent=careflow_queue)
+  chiefComplaints: String
+  clinicalObservations: String?
+  diagnosis: String
+  bp: String?
+  pulse: String?
+  temperature: String?
+  spO2: String?
+  weight: String?
+  clinicalNotes: String?
+  followUpDate: DateTime?
+  status: String, default='completed'
+  createdAt: DateTime?
+  updatedAt: DateTime?

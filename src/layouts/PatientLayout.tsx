@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useQueue } from '../context/QueueContext';
 import { useLanguage } from '../context/LanguageContext';
 import { PageSkeleton } from '../components/common/LoadingSkeleton';
+import { VoiceChatAssistantFloatingButton } from '../components/assistant/VoiceChatAssistantFloatingButton';
 
 export const PatientLayout: React.FC = () => {
   const { user } = useAuth();
@@ -71,6 +72,9 @@ export const PatientLayout: React.FC = () => {
       <main className="flex-grow p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
         {routeLoading ? <PageSkeleton variant="content" /> : <Outlet />}
       </main>
+
+      {/* Persistent Voice and Chat OPD Assistant */}
+      <VoiceChatAssistantFloatingButton />
     </div>
   );
 };

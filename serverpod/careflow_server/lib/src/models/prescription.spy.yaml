@@ -1,0 +1,11 @@
+class: Prescription
+table: careflow_prescriptions
+fields:
+  prescriptionNumber: String
+  consultationId: int, relation(parent=careflow_consultations)
+  patientId: int, relation(parent=careflow_patients)
+  doctorId: int, relation(parent=careflow_doctors)
+  dietaryAdvice: String?
+  status: String, default='pending_pharmacy'
+  createdAt: DateTime?
+  updatedAt: DateTime?

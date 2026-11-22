@@ -1,0 +1,44 @@
+services:
+  # Development services
+  postgres:
+    image: ghcr.io/serverpod/postgres:16
+    ports:
+      - "8090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: careflow
+      POSTGRES_PASSWORD: "yCx1_dVfjkKss4snprEmwaLBAe5WGXJJ"
+    volumes:
+      - careflow_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2.6
+    ports:
+      - "8091:6379"
+    command: redis-server --requirepass "MjrVHhlUMiAvQStLOeKBAmC6kJg0JSpB"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  # Test services
+  postgres_test:
+    image: ghcr.io/serverpod/postgres:16
+    ports:
+      - "9090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: careflow_test
+      POSTGRES_PASSWORD: "OFyz5a_VOllrGNhnyGUKZJUp8xVoRmMN"
+    volumes:
+      - careflow_test_data:/var/lib/postgresql/data
+
+  redis_test:
+    image: redis:6.2.6
+    ports:
+      - "9091:6379"
+    command: redis-server --requirepass "mZ4iuD8Kr6fBOUBfYWAfwIa_q9hTJPHV"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+volumes:
+  careflow_data:
+  careflow_test_data:

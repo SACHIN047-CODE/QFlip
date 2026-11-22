@@ -1,0 +1,15 @@
+class: DoctorCapacity
+fields:
+  canAccept: bool
+  isBuffer: bool
+  reason: String
+  remainingOpdMinutes: int
+  activeWorkload: int
+  avgConsultationDurationMinutes: double
+  estimatedCompletionMinutes: int
+  remainingStandardCapacity: int
+  currentBufferPatients: int
+  remainingBufferCapacity: int
+  bufferLimit: int
+  isAvailable: bool
+  isClosed: bool

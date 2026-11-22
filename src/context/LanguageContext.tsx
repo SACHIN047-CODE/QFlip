@@ -394,17 +394,581 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
   },
 };
 
+export const FULL_PAGE_TRANSLATIONS_HI: Record<string, string> = {
+  // Navigation & Headers
+  "Doctor OPD Consultation Desk": "डॉक्टर ओपीडी परामर्श डेस्क",
+  "Doctor Directory & Room Assignment": "डॉक्टर निर्देशिका एवं कमरा आवंटन",
+  "Clinical Roster Control": "क्लिनिकल रोस्टर नियंत्रण",
+  "Clinical Roster Control • Firebase Connected": "क्लिनिकल रोस्टर नियंत्रण • फायरबेस कनेक्टेड",
+  "Hospital Operations Command Admin": "अस्पताल संचालन कमान प्रशासन",
+  "Counter & Triage Staff Management": "काउंटर एवं ट्राइएज स्टाफ प्रबंधन",
+  "Operations Personnel": "अस्पताल संचालन स्टाफ",
+  "Front Desk Registration & Triage": "पंजीकरण एवं ट्राइएज काउंटर",
+  "Clinical Diagnostics & Laboratory": "क्लिनिकल डायग्नोस्टिक्स एवं लैब",
+  "Jan Aushadhi Pharmacy Counter": "जन औषधि दवाखाना / केमिस्ट",
+  "Hospital Operations Command": "अस्पताल संचालन कमान",
+  "AI & Digital Twin Simulation": "एआई एवं डिजिटल ट्विन सिमुलेशन",
+  "Digital Prescriptions": "डिजिटल दवा पर्चियां",
+  "Laboratory Investigations": "प्रयोगशाला जांच आदेश",
+  "Medicine Dispensing Orders": "दवा वितरण आदेश",
+  "Patient Medical History": "मरीज़ का चिकित्सा इतिहास",
+  "Smart Outpatient Queue": "स्मार्ट ओपीडी कतार",
+  "Live Hospital Operations": "लाइव अस्पताल संचालन",
+  "Live Clinical OPD Consultation Desk": "लाइव क्लिनिकल ओपीडी परामर्श डेस्क",
+  "Smart Outpatient Queue & Real-Time Hospital Flow": "स्मार्ट ओपीडी कतार एवं लाइव अस्पताल संचालन",
+  "Hospital SSO & Portal Authentication": "अस्पताल पोर्टल लॉगिन एवं प्रमाणीकरण",
+  "Select Your Role:": "अपनी भूमिका चुनें:",
+
+  // Sidebar Links
+  "Overview Dashboard": "अवलोकन डैशबोर्ड",
+  "Consultation Desk": "परामर्श डेस्क",
+  "Patient Queue": "मरीज़ों की कतार",
+  "Counter & Triage": "काउंटर एवं ट्राइएज",
+  "Token Desk": "टोकन डेस्क",
+  "Diagnostic Orders": "जांच आदेश",
+  "Test Results": "जांच परिणाम",
+  "Dispensary Queue": "दवा वितरण कतार",
+  "Medicine Inventory": "दवा स्टॉक सूची",
+  "Doctor Roster": "डॉक्टर रोस्टर",
+  "Staff Roster": "स्टाफ रोस्टर",
+  "Departments": "विभाग",
+  "Resource Allocations": "संसाधन आवंटन",
+  "Complaints & Grievances": "शिकायतें एवं निवारण",
+  "Operations Command": "अस्पताल संचालन कमान",
+  "Firebase Manager": "फायरबेस प्रबंधक",
+  "AI & Digital Twin": "एआई एवं डिजिटल ट्विन",
+  "Medical History": "चिकित्सा इतिहास",
+  "Lab Tests": "लैब परीक्षण",
+  "Pharmacy": "दवाखाना / केमिस्ट",
+  "Notifications": "सूचनाएं",
+  "Live Queue": "लाइव कतार",
+  "Live Token Tracker": "लाइव टोकन ट्रैकर",
+  "Book / OPD Slip": "ओपीडी पर्ची बनाएं",
+  "Pharmacy Orders": "दवा वितरण आदेश",
+  "Appointments": "अपॉइंटमेंट्स",
+  "Patient Services": "मरीज़ सेवाएं",
+  "Hospital Command": "अस्पताल कमान",
+
+  // Action Buttons
+  "Add New Doctor": "नया डॉक्टर जोड़ें",
+  "Call Next Patient": "अगला मरीज़ बुलाएं",
+  "Call Next": "अगला मरीज़ बुलाएं",
+  "Complete Consultation": "परामर्श पूरा करें",
+  "Skip Patient": "मरीज़ छोड़ें",
+  "Save Doctor": "डॉक्टर सहेजें",
+  "Save Doctor (role=\"doctor\")": "डॉक्टर सहेजें (role=\"doctor\")",
+  "Toggle Shift": "शिफ्ट बदलें",
+  "Review Details & Issue Token": "विवरण जांचें और टोकन बनाएं",
+  "Print Official Prescription Slip": "आधिकारिक पर्ची प्रिंट करें",
+  "Get WhatsApp Copy": "व्हाट्सएप कॉपी प्राप्त करें",
+  "Sign In": "लॉग इन",
+  "Sign Out": "लॉग आउट",
+  "Register": "पंजीकरण",
+  "Search": "खोजें",
+  "Cancel": "रद्द करें",
+  "Confirm": "पुष्टि करें",
+  "Dismiss": "हटाएं",
+  "Book OPD Token": "ओपीडी टोकन बुक करें",
+  "Track Live Queue": "लाइव कतार देखें",
+  "Try Voice OPD": "वॉयस ओपीडी आज़माएं",
+  "Register Patient": "मरीज़ का पंजीकरण करें",
+  "Clear & Retry": "हटाएं व पुनः प्रयास करें",
+  "Speak Again": "पुनः बोलें",
+  "Analyze & Assign Department": "जांचें और विभाग तय करें",
+  "Proceed with this Department": "इस विभाग के साथ आगे बढ़ें",
+  "Register & Assign Doctor (Firebase)": "डॉक्टर पंजीकरण एवं आवंटन (फायरबेस)",
+  "Adding to Firebase...": "फायरबेस में सहेजा जा रहा है...",
+
+  // Table & Form Headers
+  "Doctor Name": "डॉक्टर का नाम",
+  "Doctor Full Name": "डॉक्टर का पूरा नाम",
+  "Doctor Email (Used for Login)": "डॉक्टर की ईमेल (लॉगिन हेतु)",
+  "Doctor Email": "डॉक्टर की ईमेल",
+  "Contact Phone": "संपर्क फोन",
+  "Specialty / Department": "विशेषज्ञता / विभाग",
+  "Specialty": "विशेषज्ञता",
+  "Qualification": "योग्यता",
+  "Assigned OPD Room": "आवंटित ओपीडी कमरा",
+  "OPD Room": "ओपीडी कमरा",
+  "Shift Timing": "शिफ्ट का समय",
+  "Shift Hours": "शिफ्ट का समय",
+  "Patient Load": "मरीज़ों का लोड",
+  "Duty Status": "ड्यूटी की स्थिति",
+  "Actions": "कार्य",
+  "Token Number": "टोकन नंबर",
+  "Token #": "टोकन #",
+  "Patient Details": "मरीज़ का विवरण",
+  "Symptoms": "लक्षण",
+  "Priority": "प्राथमिकता",
+  "Queue Status": "कतार की स्थिति",
+  "Estimated Wait Time": "अनुमानित प्रतीक्षा समय",
+  "Estimated Wait": "अनुमानित प्रतीक्षा",
+  "Currently Serving": "वर्तमान में सेवारत",
+  "Chief Complaints": "मुख्य समस्याएं / लक्षण",
+  "Clinical Findings": "क्लिनिकल जांच निष्कर्ष",
+  "Diagnosis": "निदान (रोग का नाम)",
+  "Advice & Follow-up": "चिकित्सक सलाह व फॉलो-अप",
+  "Advice": "सलाह",
+  "Prescriptions": "दवा पर्ची",
+  "Prescribed Medicines": "निर्धारित दवाइयां",
+  "Medicine & Strength": "दवा एवं खुराक",
+  "Medicine Name": "दवा का नाम",
+  "Dosage": "खुराक",
+  "Quantity": "मात्रा",
+  "Consumption Timing": "दवा लेने का समय",
+  "Stock Status": "स्टॉक स्थिति",
+  "Available in Jan Aushadhi": "जन औषधि में उपलब्ध",
+  "Instructions": "विशेष निर्देश",
+  "Frequency": "आवृत्ति",
+  "Duration": "अवधि",
+  "Total Today": "आज कुल",
+  "Pending Collection": "नमूना संग्रह लंबित",
+  "In Analyzer": "मशीन में जांच जारी",
+  "Reports Completed": "रिपोर्ट्स तैयार",
+  "Total Prescriptions Today": "आज कुल दवा पर्चियां",
+  "Queued for Packaging": "पैकिंग हेतु कतारबद्ध",
+  "Currently Dispensing": "वितरित की जा रही हैं",
+  "Ready at Counter": "काउंटर पर तैयार",
+  "Assigned Desk": "आवंटित काउंटर",
+  "Tokens Issued Today": "आज जारी टोकन",
+  "Duty Shift": "ड्यूटी शिफ्ट",
+  "Password": "पासवर्ड",
+  "Doctor Security Clearance PIN": "डॉक्टर सुरक्षा पिन (Clearance PIN)",
+  "Doctor Security PIN (4-Digits)": "डॉक्टर सुरक्षा पिन (4 अंक)",
+  "Email Address / Username": "ईमेल पता / उपयोगकर्ता नाम",
+
+  // Statuses & Priorities
+  "Active": "सक्रिय",
+  "On Break": "विश्राम पर",
+  "In Session": "सत्र चालू",
+  "Online": "ऑनलाइन",
+  "Offline": "ऑफलाइन",
+  "WAITING": "प्रतीक्षारत",
+  "IN_CONSULTATION": "परामर्श जारी",
+  "COMPLETED": "संपन्न",
+  "SKIPPED": "छोड़ा गया",
+  "PENDING": "लंबित",
+  "PROCESSING": "प्रक्रिया में",
+  "QUEUED": "कतारबद्ध",
+  "READY_FOR_PICKUP": "वितरण हेतु तैयार",
+  "DISPENSING": "वितरित किया जा रहा है",
+  "Normal": "सामान्य",
+  "Senior": "वरिष्ठ नागरिक",
+  "Emergency": "आपातकालीन",
+  "Pediatric": "बाल रोग",
+  "Critical": "गंभीर",
+  "Elevated": "अधिक भीड़",
+  "Optimal": "सामान्य",
+  "Overload": "अत्यधिक भीड़",
+
+  // Departments
+  "General Medicine": "सामान्य चिकित्सा",
+  "Cardiology": "हृदय रोग विभाग",
+  "Orthopedics": "हड्डी रोग विभाग",
+  "Pediatrics": "बाल रोग विभाग",
+  "Obstetrics & Gynecology": "प्रसूति एवं स्त्री रोग",
+  "ENT & Head Neck": "कान, नाक, गला",
+  "Emergency Trauma Care": "आपातकालीन ट्रौमा केयर",
+
+  // Common UI words
+  "Admin": "प्रशासक",
+  "Doctor": "डॉक्टर",
+  "Patient": "मरीज़",
+  "Staff": "स्टाफ",
+  "Lab": "लैब",
+  "Chemist": "केमिस्ट",
+  "Welcome,": "स्वागत है,",
+  "Active OPD Token": "सक्रिय ओपीडी टोकन",
+  "Hospital Map": "अस्पताल का नक्शा",
+  "Voice OPD": "वॉयस ओपीडी",
+  "Patient Full Name": "मरीज़ का पूरा नाम",
+  "Mobile Phone (10 digits)": "मोबाइल फोन (10 अंक)",
+  "Age (Years)": "उम्र (वर्ष)",
+  "Gender": "लिंग",
+  "Male": "पुरुष",
+  "Female": "महिला",
+  "Other": "अन्य",
+  "After breakfast": "नाश्ते के बाद",
+  "Before breakfast": "नाश्ते से पहले",
+  "After lunch": "दोपहर के खाने के बाद",
+  "Before dinner": "रात के खाने से पहले",
+  "After dinner": "रात के खाने के बाद",
+  "At bedtime": "सोते समय",
+  "Once daily": "दिन में 1 बार",
+  "Twice daily": "दिन में 2 बार",
+  "Thrice daily": "दिन में 3 बार",
+  "5 Days": "5 दिन",
+  "3 Days": "3 दिन",
+  "1 Tablet": "1 गोली",
+  "Emergency Helplines": "आपातकालीन हेल्पलाइन",
+
+  // Dashboard & Layout Titles
+  "Operations Management": "अस्पताल संचालन प्रबंधन",
+  "Civil Hospital Ambala • Integrated Clinical Health Stream": "सिविल अस्पताल अंबाला • एकीकृत क्लिनिकल हेल्थ स्ट्रीम",
+  "Patient View": "मरीज़ दृश्य",
+  "Voice Triage": "वॉयस ट्राइएज",
+  "Logout": "लॉग आउट"
+};
+
+export const FULL_PAGE_TRANSLATIONS_PA: Record<string, string> = {
+  // Navigation & Headers
+  "Doctor OPD Consultation Desk": "ਡਾਕਟਰ ਓਪੀਡੀ ਸਲਾਹ ਡੈਸਕ",
+  "Doctor Directory & Room Assignment": "ਡਾਕਟਰ ਡਾਇਰੈਕਟਰੀ ਅਤੇ ਕਮਰਾ ਵੰਡ",
+  "Clinical Roster Control": "ਕਲੀਨਿਕਲ ਰੋਸਟਰ ਕੰਟਰੋਲ",
+  "Clinical Roster Control • Firebase Connected": "ਕਲੀਨਿਕਲ ਰੋਸਟਰ ਕੰਟਰੋਲ • ਫਾਇਰਬੇਸ ਜੁੜਿਆ",
+  "Hospital Operations Command Admin": "ਹਸਪਤਾਲ ਸੰਚਾਲਨ ਕਮਾਂਡ ਐਡਮਿਨ",
+  "Counter & Triage Staff Management": "ਕਾਊਂਟਰ ਅਤੇ ਟ੍ਰਾਈਏਜ ਸਟਾਫ ਪ੍ਰਬੰਧਨ",
+  "Operations Personnel": "ਹਸਪਤਾਲ ਸੰਚਾਲਨ ਸਟਾਫ",
+  "Front Desk Registration & Triage": "ਫਰੰਟ ਡੈਸਕ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਅਤੇ ਟ੍ਰਾਈਏਜ",
+  "Clinical Diagnostics & Laboratory": "ਕਲੀਨਿਕਲ ਟੈਸਟ ਅਤੇ ਲੈਬਾਰਟਰੀ",
+  "Jan Aushadhi Pharmacy Counter": "ਜਨ ਔਸ਼ਧੀ ਦਵਾਈ ਘਰ / ਕੈਮਿਸਟ",
+  "Hospital Operations Command": "ਹਸਪਤਾਲ ਸੰਚਾਲਨ ਕਮਾਂਡ",
+  "AI & Digital Twin Simulation": "ਏਆਈ ਅਤੇ ਡਿਜੀਟਲ ਟਵਿਨ ਸਿਮੂਲੇਸ਼ਨ",
+  "Digital Prescriptions": "ਡਿਜੀਟਲ ਦਵਾਈ ਪਰਚੀਆਂ",
+  "Laboratory Investigations": "ਲੈਬਾਰਟਰੀ ਜਾਂਚ ਆਰਡਰ",
+  "Medicine Dispensing Orders": "ਦਵਾਈ ਵੰਡ ਆਰਡਰ",
+  "Patient Medical History": "ਮਰੀਜ਼ ਦਾ ਡਾਕਟਰੀ ਇਤਿਹਾਸ",
+  "Smart Outpatient Queue": "ਸਮਾਰਟ ਓਪੀਡੀ ਕਤਾਰ",
+  "Live Hospital Operations": "ਲਾਈਵ ਹਸਪਤਾਲ ਕਾਰਜ",
+  "Live Clinical OPD Consultation Desk": "ਲਾਈਵ ਕਲੀਨਿਕਲ ਓਪੀਡੀ ਸਲਾਹ ਡੈਸਕ",
+  "Smart Outpatient Queue & Real-Time Hospital Flow": "ਸਮਾਰਟ ਓਪੀਡੀ ਕਤਾਰ ਅਤੇ ਲਾਈਵ ਹਸਪਤਾਲ ਪ੍ਰਵਾਹ",
+  "Hospital SSO & Portal Authentication": "ਹਸਪਤਾਲ ਪੋਰਟਲ ਲਾਗ ਇਨ ਅਤੇ ਪ੍ਰਮਾਣਿਕਤਾ",
+  "Select Your Role:": "ਆਪਣੀ ਭੂਮਿਕਾ ਚੁਣੋ:",
+
+  // Sidebar Links
+  "Overview Dashboard": "ਸੰਖੇਪ ਡੈਸ਼ਬੋਰਡ",
+  "Consultation Desk": "ਸਲਾਹ ਡੈਸਕ",
+  "Patient Queue": "ਮਰੀਜ਼ਾਂ ਦੀ ਕਤਾਰ",
+  "Counter & Triage": "ਕਾਊਂਟਰ ਅਤੇ ਟ੍ਰਾਈਏਜ",
+  "Token Desk": "ਟੋਕਨ ਡੈਸਕ",
+  "Diagnostic Orders": "ਜਾਂਚ ਆਰਡਰ",
+  "Test Results": "ਜਾਂਚ ਨਤੀਜੇ",
+  "Dispensary Queue": "ਦਵਾਈ ਵੰਡ ਕਤਾਰ",
+  "Medicine Inventory": "ਦਵਾਈ ਸਟਾਕ ਸੂਚੀ",
+  "Doctor Roster": "ਡਾਕਟਰ ਰੋਸਟਰ",
+  "Staff Roster": "ਸਟਾਫ ਰੋਸਟਰ",
+  "Departments": "ਵਿਭਾਗ",
+  "Resource Allocations": "ਸਰੋਤ ਵੰਡ",
+  "Complaints & Grievances": "ਸ਼ਿਕਾਇਤਾਂ ਅਤੇ ਨਿਵਾਰਨ",
+  "Operations Command": "ਹਸਪਤਾਲ ਸੰਚਾਲਨ ਕਮਾਂਡ",
+  "Firebase Manager": "ਫਾਇਰਬੇਸ ਮੈਨੇਜਰ",
+  "AI & Digital Twin": "ਏਆਈ ਅਤੇ ਡਿਜੀਟਲ ਟਵਿਨ",
+  "Medical History": "ਡਾਕਟਰੀ ਇਤਿਹਾਸ",
+  "Lab Tests": "ਲੈਬ ਟੈਸਟ",
+  "Pharmacy": "ਦਵਾਈ ਘਰ / ਫਾਰਮੇਸੀ",
+  "Notifications": "ਸੂਚਨਾਵਾਂ",
+  "Live Queue": "ਲਾਈਵ ਕਤਾਰ",
+  "Live Token Tracker": "ਲਾਈਵ ਟੋਕਨ ਟਰੈਕਰ",
+  "Book / OPD Slip": "ਓਪੀਡੀ ਪਰਚੀ ਬਣਾਓ",
+  "Pharmacy Orders": "ਦਵਾਈ ਆਰਡਰ",
+  "Appointments": "ਮੁਲਾਕਾਤਾਂ (ਅਪਾਇੰਟਮੈਂਟ)",
+  "Patient Services": "ਮਰੀਜ਼ ਸੇਵਾਵਾਂ",
+  "Hospital Command": "ਹਸਪਤਾਲ ਕਮਾਂਡ",
+
+  // Action Buttons
+  "Add New Doctor": "ਨਵਾਂ ਡਾਕਟਰ ਸ਼ਾਮਲ ਕਰੋ",
+  "Call Next Patient": "ਅਗਲਾ ਮਰੀਜ਼ ਬੁਲਾਓ",
+  "Call Next": "ਅਗਲਾ ਮਰੀਜ਼ ਬੁਲਾਓ",
+  "Complete Consultation": "ਸਲਾਹ-ਮਸ਼ਵਰਾ ਪੂਰਾ ਕਰੋ",
+  "Skip Patient": "ਮਰੀਜ਼ ਛੱਡੋ",
+  "Save Doctor": "ਡਾਕਟਰ ਸੇਵ ਕਰੋ",
+  "Save Doctor (role=\"doctor\")": "ਡਾਕਟਰ ਸੇਵ ਕਰੋ (role=\"doctor\")",
+  "Toggle Shift": "ਸ਼ਿਫਟ ਬਦਲੋ",
+  "Review Details & Issue Token": "ਵੇਰਵੇ ਦੇਖੋ ਅਤੇ ਟੋਕਨ ਜਾਰੀ ਕਰੋ",
+  "Print Official Prescription Slip": "ਸਰਕਾਰੀ ਪਰਚੀ ਪ੍ਰਿੰਟ ਕਰੋ",
+  "Get WhatsApp Copy": "ਵ੍ਹੱਟਸਐਪ ਕਾਪੀ ਪ੍ਰਾਪਤ ਕਰੋ",
+  "Sign In": "ਲਾਗ ਇਨ ਕਰੋ",
+  "Sign Out": "ਲਾਗ ਆਊਟ",
+  "Register": "ਰਜਿਸਟਰੇਸ਼ਨ",
+  "Search": "ਖੋਜੋ",
+  "Cancel": "ਰੱਦ ਕਰੋ",
+  "Confirm": "ਪੁਸ਼ਟੀ ਕਰੋ",
+  "Dismiss": "ਹਟਾਓ",
+  "Book OPD Token": "ਓਪੀਡੀ ਟੋਕਨ ਬੁੱਕ ਕਰੋ",
+  "Track Live Queue": "ਲਾਈਵ ਕਤਾਰ ਦੇਖੋ",
+  "Try Voice OPD": "ਆਵਾਜ਼ ਰਾਹੀਂ ਪਰਚੀ ਅਜ਼ਮਾਓ",
+  "Register Patient": "ਮਰੀਜ਼ ਰਜਿਸਟਰ ਕਰੋ",
+  "Clear & Retry": "ਸਾਫ਼ ਕਰੋ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+  "Speak Again": "ਦੁਬਾਰਾ ਬੋਲੋ",
+  "Analyze & Assign Department": "ਜਾਂਚੋ ਅਤੇ ਵਿਭਾਗ ਤੈਅ ਕਰੋ",
+  "Proceed with this Department": "ਇਸ ਵਿਭਾਗ ਨਾਲ ਅੱਗੇ ਵਧੋ",
+  "Register & Assign Doctor (Firebase)": "ਡਾਕਟਰ ਰਜਿਸਟਰ ਅਤੇ ਵੰਡ (ਫਾਇਰਬੇਸ)",
+  "Adding to Firebase...": "ਫਾਇਰਬੇਸ ਵਿੱਚ ਜੋੜਿਆ ਜਾ ਰਿਹਾ ਹੈ...",
+
+  // Table & Form Headers
+  "Doctor Name": "ਡਾਕਟਰ ਦਾ ਨਾਂ",
+  "Doctor Full Name": "ਡਾਕਟਰ ਦਾ ਪੂਰਾ ਨਾਂ",
+  "Doctor Email (Used for Login)": "ਡਾਕਟਰ ਈਮੇਲ (ਲਾਗਇਨ ਲਈ)",
+  "Doctor Email": "ਡਾਕਟਰ ਈਮੇਲ",
+  "Contact Phone": "ਸੰਪਰਕ ਫ਼ੋਨ",
+  "Specialty / Department": "ਮਾਹਰਤਾ / ਵਿਭਾਗ",
+  "Specialty": "ਮਾਹਰਤਾ",
+  "Qualification": "ਯੋਗਤਾ",
+  "Assigned OPD Room": "ਅਲਾਟ ਕੀਤਾ ਓਪੀਡੀ ਕਮਰਾ",
+  "OPD Room": "ਓਪੀਡੀ ਕਮਰਾ",
+  "Shift Timing": "ਸ਼ਿਫਟ ਦਾ ਸਮਾਂ",
+  "Shift Hours": "ਸ਼ਿਫਟ ਦਾ ਸਮਾਂ",
+  "Patient Load": "ਮਰੀਜ਼ਾਂ ਦਾ ਭਾਰ",
+  "Duty Status": "ਡਿਊਟੀ ਸਥਿਤੀ",
+  "Actions": "ਕਾਰਵਾਈਆਂ",
+  "Token Number": "ਟੋਕਨ ਨੰਬਰ",
+  "Token #": "ਟੋਕਨ #",
+  "Patient Details": "ਮਰੀਜ਼ ਦੇ ਵੇਰਵੇ",
+  "Symptoms": "ਲੱਛਣ",
+  "Priority": "ਤਰਜੀਹ",
+  "Queue Status": "ਕਤਾਰ ਦੀ ਸਥਿਤੀ",
+  "Estimated Wait Time": "ਅੰਦਾਜ਼ਨ ਉਡੀਕ ਸਮਾਂ",
+  "Estimated Wait": "ਅੰਦਾਜ਼ਨ ਉਡੀਕ",
+  "Currently Serving": "ਇਸ ਵੇਲੇ ਸੇਵਾ ਅਧੀਨ",
+  "Chief Complaints": "ਮੁੱਖ ਸਮੱਸਿਆਵਾਂ / ਲੱਛਣ",
+  "Clinical Findings": "ਡਾਕਟਰੀ ਜਾਂਚ ਦੇ ਨਤੀਜੇ",
+  "Diagnosis": "ਰੋਗ ਦੀ ਪਛਾਣ (ਨਿਦਾਨ)",
+  "Advice & Follow-up": "ਡਾਕਟਰੀ ਸਲਾਹ ਅਤੇ ਫਾਲੋ-ਅੱਪ",
+  "Advice": "ਸਲਾਹ",
+  "Prescriptions": "ਦਵਾਈ ਪਰਚੀ",
+  "Prescribed Medicines": "ਤਜਵੀਜ਼ ਕੀਤੀਆਂ ਦਵਾਈਆਂ",
+  "Medicine & Strength": "ਦਵਾਈ ਅਤੇ ਖੁਰਾਕ",
+  "Medicine Name": "ਦਵਾਈ ਦਾ ਨਾਂ",
+  "Dosage": "ਖੁਰਾਕ",
+  "Quantity": "ਮਾਤਰਾ",
+  "Consumption Timing": "ਦਵਾਈ ਲੈਣ ਦਾ ਸਮਾਂ",
+  "Stock Status": "ਸਟਾਕ ਸਥਿਤੀ",
+  "Available in Jan Aushadhi": "ਜਨ ਔਸ਼ਧੀ ਵਿੱਚ ਉਪਲਬਧ",
+  "Instructions": "ਖ਼ਾਸ ਹਦਾਇਤਾਂ",
+  "Frequency": "ਵਾਰ-ਵਾਰਤਾ",
+  "Duration": "ਮਿਆਦ",
+  "Total Today": "ਅੱਜ ਕੁੱਲ",
+  "Pending Collection": "ਸੈਂਪਲ ਇਕੱਠਾ ਕਰਨਾ ਬਾਕੀ",
+  "In Analyzer": "ਮਸ਼ੀਨ ਵਿੱਚ ਜਾਂਚ ਅਧੀਨ",
+  "Reports Completed": "ਰਿਪੋਰਟਾਂ ਤਿਆਰ",
+  "Total Prescriptions Today": "ਅੱਜ ਕੁੱਲ ਦਵਾਈ ਪਰਚੀਆਂ",
+  "Queued for Packaging": "ਪੈਕਿੰਗ ਲਈ ਕਤਾਰ ਵਿੱਚ",
+  "Currently Dispensing": "ਦਵਾਈਆਂ ਦਿੱਤੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ",
+  "Ready at Counter": "ਕਾਊਂਟਰ ਉੱਤੇ ਤਿਆਰ",
+  "Assigned Desk": "ਅਲਾਟ ਕੀਤਾ ਕਾਊਂਟਰ",
+  "Tokens Issued Today": "ਅੱਜ ਜਾਰੀ ਕੀਤੇ ਟੋਕਨ",
+  "Duty Shift": "ਡਿਊਟੀ ਸ਼ਿਫਟ",
+  "Password": "ਪਾਸਵਰਡ",
+  "Doctor Security Clearance PIN": "ਡਾਕਟਰ ਸੁਰੱਖਿਆ ਪਿੰਨ (Security PIN)",
+  "Doctor Security PIN (4-Digits)": "ਡਾਕਟਰ ਸੁਰੱਖਿਆ ਪਿੰਨ (4 ਅੰਕ)",
+  "Email Address / Username": "ਈਮੇਲ ਪਤਾ / ਯੂਜ਼ਰਨੇਮ",
+
+  // Statuses & Priorities
+  "Active": "ਸਰਗਰਮ",
+  "On Break": "ਬਰੇਕ 'ਤੇ",
+  "In Session": "ਸੈਸ਼ਨ ਚਾਲੂ",
+  "Online": "ਆਨਲਾਈਨ",
+  "Offline": "ਆਫ਼ਲਾਈਨ",
+  "WAITING": "ਉਡੀਕ ਵਿੱਚ",
+  "IN_CONSULTATION": "ਸਲਾਹ ਜਾਰੀ",
+  "COMPLETED": "ਮੁਕੰਮਲ",
+  "SKIPPED": "ਛੱਡਿਆ ਗਿਆ",
+  "PENDING": "ਬਕਾਇਆ",
+  "PROCESSING": "ਪ੍ਰਕਿਰਿਆ ਅਧੀਨ",
+  "QUEUED": "ਕਤਾਰ ਵਿੱਚ",
+  "READY_FOR_PICKUP": "ਲੈਣ ਲਈ ਤਿਆਰ",
+  "DISPENSING": "ਵੰਡਿਆ ਜਾ ਰਿਹਾ ਹੈ",
+  "Normal": "ਆਮ",
+  "Senior": "ਬਜ਼ੁਰਗ ਨਾਗਰਿਕ",
+  "Emergency": "ਐਮਰਜੈਂਸੀ",
+  "Pediatric": "ਬਾਲ ਰੋਗ",
+  "Critical": "ਗੰਭੀਰ",
+  "Elevated": "ਵਧੀ ਹੋਈ ਭੀੜ",
+  "Optimal": "ਸਧਾਰਨ",
+  "Overload": "ਬਹੁਤ ਜ਼ਿਆਦਾ ਭੀੜ",
+
+  // Departments
+  "General Medicine": "ਜਨਰਲ ਮੈਡੀਸਿਨ (ਆਮ ਰੋਗ)",
+  "Cardiology": "ਦਿਲ ਦੇ ਰੋਗਾਂ ਦਾ ਵਿਭਾਗ",
+  "Orthopedics": "ਹੱਡੀਆਂ ਦੇ ਰੋਗਾਂ ਦਾ ਵਿਭਾਗ",
+  "Pediatrics": "ਬੱਚਿਆਂ ਦੇ ਰੋਗਾਂ ਦਾ ਵਿਭਾਗ",
+  "Obstetrics & Gynecology": "ਜੱਚਾ-ਬੱਚਾ ਤੇ ਇਸਤਰੀ ਰੋਗ",
+  "ENT & Head Neck": "ਕੰਨ, ਨੱਕ ਅਤੇ ਗਲਾ",
+  "Emergency Trauma Care": "ਐਮਰਜੈਂਸੀ ਟਰਾਮਾ ਕੇਅਰ",
+
+  // Common UI words
+  "Admin": "ਪ੍ਰਬੰਧਕ (ਐਡਮਿਨ)",
+  "Doctor": "ਡਾਕਟਰ",
+  "Patient": "ਮਰੀਜ਼",
+  "Staff": "ਸਟਾਫ",
+  "Lab": "ਲੈਬ",
+  "Chemist": "ਕੈਮਿਸਟ",
+  "Welcome,": "ਜੀ ਆਇਆਂ ਨੂੰ,",
+  "Active OPD Token": "ਚਾਲੂ ਓਪੀਡੀ ਟੋਕਨ",
+  "Hospital Map": "ਹਸਪਤਾਲ ਦਾ ਨਕਸ਼ਾ",
+  "Voice OPD": "ਆਵਾਜ਼ ਰਾਹੀਂ ਓਪੀਡੀ",
+  "Patient Full Name": "ਮਰੀਜ਼ ਦਾ ਪੂਰਾ ਨਾਂ",
+  "Mobile Phone (10 digits)": "ਮੋਬਾਈਲ ਫ਼ੋਨ (10 ਅੰਕ)",
+  "Age (Years)": "ਉਮਰ (ਸਾਲ)",
+  "Gender": "ਲਿੰਗ",
+  "Male": "ਪੁਰਸ਼",
+  "Female": "ਮਹਿਲਾ",
+  "Other": "ਹੋਰ",
+  "After breakfast": "ਨਾਸ਼ਤੇ ਤੋਂ ਬਾਅਦ",
+  "Before breakfast": "ਨਾਸ਼ਤੇ ਤੋਂ ਪਹਿਲਾਂ",
+  "After lunch": "ਦੁਪਹਿਰ ਦੇ ਖਾਣੇ ਤੋਂ ਬਾਅਦ",
+  "Before dinner": "ਰਾਤ ਦੇ ਖਾਣੇ ਤੋਂ ਪਹਿਲਾਂ",
+  "After dinner": "ਰਾਤ ਦੇ ਖਾਣੇ ਤੋਂ ਬਾਅਦ",
+  "At bedtime": "ਸੌਣ ਵੇਲੇ",
+  "Once daily": "ਦਿਨ ਵਿੱਚ 1 ਵਾਰ",
+  "Twice daily": "ਦਿਨ ਵਿੱਚ 2 ਵਾਰ",
+  "Thrice daily": "ਦਿਨ ਵਿੱਚ 3 ਵਾਰ",
+  "5 Days": "5 ਦਿਨ",
+  "3 Days": "3 ਦਿਨ",
+  "1 Tablet": "1 ਗੋਲੀ",
+  "Emergency Helplines": "ਐਮਰਜੈਂਸੀ ਹੈਲਪਲਾਈਨ",
+
+  // Dashboard & Layout Titles
+  "Operations Management": "ਹਸਪਤਾਲ ਸੰਚਾਲਨ ਪ੍ਰਬੰਧਨ",
+  "Civil Hospital Ambala • Integrated Clinical Health Stream": "ਸਿਵਲ ਹਸਪਤਾਲ ਅੰਬਾਲਾ • ਏਕੀਕ੍ਰਿਤ ਕਲੀਨਿਕਲ ਹੈਲਥ ਸਟ੍ਰੀਮ",
+  "Patient View": "ਮਰੀਜ਼ ਦ੍ਰਿਸ਼",
+  "Voice Triage": "ਆਵਾਜ਼ ਰਾਹੀਂ ਜਾਂਚ",
+  "Logout": "ਲਾਗ ਆਊਟ"
+};
+
+// Aliased export for backwards compatibility
+export const FULL_PAGE_TRANSLATIONS = FULL_PAGE_TRANSLATIONS_HI;
+
+// Auto-generate universal reverse dictionary for (Hindi | Punjabi) -> English restoration
+const REVERSE_TRANSLATIONS: Record<string, string> = {};
+for (const [enKey, hiVal] of Object.entries(FULL_PAGE_TRANSLATIONS_HI)) {
+  if (hiVal && typeof hiVal === 'string') {
+    REVERSE_TRANSLATIONS[hiVal.trim()] = enKey.trim();
+  }
+}
+for (const [enKey, paVal] of Object.entries(FULL_PAGE_TRANSLATIONS_PA)) {
+  if (paVal && typeof paVal === 'string') {
+    REVERSE_TRANSLATIONS[paVal.trim()] = enKey.trim();
+  }
+}
+
+/**
+ * Universal text translation function:
+ * Converts any string (whether currently English, Hindi, or Punjabi) into the desired target language.
+ */
+export const translateText = (text: string, targetLang: SupportedLanguage): string => {
+  if (!text) return text;
+  const trimmed = text.trim();
+  if (!trimmed) return text;
+
+  // Resolve root English key
+  const enKey = REVERSE_TRANSLATIONS[trimmed] || (FULL_PAGE_TRANSLATIONS_HI[trimmed] ? trimmed : (FULL_PAGE_TRANSLATIONS_PA[trimmed] ? trimmed : null));
+
+  if (targetLang === 'en') {
+    if (enKey) {
+      return text.replace(trimmed, enKey);
+    }
+    return text;
+  }
+
+  const dict = targetLang === 'hi' ? FULL_PAGE_TRANSLATIONS_HI : FULL_PAGE_TRANSLATIONS_PA;
+
+  if (enKey && dict[enKey]) {
+    return text.replace(trimmed, dict[enKey]);
+  }
+  if (dict[trimmed]) {
+    return text.replace(trimmed, dict[trimmed]);
+  }
+
+  return text;
+};
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<SupportedLanguage>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as SupportedLanguage | null;
-    return saved === 'hi' || saved === 'pa' ? saved : 'en';
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) as SupportedLanguage | null;
+      if (saved === 'hi' || saved === 'pa' || saved === 'en') {
+        return saved;
+      }
+    } catch {
+      // ignore
+    }
+    return 'en';
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, language);
+    try {
+      localStorage.setItem(STORAGE_KEY, language);
+    } catch {
+      // ignore
+    }
     document.documentElement.lang = language;
+
+    if (typeof window === 'undefined' || !document.body) return;
+
+    let observer: MutationObserver | null = null;
+
+    const translateNode = (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const textNode = node as Text;
+        const text = textNode.nodeValue;
+        if (!text || !text.trim()) return;
+
+        // Skip script, style, code, pre, svg tags
+        const parent = textNode.parentElement;
+        if (parent) {
+          const tag = parent.tagName.toLowerCase();
+          if (['script', 'style', 'code', 'pre', 'svg', 'noscript'].includes(tag)) return;
+        }
+
+        const newText = translateText(text, language);
+        if (newText !== text) {
+          textNode.nodeValue = newText;
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const el = node as HTMLElement;
+        const tag = el.tagName.toLowerCase();
+        if (['script', 'style', 'code', 'pre', 'svg', 'noscript'].includes(tag)) return;
+
+        // Translate placeholders
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+          if (el.placeholder && el.placeholder.trim()) {
+            const newPh = translateText(el.placeholder, language);
+            if (newPh !== el.placeholder) {
+              el.placeholder = newPh;
+            }
+          }
+        }
+
+        // Recurse into children
+        node.childNodes.forEach(translateNode);
+      }
+    };
+
+    // 1. Initial complete DOM tree scan & instant translation
+    translateNode(document.body);
+
+    // 2. Continuous reactive observer for dynamic components/modals/updates
+    observer = new MutationObserver((mutations) => {
+      for (const mut of mutations) {
+        if (mut.type === 'childList') {
+          mut.addedNodes.forEach(translateNode);
+        } else if (mut.type === 'characterData') {
+          const textNode = mut.target as Text;
+          const text = textNode.nodeValue;
+          if (text && text.trim()) {
+            const newText = translateText(text, language);
+            if (newText !== text) {
+              textNode.nodeValue = newText;
+            }
+          }
+        }
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, [language]);
 
   const toggleLanguage = () => {

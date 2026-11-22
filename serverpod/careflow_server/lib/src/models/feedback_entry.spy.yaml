@@ -1,0 +1,15 @@
+class: FeedbackEntry
+table: careflow_feedback
+fields:
+  patientId: int?, relation(parent=careflow_patients)
+  departmentId: int?, relation(parent=careflow_departments)
+  doctorId: int?, relation(parent=careflow_doctors)
+  rating: int
+  category: String, default='overall'
+  comments: String?
+  ticketId: String
+  status: String, default='open'
+  resolutionNote: String?
+  isAnonymous: bool, default=false
+  createdAt: DateTime?
+  updatedAt: DateTime?

@@ -1,0 +1,15 @@
+class: Appointment
+table: careflow_appointments
+fields:
+  appointmentNumber: String
+  patientId: int, relation(parent=careflow_patients)
+  doctorId: int?, relation(parent=careflow_doctors)
+  departmentId: int, relation(parent=careflow_departments)
+  appointmentDate: DateTime
+  timeSlot: String
+  status: String, default='scheduled'
+  reason: String?
+  symptoms: String?
+  notes: String?
+  createdAt: DateTime?
+  updatedAt: DateTime?

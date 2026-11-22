@@ -1,0 +1,12 @@
+class: PharmacyOrder
+table: careflow_pharmacy_orders
+fields:
+  orderNumber: String
+  prescriptionId: int, relation(parent=careflow_prescriptions)
+  patientId: int, relation(parent=careflow_patients)
+  totalAmount: double, default=0.0
+  paymentStatus: String, default='exempt_gov'
+  status: String, default='received'
+  dispensedAt: DateTime?
+  createdAt: DateTime?
+  updatedAt: DateTime?

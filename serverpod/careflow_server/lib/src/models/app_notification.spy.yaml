@@ -1,0 +1,12 @@
+class: AppNotification
+table: careflow_notifications
+fields:
+  recipientUserId: int, relation(parent=careflow_users)
+  title: String
+  message: String
+  type: String, default='queue_update'
+  isRead: bool, default=false
+  tokenNumber: String?
+  department: String?
+  urgency: String?
+  createdAt: DateTime?
