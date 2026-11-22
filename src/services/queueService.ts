@@ -229,6 +229,12 @@ export const queueService = {
       const deptKey = (payload.department || '').toLowerCase();
       const assigned = docMapping[deptKey] || { name: 'Dr. Rahul Verma', room: 'OPD Room 101' };
 
+      const appointmentId = `APT-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+      const secureAccessToken = Array.from(crypto.getRandomValues(new Uint8Array(24)))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+      const qrUrl = `/appointment/${secureAccessToken}`;
+
       const newToken: PatientToken = {
         id: `tok-${Date.now()}`,
         tokenNumber,
@@ -249,6 +255,9 @@ export const queueService = {
         voiceNoteUrl: payload.voiceNoteUrl,
         isBuffer: capacity.isBuffer,
         entryType: capacity.isBuffer ? 'buffer' : 'standard',
+        appointmentId,
+        secureAccessToken,
+        qrUrl,
         statusHistory: [
           {
             status: 'WAITING',
@@ -257,6 +266,25 @@ export const queueService = {
           }
         ]
       };
+
+      // Cache digital appointment pass for QR details display
+      const passData = {
+        appointmentId,
+        tokenNumber,
+        patientName: payload.patientName,
+        doctorName: assigned.name,
+        doctorSpecialization: 'Consultant Physician',
+        roomNumber: assigned.room,
+        departmentName: payload.department,
+        departmentCode: (payload.department || 'GEN').slice(0, 4).toUpperCase(),
+        departmentFloor: 'Ground Floor, Wing A',
+        appointmentDate: new Date().toISOString(),
+        timeSlot: '10:00 AM - 10:30 AM',
+        status: 'scheduled',
+        priority: payload.priority || 'Normal',
+        qrUrl,
+      };
+      localStorage.setItem(`qflip_appointment_pass_${secureAccessToken}`, JSON.stringify(passData));
 
       // Emergency cases jump ahead
       let updated: PatientToken[];

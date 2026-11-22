@@ -1,4 +1,5 @@
 import React from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
 import { PatientToken } from '../../types';
 import { StatusBadge } from './StatusBadge';
 import { PriorityIndicator } from './PriorityIndicator';
@@ -83,13 +84,25 @@ export const TokenCard: React.FC<TokenCardProps> = ({
             </div>
           </div>
 
-          {/* QR Code Preview Box */}
+          {/* QR Code Pass Box */}
           <div className="flex flex-col items-center p-3 bg-slate-50 rounded-xl border border-slate-200 text-center">
-            <div className="w-20 h-20 bg-white p-2 rounded-lg border border-slate-200 flex items-center justify-center text-slate-900 shadow-inner">
-              <QrCode className="w-16 h-16 text-slate-800" />
+            <div className="w-20 h-20 bg-white p-1 rounded-lg border border-slate-200 flex items-center justify-center text-slate-900 shadow-inner overflow-hidden">
+              {token.secureAccessToken || token.qrUrl ? (
+                <QRCodeCanvas
+                  value={
+                    token.qrUrl?.startsWith('http')
+                      ? token.qrUrl
+                      : `${window.location.origin}${token.qrUrl || `/appointment/${token.secureAccessToken}`}`
+                  }
+                  size={72}
+                  level="M"
+                />
+              ) : (
+                <QrCode className="w-16 h-16 text-slate-800" />
+              )}
             </div>
             <span className="font-mono text-[10px] text-slate-500 mt-1.5 font-bold tracking-wider">
-              {token.patientId}
+              {token.appointmentId || token.patientId}
             </span>
           </div>
         </div>

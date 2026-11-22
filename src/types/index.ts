@@ -75,6 +75,26 @@ export interface PatientToken {
     temp?: number;
     weight?: number;
   };
+  appointmentId?: string;
+  secureAccessToken?: string;
+  qrUrl?: string;
+}
+
+export interface AppointmentPassData {
+  appointmentId: string;
+  tokenNumber: string;
+  patientName: string;
+  doctorName: string;
+  doctorSpecialization?: string;
+  roomNumber?: string;
+  departmentName: string;
+  departmentCode?: string;
+  departmentFloor?: string;
+  appointmentDate: string;
+  timeSlot: string;
+  status: string;
+  priority?: string;
+  qrUrl?: string;
 }
 
 export interface ConsultationNote {

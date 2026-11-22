@@ -16,6 +16,7 @@ import { RegisterPage, ForgotPasswordPage } from '../pages/public/RegisterPage';
 import { FeedbackPage } from '../pages/public/FeedbackPage';
 import { PrivacyPolicyPage } from '../pages/public/PrivacyPolicyPage';
 import { TermsAndConditionsPage } from '../pages/public/TermsAndConditionsPage';
+import { PublicAppointmentPassPage } from '../pages/public/PublicAppointmentPassPage';
 
 // Patient Portal Pages
 import { PatientDashboard } from '../pages/patient/PatientDashboard';
@@ -67,6 +68,8 @@ export const AppRoutes: React.FC = () => {
   return (
     <Routes>
       {/* Public Pages */}
+      <Route path="/appointment/:secureAccessToken" element={<PublicAppointmentPassPage />} />
+      <Route path="/appointment" element={<Navigate to="/" replace />} />
       <Route element={<PublicLayout />}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/landing" element={<LandingPage />} />
