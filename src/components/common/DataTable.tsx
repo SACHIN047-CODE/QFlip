@@ -51,10 +51,10 @@ export function DataTable<T extends Record<string, any>>({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+    <div className="bg-white/85 backdrop-blur-md rounded-2xl border border-slate-200/80 shadow-[0_4px_20px_-2px_rgba(15,23,42,0.03)] overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs font-sans">
-          <thead className="bg-slate-50/80 border-b border-slate-200 text-slate-500 uppercase text-[11px] font-semibold tracking-wider">
+          <thead className="bg-slate-50/70 backdrop-blur-sm border-b border-slate-200/80 text-slate-500 uppercase text-[11px] font-semibold tracking-wider">
             <tr>
               {columns.map((col) => (
                 <th

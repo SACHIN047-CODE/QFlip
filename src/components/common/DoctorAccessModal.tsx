@@ -106,29 +106,29 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
       <div className="space-y-5 text-center">
         {/* Security Shield Icon */}
         <div className="flex flex-col items-center justify-center">
-          <div className="w-16 h-16 rounded-2xl bg-secondary/10 border-2 border-secondary/30 flex items-center justify-center text-secondary shadow-inner">
+          <div className="w-16 h-16 rounded-2xl bg-teal-50/80 border border-[#0F766E]/30 flex items-center justify-center text-[#0F766E] shadow-sm backdrop-blur-md">
             <span className="material-symbols-outlined text-3xl">local_police</span>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-danger/10 border border-danger/25 text-danger font-bold text-[10px] uppercase tracking-wider mt-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-danger animate-pulse"></span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50/80 border border-red-200 text-[#DC2626] font-bold text-[10px] uppercase tracking-wider mt-3 backdrop-blur-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626] animate-pulse"></span>
             Hospital Command Restricted to Doctors
           </span>
-          <p className="text-xs text-light-on-surface-variant max-w-sm mt-1.5">
+          <p className="text-xs text-slate-500 max-w-sm mt-1.5">
             Hospital Command &amp; Capacity Overrides are restricted to on-duty Doctors and the Chief Medical Superintendent.
           </p>
         </div>
 
         {/* Feedback Alerts */}
         {error && (
-          <div className="p-3 bg-danger/10 border border-danger/30 rounded-xl text-xs text-danger flex items-center gap-2 text-left">
-            <span className="material-symbols-outlined text-base flex-shrink-0">gpp_bad</span>
+          <div className="p-3 bg-red-50/80 border border-red-200 rounded-xl text-xs text-red-700 flex items-center gap-2 text-left backdrop-blur-xs">
+            <span className="material-symbols-outlined text-base flex-shrink-0 text-red-600">gpp_bad</span>
             <span>{error}</span>
           </div>
         )}
 
         {verifiedSuccess && (
-          <div className="p-3 bg-success/10 border border-success/30 rounded-xl text-xs text-success flex items-center gap-2 text-left animate-in fade-in">
-            <span className="material-symbols-outlined text-base flex-shrink-0">verified_user</span>
+          <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-2 text-left animate-in fade-in backdrop-blur-xs">
+            <span className="material-symbols-outlined text-base flex-shrink-0 text-emerald-600">verified_user</span>
             <div>
               <strong>Doctor Clearance Authenticated:</strong> Dr. Rajesh Sharma, MD (NMC-98124). Entering Hospital Command...
             </div>
@@ -137,24 +137,24 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
 
         {/* PIN Input with Dots */}
         <div>
-          <label className="text-xs font-bold text-light-primary block mb-2">
+          <label className="text-xs font-bold text-slate-900 block mb-2">
             Enter Doctor 4-Digit Security PIN:
           </label>
           <div className="flex items-center justify-center gap-3 mb-2">
             {[0, 1, 2, 3].map((idx) => (
               <div
                 key={idx}
-                className={`w-11 h-12 rounded-xl border-2 flex items-center justify-center text-lg font-bold font-code transition-all ${
+                className={`w-11 h-12 rounded-xl border-2 flex items-center justify-center text-lg font-bold font-mono transition-all backdrop-blur-sm ${
                   pin.length > idx
-                    ? 'border-secondary bg-secondary/10 text-secondary'
-                    : 'border-light-outline bg-light-surface text-transparent'
+                    ? 'border-[#0F766E] bg-teal-50 text-[#0F766E] shadow-xs'
+                    : 'border-slate-200 bg-white/70 text-transparent'
                 }`}
               >
                 {pin[idx] ? '●' : ''}
               </div>
             ))}
           </div>
-          <div className="text-[11px] text-light-on-surface-variant">
+          <div className="text-[11px] text-slate-500">
             Authorized Medical Council of India / NMC credentials required.
           </div>
         </div>
@@ -166,10 +166,10 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
               key={btn}
               type="button"
               onClick={() => handleKeypadPress(btn)}
-              className={`py-3 rounded-xl border text-sm font-bold font-code transition-all ${
+              className={`py-3 rounded-xl border text-sm font-bold font-mono transition-all backdrop-blur-sm ${
                 btn === 'CLEAR' || btn === 'DEL'
-                  ? 'bg-light-surface-variant text-light-on-surface-variant border-light-outline hover:bg-light-outline text-xs'
-                  : 'bg-white text-light-primary border-light-outline hover:bg-secondary/10 hover:border-secondary hover:text-secondary'
+                  ? 'bg-slate-100/80 text-slate-600 border-slate-200 hover:bg-slate-200 text-xs'
+                  : 'bg-white/80 text-slate-900 border-slate-200/90 hover:bg-teal-50 hover:border-[#0F766E]/40 hover:text-[#0F766E] shadow-xs'
               }`}
             >
               {btn}
@@ -181,7 +181,7 @@ export const DoctorAccessModal: React.FC<DoctorAccessModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-2 border border-light-outline rounded-lg text-xs font-semibold text-light-on-surface-variant hover:bg-light-surface-variant"
+            className="w-full py-2.5 border border-slate-200 bg-white/80 backdrop-blur-sm rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors shadow-xs"
           >
             Cancel / Back to Public Portal
           </button>

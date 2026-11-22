@@ -101,8 +101,14 @@ export const PatientQueueList: React.FC = () => {
     },
   ];
 
+  const emergencyCount = tokens.filter((t) => t.priority === 'Emergency').length;
+  const seniorCount = tokens.filter((t) => t.priority === 'Senior').length;
+  const inConsultCount = tokens.filter((t) => t.status === 'IN_CONSULTATION').length;
+  const waitingCount = tokens.filter((t) => t.status === 'WAITING').length;
+
   return (
     <div className="space-y-6">
+      {/* Top Header Card */}
       <div className="glass-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
@@ -121,14 +127,61 @@ export const PatientQueueList: React.FC = () => {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="text-xs rounded-xl border border-slate-200 bg-white px-3 py-2 font-bold text-slate-900 shadow-xs focus:border-[#0F766E]"
+            className="text-xs rounded-xl border border-slate-200/80 bg-white/80 backdrop-blur-sm px-3 py-2 font-bold text-slate-900 shadow-xs focus:border-[#0F766E]"
           >
             <option value="ALL">All Patients ({tokens.length})</option>
-            <option value="Emergency">Emergency Only</option>
-            <option value="Senior">Senior Citizens</option>
+            <option value="Emergency">Emergency Only ({emergencyCount})</option>
+            <option value="Senior">Senior Citizens ({seniorCount})</option>
             <option value="Pediatric">Pediatric</option>
             <option value="Normal">Normal OPD</option>
           </select>
+        </div>
+      </div>
+
+      {/* 4 Glass Stat Cards Bento Ribbon */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">Waiting Queue</span>
+            <span className="material-symbols-outlined text-lg text-[#0F766E]">hourglass_empty</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-slate-900 mt-1 tabular-nums">
+            {waitingCount}
+          </div>
+          <span className="text-[11px] text-slate-500">Lounge Backlog</span>
+        </div>
+
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">In Room Active</span>
+            <span className="material-symbols-outlined text-lg text-emerald-600">stethoscope</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-emerald-600 mt-1 tabular-nums">
+            {inConsultCount}
+          </div>
+          <span className="text-[11px] text-slate-500">Consultation Session</span>
+        </div>
+
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">Emergency Acute</span>
+            <span className="material-symbols-outlined text-lg text-[#DC2626]">emergency</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-[#DC2626] mt-1 tabular-nums">
+            {emergencyCount}
+          </div>
+          <span className="text-[11px] text-slate-500">High Clinical Priority</span>
+        </div>
+
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">Senior Citizens</span>
+            <span className="material-symbols-outlined text-lg text-purple-600">elderly</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-purple-600 mt-1 tabular-nums">
+            {seniorCount}
+          </div>
+          <span className="text-[11px] text-slate-500">Fast Track Care (60+)</span>
         </div>
       </div>
 
@@ -140,7 +193,7 @@ export const PatientQueueList: React.FC = () => {
         />
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-1">
+      <div className="bento-card-solid rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <DataTable columns={columns} data={filtered} />
       </div>
     </div>

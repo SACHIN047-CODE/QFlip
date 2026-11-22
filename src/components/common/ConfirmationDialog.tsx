@@ -25,11 +25,11 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} maxWidth="sm">
       <div className="space-y-4">
-        <p className="text-xs text-light-on-surface-variant leading-relaxed">{message}</p>
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-light-outline">
+        <p className="text-xs text-slate-600 leading-relaxed">{message}</p>
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200/70">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold rounded-lg border border-light-outline bg-white hover:bg-light-surface-variant text-light-primary transition-colors"
+            className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white/80 hover:bg-slate-100 text-slate-700 transition-colors shadow-xs"
           >
             {cancelLabel}
           </button>
@@ -38,10 +38,10 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
               onConfirm();
               onClose();
             }}
-            className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors ${
+            className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors shadow-xs ${
               isDestructive
-                ? 'bg-danger text-white hover:bg-danger/90'
-                : 'bg-accent text-on-accent hover:brightness-95'
+                ? 'bg-[#DC2626] text-white hover:bg-red-700'
+                : 'bg-[#0F766E] text-white hover:bg-[#115E59]'
             }`}
           >
             {confirmLabel}

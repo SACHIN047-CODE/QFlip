@@ -128,386 +128,480 @@ export const PatientRegistration: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-6 space-y-8">
-      {/* Step Indicator */}
-      <div className="flex items-center justify-between max-w-lg mx-auto">
-        <div className="flex items-center gap-2">
-          <span
-            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-              step === 'form' ? 'bg-[#0F766E] text-white shadow-xs' : 'bg-[#16A34A] text-white'
-            }`}
-          >
-            {step === 'form' ? '1' : '✓'}
+    <div className="max-w-6xl mx-auto py-6 space-y-6">
+      {/* Top Header & Step Indicator */}
+      <div className="glass-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
+            Ayushman Bharat Digital Health Mission
           </span>
-          <span className="text-xs font-bold text-slate-900">{t('reg.step_form', '1. Patient Details')}</span>
+          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mt-0.5">
+            {t('reg.title', 'Online OPD Registration & Token Slip')}
+          </h1>
+          <p className="text-xs text-slate-500 mt-1">
+            {t('reg.subtitle', 'Civil Hospital Ambala • Instant Digital Queue Token with SMS Updates')}
+          </p>
         </div>
-        <div className="w-12 h-0.5 bg-slate-200"></div>
-        <div className="flex items-center gap-2">
-          <span
-            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-              step === 'review'
-                ? 'bg-[#0F766E] text-white shadow-xs'
-                : step === 'success'
-                ? 'bg-[#16A34A] text-white'
-                : 'bg-slate-100 text-slate-500'
-            }`}
-          >
-            {step === 'success' ? '✓' : '2'}
-          </span>
-          <span className="text-xs font-bold text-slate-900">{t('reg.step_review', '2. Review & Triage')}</span>
-        </div>
-        <div className="w-12 h-0.5 bg-slate-200"></div>
-        <div className="flex items-center gap-2">
-          <span
-            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-              step === 'success'
-                ? 'bg-[#0F766E] text-white shadow-xs'
-                : 'bg-slate-100 text-slate-500'
-            }`}
-          >
-            3
-          </span>
-          <span className="text-xs font-bold text-slate-900">{t('reg.step_slip', '3. OPD Slip')}</span>
+
+        {/* Step Indicator */}
+        <div className="flex items-center gap-2 sm:gap-3 bg-white/80 backdrop-blur-sm p-2 rounded-xl border border-slate-200">
+          <div className="flex items-center gap-1.5">
+            <span
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                step === 'form' ? 'bg-[#0F766E] text-white shadow-xs' : 'bg-[#16A34A] text-white'
+              }`}
+            >
+              {step === 'form' ? '1' : '✓'}
+            </span>
+            <span className="text-xs font-bold text-slate-900 hidden md:inline">{t('reg.step_form', 'Details')}</span>
+          </div>
+          <div className="w-6 h-0.5 bg-slate-200"></div>
+          <div className="flex items-center gap-1.5">
+            <span
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                step === 'review'
+                  ? 'bg-[#0F766E] text-white shadow-xs'
+                  : step === 'success'
+                  ? 'bg-[#16A34A] text-white'
+                  : 'bg-slate-100 text-slate-500'
+              }`}
+            >
+              {step === 'success' ? '✓' : '2'}
+            </span>
+            <span className="text-xs font-bold text-slate-900 hidden md:inline">{t('reg.step_review', 'Review')}</span>
+          </div>
+          <div className="w-6 h-0.5 bg-slate-200"></div>
+          <div className="flex items-center gap-1.5">
+            <span
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                step === 'success' ? 'bg-[#0F766E] text-white shadow-xs' : 'bg-slate-100 text-slate-500'
+              }`}
+            >
+              3
+            </span>
+            <span className="text-xs font-bold text-slate-900 hidden md:inline">{t('reg.step_slip', 'OPD Slip')}</span>
+          </div>
         </div>
       </div>
 
-      {/* STEP 1: FORM INPUT */}
-      {step === 'form' && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-            <div>
-              <h2 className="text-lg sm:text-xl font-bold text-slate-900">
-                {t('reg.title', 'Online OPD Registration & Token Slip')}
-              </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                {t('reg.subtitle', 'Civil Hospital • Ayushman Bharat Digital Mission (ABDM)')}
-              </p>
-            </div>
+      {/* 4 Stat Bento Cards Ribbon */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">Est. Wait</span>
+            <span className="material-symbols-outlined text-lg text-[#0F766E]">schedule</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-[#0F766E] mt-1 tabular-nums">~12 Mins</div>
+          <span className="text-[11px] text-slate-500">General Medicine OPD</span>
+        </div>
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">Active Doctors</span>
+            <span className="material-symbols-outlined text-lg text-emerald-600">stethoscope</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-slate-900 mt-1 tabular-nums">28 / 32</div>
+          <span className="text-[11px] text-slate-500">All OPD Wings Active</span>
+        </div>
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">Digital Token</span>
+            <span className="material-symbols-outlined text-lg text-blue-600">confirmation_number</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-blue-600 mt-1 tabular-nums">Real-Time</div>
+          <span className="text-[11px] text-slate-500">SMS & Audio Alerts</span>
+        </div>
+        <div className="glass-card p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase">Ayushman ABHA</span>
+            <span className="material-symbols-outlined text-lg text-purple-600">verified</span>
+          </div>
+          <div className="text-2xl font-bold font-mono text-purple-600 mt-1 tabular-nums">Linked</div>
+          <span className="text-[11px] text-slate-500">Zero Paperwork Needed</span>
+        </div>
+      </div>
 
-            {/* Voice Input Trigger */}
+      {/* Main 12-Column Bento Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column: Context, Guidelines & Voice Intake (4 cols) */}
+        <div className="lg:col-span-4 space-y-5">
+          {/* Voice Intake Bento Card */}
+          <div className="bento-card-teal rounded-2xl p-5 space-y-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center shadow-xs">
+                <span className="material-symbols-outlined text-xl">mic</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-900 text-sm">बोलकर पर्ची बनाएं</h3>
+                <p className="text-[11px] text-slate-600">Voice OPD Assistant (Multi-lingual)</p>
+              </div>
+            </div>
+            <p className="text-xs text-slate-700 leading-relaxed">
+              Speak symptoms in Hindi, Punjabi, Tamil or English. Our AI automatically maps you to the right department.
+            </p>
             <button
               type="button"
               onClick={() => setVoiceOpen(true)}
-              className="px-3.5 py-2 rounded-xl border border-[#0F766E]/30 bg-[#E6F4F1] hover:bg-[#CCFBF1] text-[#0F766E] text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2.5 bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2"
             >
               <span className="material-symbols-outlined text-sm">mic</span>
-              <span>{t('reg.voice_btn', 'Voice Intake (बोलकर बताएं)')}</span>
+              <span>Start Voice Intake</span>
             </button>
           </div>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setStep('review');
-            }}
-            className="space-y-5 text-xs"
-          >
-            {/* ABHA Autofill Banner */}
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <span className="material-symbols-outlined text-[#0F766E]">credit_card</span>
+          {/* Registration Guidelines Bento Card */}
+          <div className="glass-card p-5 space-y-3">
+            <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-base text-[#0F766E]">info</span>
+              <span>Important OPD Instructions</span>
+            </h3>
+            <ul className="space-y-2 text-xs text-slate-600">
+              <li className="flex items-start gap-2">
+                <span className="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check_circle</span>
+                <span>Enter valid 10-digit phone to receive live SMS notifications as your token approaches.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check_circle</span>
+                <span>Senior Citizens (60+) & Emergencies receive automated priority queue dispatch.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check_circle</span>
+                <span>Free medication dispensing is pre-synchronized with Jan Aushadhi Chemist Desk #3.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Right Column: Active Interactive Form (8 cols) */}
+        <div className="lg:col-span-8">
+          {/* STEP 1: FORM INPUT */}
+          {step === 'form' && (
+            <div className="bg-white/88 backdrop-blur-md rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div>
-                  <span className="font-bold text-slate-900 block">ABHA / Aadhaar Auto-Fetch</span>
-                  <span className="text-[11px] text-slate-500">
-                    National Health ID linked to Ayushman Bharat
-                  </span>
+                  <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                    Patient Demographics &amp; Symptoms
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Fill in basic information or verify pre-filled Ayushman record
+                  </p>
                 </div>
               </div>
-              <input
-                type="text"
-                value={formData.abhaId}
-                onChange={(e) => setFormData({ ...formData, abhaId: e.target.value })}
-                placeholder="91-XXXX-XXXX-XXXX"
-                className="px-3 py-1.5 bg-white rounded-lg border border-slate-200 font-mono text-xs text-slate-900 font-bold focus:border-[#0F766E]"
-              />
-            </div>
 
-            {/* Basic Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="font-bold text-slate-900 block mb-1">{t('reg.full_name', 'Patient Full Name')}</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.patientName}
-                  onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 focus:bg-white focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-900 block mb-1">{t('reg.phone', 'Mobile Phone (10 digits)')}</label>
-                <input
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-mono focus:bg-white focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <label className="font-bold text-slate-900 block mb-1">{t('reg.age', 'Age (Years)')}</label>
-                <input
-                  type="number"
-                  required
-                  min={1}
-                  max={120}
-                  value={formData.age}
-                  onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 font-mono focus:bg-white focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-900 block mb-1">{t('reg.gender', 'Gender')}</label>
-                <select
-                  value={formData.gender}
-                  onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-[#0F766E]"
-                >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-900 block mb-1">{t('reg.priority', 'Priority Category')}</label>
-                <select
-                  value={formData.priority}
-                  onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-[#0F766E]"
-                >
-                  <option value="Normal">Standard OPD</option>
-                  <option value="Senior">Senior Citizen (60+)</option>
-                  <option value="Emergency">Emergency / Acute</option>
-                  <option value="Pediatric">Pediatric Child</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Department Selection */}
-            <div>
-              <label className="font-bold text-slate-900 block mb-1">{t('reg.select_dept', 'Select Clinical Department')}</label>
-              <select
-                value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 font-semibold focus:border-[#0F766E]"
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setStep('review');
+                }}
+                className="space-y-5 text-xs"
               >
-                {departments.map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
-            </div>
+                {/* ABHA Autofill Banner */}
+                <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="material-symbols-outlined text-[#0F766E]">credit_card</span>
+                    <div>
+                      <span className="font-bold text-slate-900 block">ABHA / Aadhaar Auto-Fetch</span>
+                      <span className="text-[11px] text-slate-500">
+                        National Health ID linked to Ayushman Bharat
+                      </span>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    value={formData.abhaId}
+                    onChange={(e) => setFormData({ ...formData, abhaId: e.target.value })}
+                    placeholder="91-XXXX-XXXX-XXXX"
+                    className="px-3 py-1.5 bg-white rounded-lg border border-slate-200 font-mono text-xs text-slate-900 font-bold focus:border-[#0F766E]"
+                  />
+                </div>
 
-            {/* Symptoms Tags */}
-            <div>
-              <label className="font-bold text-slate-900 block mb-2">
-                {t('reg.symptoms_title', 'Chief Symptoms (Click to Select / Multiple)')}
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {commonSymptoms.map((sym) => {
-                  const selected = formData.symptoms.includes(sym);
-                  return (
-                    <button
-                      key={sym}
-                      type="button"
-                      onClick={() => toggleSymptom(sym)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
-                        selected
-                          ? 'bg-[#0F766E] text-white border-[#0F766E] shadow-xs'
-                          : 'bg-white/80 text-slate-700 border-slate-200 hover:border-[#0F766E] hover:bg-[#E6F4F1]/50'
-                      }`}
-                    >
-                      {sym}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+                {/* Basic Info */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-900 block mb-1">{t('reg.full_name', 'Patient Full Name')}</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.patientName}
+                      onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]/20"
+                    />
+                  </div>
 
-            {/* Voice Notes / Text description */}
-            <div>
-              <label className="font-bold text-slate-900 block mb-1">
-                {t('reg.symptoms_desc', 'Describe Symptoms / Voice Transcript')}
-              </label>
-              <textarea
-                rows={3}
-                value={formData.symptomSummary}
-                onChange={(e) => setFormData({ ...formData, symptomSummary: e.target.value })}
-                placeholder="Mention duration, severity, fever temperature, or any previous prescription..."
-                className="w-full p-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-[#0F766E] focus:outline-none focus:ring-1 focus:ring-[#0F766E]/20 text-xs"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-3.5 bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2"
-            >
-              <span>{t('reg.submit_btn', 'Review Details & Issue Token')}</span>
-              <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
-          </form>
-        </div>
-      )}
-
-      {/* STEP 2: REVIEW */}
-      {step === 'review' && (
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
-          <div className="pb-4 border-b border-slate-100">
-            <h2 className="font-headline text-lg font-bold text-slate-900">
-              Verify Information Before OPD Token Generation
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Please ensure mobile number is correct to receive live SMS notifications
-            </p>
-          </div>
-
-          <div className="space-y-4 text-xs">
-            <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50/80 rounded-xl border border-slate-200">
-              <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">Patient Name</span>
-                <span className="font-bold text-sm text-slate-900">{formData.patientName}</span>
-              </div>
-              <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">Age / Gender</span>
-                <span className="font-bold text-sm text-slate-900">
-                  {formData.age} yrs • {formData.gender}
-                </span>
-              </div>
-              <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">Mobile Number</span>
-                <span className="font-bold text-sm font-mono tracking-tight text-slate-900">{formData.phone}</span>
-              </div>
-              <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">ABHA ID</span>
-                <span className="font-bold text-sm font-mono tracking-tight text-[#0F766E]">{formData.abhaId}</span>
-              </div>
-            </div>
-
-            <div className="p-4 bg-[#E6F4F1] rounded-xl border border-[#0F766E]/30">
-              <span className="text-[10px] uppercase font-bold text-[#0F766E] block mb-1">
-                Clinical Department Allocated
-              </span>
-              <div className="font-headline text-lg font-bold text-slate-900">
-                {formData.department}
-              </div>
-              <div className="text-xs text-slate-600 mt-1">
-                Room Allocated: <strong>OPD Room 12, Block B</strong> • Head: Dr. Rajesh Sharma, MD
-              </div>
-            </div>
-
-            <div>
-              <span className="font-bold text-slate-900 block mb-1">Recorded Symptoms:</span>
-              <div className="flex flex-wrap gap-1.5">
-                {formData.symptoms.map((s) => (
-                  <span
-                    key={s}
-                    className="px-2.5 py-1 rounded-lg bg-[#E6F4F1] text-[#0F766E] border border-[#0F766E]/20 text-xs font-semibold"
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
-              {formData.symptomSummary && (
-                <p className="mt-2 text-xs text-slate-500 italic">
-                  "{formData.symptomSummary}"
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Capacity Error Banner & Alternatives */}
-          {errorMessage && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 space-y-3">
-              <div className="flex items-center gap-2 font-bold">
-                <span className="material-symbols-outlined text-base text-red-600">error</span>
-                <span>{errorMessage}</span>
-              </div>
-
-              {alternativeDoctors.length > 0 && (
-                <div className="pt-2 border-t border-red-200/60 space-y-2">
-                  <span className="font-bold text-slate-900 block">
-                    Available Alternative Doctors with Open Capacity:
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {alternativeDoctors.map((doc: any) => (
-                      <div
-                        key={doc.id}
-                        className="p-2.5 bg-white rounded-lg border border-slate-200 text-slate-900 text-[11px] flex justify-between items-center"
-                      >
-                        <div>
-                          <div className="font-bold">{doc.name}</div>
-                          <div className="text-[10px] text-slate-500">
-                            {doc.specialization} • {doc.roomNumber}
-                          </div>
-                        </div>
-                        <span className="text-[10px] font-bold text-emerald-600">
-                          Est. wait ~{doc.estimatedWaitMinutes || 15}m
-                        </span>
-                      </div>
-                    ))}
+                  <div>
+                    <label className="font-bold text-slate-900 block mb-1">{t('reg.phone', 'Mobile Phone (10 digits)')}</label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 font-mono focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]/20"
+                    />
                   </div>
                 </div>
-              )}
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="font-bold text-slate-900 block mb-1">{t('reg.age', 'Age (Years)')}</label>
+                    <input
+                      type="number"
+                      required
+                      min={1}
+                      max={120}
+                      value={formData.age}
+                      onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 font-mono focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]/20"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-900 block mb-1">{t('reg.gender', 'Gender')}</label>
+                    <select
+                      value={formData.gender}
+                      onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-[#0F766E]"
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-900 block mb-1">{t('reg.priority', 'Priority Category')}</label>
+                    <select
+                      value={formData.priority}
+                      onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-[#0F766E]"
+                    >
+                      <option value="Normal">Standard OPD</option>
+                      <option value="Senior">Senior Citizen (60+)</option>
+                      <option value="Emergency">Emergency / Acute</option>
+                      <option value="Pediatric">Pediatric Child</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Department Selection */}
+                <div>
+                  <label className="font-bold text-slate-900 block mb-1">{t('reg.select_dept', 'Select Clinical Department')}</label>
+                  <select
+                    value={formData.department}
+                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-900 font-semibold focus:border-[#0F766E]"
+                  >
+                    {departments.map((dept) => (
+                      <option key={dept} value={dept}>
+                        {dept}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Symptoms Tags */}
+                <div>
+                  <label className="font-bold text-slate-900 block mb-2">
+                    {t('reg.symptoms_title', 'Chief Symptoms (Click to Select / Multiple)')}
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {commonSymptoms.map((sym) => {
+                      const selected = formData.symptoms.includes(sym);
+                      return (
+                        <button
+                          key={sym}
+                          type="button"
+                          onClick={() => toggleSymptom(sym)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                            selected
+                              ? 'bg-[#0F766E] text-white border-[#0F766E] shadow-xs'
+                              : 'bg-white/80 text-slate-700 border-slate-200 hover:border-[#0F766E] hover:bg-[#E6F4F1]/50'
+                          }`}
+                        >
+                          {sym}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Voice Notes / Text description */}
+                <div>
+                  <label className="font-bold text-slate-900 block mb-1">
+                    {t('reg.symptoms_desc', 'Describe Symptoms / Voice Transcript')}
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={formData.symptomSummary}
+                    onChange={(e) => setFormData({ ...formData, symptomSummary: e.target.value })}
+                    placeholder="Mention duration, severity, fever temperature, or any previous prescription..."
+                    className="w-full p-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:border-[#0F766E] focus:outline-none focus:ring-1 focus:ring-[#0F766E]/20 text-xs"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3.5 bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2"
+                >
+                  <span>{t('reg.submit_btn', 'Review Details & Issue Token')}</span>
+                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+              </form>
             </div>
           )}
 
-          <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={() => {
-                setErrorMessage(null);
-                setStep('form');
-              }}
-              className="px-5 py-2.5 text-xs font-semibold rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-colors"
-            >
-              Back to Edit
-            </button>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={handleSubmit}
-              className="px-6 py-3 bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-2"
-            >
-              {loading ? 'Issuing Token...' : 'Confirm & Generate Digital Token'}
-            </button>
-          </div>
-        </div>
-      )}
+          {/* STEP 2: REVIEW */}
+          {step === 'review' && (
+            <div className="bg-white/88 backdrop-blur-md rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="pb-4 border-b border-slate-100">
+                <h2 className="font-headline text-lg font-bold text-slate-900">
+                  Verify Information Before OPD Token Generation
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Please ensure mobile number is correct to receive live SMS notifications
+                </p>
+              </div>
 
-      {/* STEP 3: SUCCESS & TOKEN SLIP */}
-      {step === 'success' && createdToken && (
-        <div className="space-y-6">
-          <div className="p-6 bg-emerald-50/80 border border-emerald-200 rounded-2xl text-center space-y-2">
-            <span className="material-symbols-outlined text-4xl text-emerald-600">check_circle</span>
-            <h2 className="font-headline text-lg font-bold text-emerald-800">
-              OPD Token Successfully Issued!
-            </h2>
-            {createdToken.isBuffer && (
-              <span className="inline-block px-3 py-1 rounded-full bg-purple-100 text-[#7C3AED] font-bold text-xs border border-purple-200">
-                Issued Under Extended Buffer Capacity Quota
-              </span>
-            )}
-            <p className="text-xs text-slate-600 max-w-md mx-auto">
-              SMS dispatch confirmation sent to <strong className="font-mono text-slate-900">{createdToken.phone}</strong>. Please proceed to the waiting hall.
-            </p>
-          </div>
+              <div className="space-y-4 text-xs">
+                <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50/80 rounded-xl border border-slate-200">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Patient Name</span>
+                    <span className="font-bold text-sm text-slate-900">{formData.patientName}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Age / Gender</span>
+                    <span className="font-bold text-sm text-slate-900">
+                      {formData.age} yrs • {formData.gender}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Mobile Number</span>
+                    <span className="font-bold text-sm font-mono tracking-tight text-slate-900">{formData.phone}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block">ABHA ID</span>
+                    <span className="font-bold text-sm font-mono tracking-tight text-[#0F766E]">{formData.abhaId}</span>
+                  </div>
+                </div>
 
-          <TokenCard
-            token={createdToken}
-            currentServingTokenNumber="In Session"
-            patientsAhead={Math.max(0, Math.round(createdToken.estimatedWaitMinutes / 5))}
-            onPrint={() => window.print()}
-            onViewDetails={() => navigate('/patient/queue')}
-          />
+                <div className="p-4 bg-[#E6F4F1] rounded-xl border border-[#0F766E]/30">
+                  <span className="text-[10px] uppercase font-bold text-[#0F766E] block mb-1">
+                    Clinical Department Allocated
+                  </span>
+                  <div className="font-headline text-lg font-bold text-slate-900">
+                    {formData.department}
+                  </div>
+                  <div className="text-xs text-slate-600 mt-1">
+                    Room Allocated: <strong>OPD Room 12, Block B</strong> • Head: Dr. Rajesh Sharma, MD
+                  </div>
+                </div>
+
+                <div>
+                  <span className="font-bold text-slate-900 block mb-1">Recorded Symptoms:</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {formData.symptoms.map((s) => (
+                      <span
+                        key={s}
+                        className="px-2.5 py-1 rounded-lg bg-[#E6F4F1] text-[#0F766E] border border-[#0F766E]/20 text-xs font-semibold"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  {formData.symptomSummary && (
+                    <p className="mt-2 text-xs text-slate-500 italic">
+                      "{formData.symptomSummary}"
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Capacity Error Banner & Alternatives */}
+              {errorMessage && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 space-y-3">
+                  <div className="flex items-center gap-2 font-bold">
+                    <span className="material-symbols-outlined text-base text-red-600">error</span>
+                    <span>{errorMessage}</span>
+                  </div>
+
+                  {alternativeDoctors.length > 0 && (
+                    <div className="pt-2 border-t border-red-200/60 space-y-2">
+                      <span className="font-bold text-slate-900 block">
+                        Available Alternative Doctors with Open Capacity:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {alternativeDoctors.map((doc: any) => (
+                          <div
+                            key={doc.id}
+                            className="p-2.5 bg-white rounded-lg border border-slate-200 text-slate-900 text-[11px] flex justify-between items-center"
+                          >
+                            <div>
+                              <div className="font-bold">{doc.name}</div>
+                              <div className="text-[10px] text-slate-500">
+                                {doc.specialization} • {doc.roomNumber}
+                              </div>
+                            </div>
+                            <span className="text-[10px] font-bold text-emerald-600">
+                              Est. wait ~{doc.estimatedWaitMinutes || 15}m
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setErrorMessage(null);
+                    setStep('form');
+                  }}
+                  className="px-5 py-2.5 text-xs font-semibold rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                >
+                  Back to Edit
+                </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={handleSubmit}
+                  className="px-6 py-3 bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-2"
+                >
+                  {loading ? 'Issuing Token...' : 'Confirm & Generate Digital Token'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3: SUCCESS & TOKEN SLIP */}
+          {step === 'success' && createdToken && (
+            <div className="space-y-6">
+              <div className="p-6 bg-emerald-50/80 border border-emerald-200 rounded-2xl text-center space-y-2">
+                <span className="material-symbols-outlined text-4xl text-emerald-600">check_circle</span>
+                <h2 className="font-headline text-lg font-bold text-emerald-800">
+                  OPD Token Successfully Issued!
+                </h2>
+                {createdToken.isBuffer && (
+                  <span className="inline-block px-3 py-1 rounded-full bg-purple-100 text-[#7C3AED] font-bold text-xs border border-purple-200">
+                    Issued Under Extended Buffer Capacity Quota
+                  </span>
+                )}
+                <p className="text-xs text-slate-600 max-w-md mx-auto">
+                  SMS dispatch confirmation sent to <strong className="font-mono text-slate-900">{createdToken.phone}</strong>. Please proceed to the waiting hall.
+                </p>
+              </div>
+
+              <TokenCard
+                token={createdToken}
+                currentServingTokenNumber="In Session"
+                patientsAhead={Math.max(0, Math.round(createdToken.estimatedWaitMinutes / 5))}
+                onPrint={() => window.print()}
+                onViewDetails={() => navigate('/patient/queue')}
+              />
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Voice Assistant Modal */}
       <VoiceInputModal

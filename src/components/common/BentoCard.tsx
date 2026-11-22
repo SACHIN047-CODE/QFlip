@@ -35,17 +35,17 @@ export const BentoCard: React.FC<BentoCardProps> = ({
 }) => {
   const variantStyles: Record<BentoCardVariant, string> = {
     glass:
-      'bg-white/75 backdrop-blur-md border border-white/80 shadow-[0_8px_30px_rgb(15,23,42,0.05)] text-slate-900',
+      'bg-white/76 backdrop-blur-md border border-white/85 shadow-[0_10px_32px_rgb(15,23,42,0.05)] text-slate-900',
     solid:
-      'bg-white border border-slate-200/90 shadow-[0_2px_12px_rgb(15,23,42,0.04)] text-slate-900',
+      'bg-white/88 backdrop-blur-md border border-slate-200/90 shadow-[0_4px_20px_-2px_rgb(15,23,42,0.04)] text-slate-900',
     teal:
-      'bg-[#E6F4F1]/80 backdrop-blur-md border border-[#0F766E]/25 shadow-[0_8px_30px_rgb(15,118,110,0.07)] text-slate-900',
+      'bg-[#E6F4F1]/85 backdrop-blur-md border border-[#0F766E]/25 shadow-[0_8px_30px_rgb(15,118,110,0.07)] text-slate-900',
     ai:
-      'bg-purple-50/70 backdrop-blur-md border border-purple-200/80 shadow-[0_8px_30px_rgb(124,58,237,0.06)] text-slate-900',
+      'bg-purple-50/75 backdrop-blur-md border border-purple-200/80 shadow-[0_8px_30px_rgb(124,58,237,0.06)] text-slate-900',
     danger:
-      'bg-red-50/70 backdrop-blur-md border border-red-200/80 shadow-[0_8px_30px_rgb(220,38,38,0.06)] text-slate-900',
+      'bg-red-50/75 backdrop-blur-md border border-red-200/80 shadow-[0_8px_30px_rgb(220,38,38,0.06)] text-slate-900',
     flat:
-      'bg-slate-50/80 border border-slate-200/70 text-slate-900',
+      'bg-slate-50/80 backdrop-blur-sm border border-slate-200/70 text-slate-900',
   };
 
   const paddingStyles: Record<BentoPadding, string> = {

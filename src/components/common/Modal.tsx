@@ -43,20 +43,20 @@ export const Modal: React.FC<ModalProps> = ({
   }[maxWidth];
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-light-primary/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
       <div
-        className={`relative w-full ${maxWidthClasses} bg-light-surface rounded-2xl border border-light-outline shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150`}
+        className={`relative w-full ${maxWidthClasses} bg-white/90 backdrop-blur-xl rounded-3xl border border-white/80 shadow-[0_25px_60px_rgba(15,23,42,0.15)] overflow-hidden animate-in fade-in zoom-in-95 duration-150`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 border-b border-light-outline flex items-center justify-between bg-light-surface-variant/30">
+        <div className="px-6 py-4 border-b border-slate-200/70 flex items-center justify-between bg-white/50 backdrop-blur-md">
           <div>
-            <h3 className="font-headline text-title-lg font-bold text-light-primary">{title}</h3>
-            {subtitle && <p className="text-xs text-light-on-surface-variant mt-0.5">{subtitle}</p>}
+            <h3 className="font-headline text-lg font-bold text-slate-900">{title}</h3>
+            {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary transition-colors"
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100/80 hover:text-slate-700 transition-colors"
           >
             <span className="material-symbols-outlined text-lg">close</span>
           </button>

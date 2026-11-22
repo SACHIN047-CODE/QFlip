@@ -31,13 +31,13 @@ export const StatCard: React.FC<StatCardProps> = ({
     switch (variant) {
       case 'accent':
       case 'secondary':
-        return 'border-[#0F766E]/20 bg-white hover:border-[#0F766E]/40';
+        return 'border-[#0F766E]/20 bg-[#E6F4F1]/60 backdrop-blur-md hover:border-[#0F766E]/40';
       case 'danger':
-        return 'border-red-200 bg-red-50/30 hover:border-red-300';
+        return 'border-red-200/80 bg-red-50/50 backdrop-blur-md hover:border-red-300';
       case 'success':
-        return 'border-green-200 bg-green-50/30 hover:border-green-300';
+        return 'border-green-200/80 bg-green-50/50 backdrop-blur-md hover:border-green-300';
       default:
-        return 'border-slate-200 bg-white hover:border-slate-300';
+        return 'border-slate-200/80 bg-white/80 backdrop-blur-md hover:border-slate-300';
     }
   };
 
