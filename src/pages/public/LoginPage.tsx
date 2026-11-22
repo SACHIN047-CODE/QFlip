@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { LanguageSelector } from '../../components/common/LanguageSelector';
 import { UserRole } from '../../types';
 
 export const LoginPage: React.FC = () => {
@@ -99,9 +98,6 @@ export const LoginPage: React.FC = () => {
       <div className="max-w-md w-full glass-card p-8 shadow-xl space-y-6">
         {/* Header */}
         <div className="text-center relative">
-          <div className="absolute top-0 right-0">
-            <LanguageSelector variant="compact" />
-          </div>
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
             <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8">
               <path

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { LanguageSelector } from '../../components/common/LanguageSelector';
 
 export const RegisterPage: React.FC = () => {
   const { register } = useAuth();
@@ -60,9 +59,6 @@ export const RegisterPage: React.FC = () => {
     <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
       <div className="max-w-md w-full glass-card p-8 shadow-xl space-y-6">
         <div className="text-center relative">
-          <div className="absolute top-0 right-0">
-            <LanguageSelector variant="compact" />
-          </div>
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
             <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8">
               <path

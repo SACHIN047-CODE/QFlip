@@ -266,11 +266,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
 
           {/* Right Action Controls */}
           <div className="flex items-center gap-3">
-            {/* Header Language Selector */}
-            <div className="hidden sm:block">
-              <LanguageSelector variant="compact" />
-            </div>
-
             {/* Voice Input Quick Button */}
             <button
               onClick={() => setIsVoiceOpen(true)}

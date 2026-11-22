@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQueue } from '../../context/QueueContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { HospitalMapModal } from '../../components/common/HospitalMapModal';
 import { PageHeader } from '../../components/common/PageHeader';
 import { Button } from '../../components/common/Button';
@@ -18,6 +19,7 @@ import {
 
 export const SmartQueueTracker: React.FC = () => {
   const { myToken, currentServingToken, tokens, refreshTokens } = useQueue();
+  const { t, language } = useLanguage();
   const [mapOpen, setMapOpen] = useState(false);
   const [audioAnnouncementPlaying, setAudioAnnouncementPlaying] = useState(false);
 
@@ -32,17 +34,22 @@ export const SmartQueueTracker: React.FC = () => {
   const tokenNumber = myToken?.tokenNumber || 'OPD-104';
   const currentToken = currentServingToken?.tokenNumber || 'OPD-098';
 
-  const myIndex = tokens.findIndex((t) => t.tokenNumber === tokenNumber);
-  const servingIndex = tokens.findIndex((t) => t.tokenNumber === currentToken);
+  const myIndex = tokens.findIndex((item) => item.tokenNumber === tokenNumber);
+  const servingIndex = tokens.findIndex((item) => item.tokenNumber === currentToken);
   const patientsAhead = myIndex >= 0 && servingIndex >= 0 ? Math.max(0, myIndex - servingIndex) : 6;
   const estimatedWait = myToken?.estimatedWaitMinutes ?? patientsAhead * 5;
 
   const playVoiceTokenAnnouncement = () => {
     setAudioAnnouncementPlaying(true);
     if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(
-        `Token number ${currentToken}. Please proceed to Room number 12. Token number ${currentToken}.`
-      );
+      let announcementText = `Token number ${currentToken}. Please proceed to Room number 12. Token number ${currentToken}.`;
+      if (language === 'hi') {
+        announcementText = `टोकन संख्या ${currentToken}. कृपया कमरा नंबर 12 में पधारें.`;
+      } else if (language === 'pa') {
+        announcementText = `ਟੋਕਨ ਨੰਬਰ ${currentToken}. ਕਿਰਪਾ ਕਰਕੇ ਕਮਰਾ ਨੰਬਰ 12 ਵਿਖੇ ਪਹੁੰਚੋ.`;
+      }
+      const utterance = new SpeechSynthesisUtterance(announcementText);
+      utterance.lang = language === 'hi' ? 'hi-IN' : language === 'pa' ? 'pa-IN' : 'en-IN';
       utterance.rate = 0.9;
       utterance.onend = () => setAudioAnnouncementPlaying(false);
       window.speechSynthesis.speak(utterance);
@@ -91,7 +98,7 @@ export const SmartQueueTracker: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <div className="p-4 bg-teal-50/70 rounded-2xl border border-[#0F766E]/20 shadow-xs">
             <span className="text-xs text-slate-500 font-semibold uppercase block mb-1">
-              Your Token
+              {t('queue.yourToken', 'Your Token')}
             </span>
             <div className="text-3xl sm:text-4xl font-black text-[#0F766E] font-mono tracking-tight tabular-nums">
               {tokenNumber}
@@ -101,7 +108,7 @@ export const SmartQueueTracker: React.FC = () => {
 
           <div className="p-4 bg-white/80 rounded-2xl border border-slate-200 shadow-xs">
             <span className="text-xs text-slate-500 font-semibold uppercase block mb-1">
-              Now Serving
+              {t('queue.servingToken', 'Now Serving')}
             </span>
             <div className="text-3xl sm:text-4xl font-black text-slate-900 font-mono tracking-tight tabular-nums">
               {currentToken}
@@ -111,7 +118,7 @@ export const SmartQueueTracker: React.FC = () => {
 
           <div className="p-4 bg-white/80 rounded-2xl border border-slate-200 shadow-xs">
             <span className="text-xs text-slate-500 font-semibold uppercase block mb-1">
-              Ahead of You
+              {t('queue.patientsAhead', 'Ahead of You')}
             </span>
             <div className="text-3xl sm:text-4xl font-black text-[#D97706] font-mono tracking-tight tabular-nums">
               {String(patientsAhead).padStart(2, '0')}
@@ -121,7 +128,7 @@ export const SmartQueueTracker: React.FC = () => {
 
           <div className="p-4 bg-white/80 rounded-2xl border border-slate-200 shadow-xs">
             <span className="text-xs text-slate-500 font-semibold uppercase block mb-1">
-              Estimated Wait
+              {t('queue.estimatedWait', 'Estimated Wait')}
             </span>
             <div className="text-3xl sm:text-4xl font-black text-slate-900 font-mono tracking-tight tabular-nums">
               {estimatedWait}m

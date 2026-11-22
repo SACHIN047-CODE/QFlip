@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { useLanguage } from '../context/LanguageContext';
-import { LanguageSelector } from '../components/common/LanguageSelector';
 import { PageSkeleton } from '../components/common/LoadingSkeleton';
 
 export const PublicLayout: React.FC = () => {
@@ -185,8 +184,6 @@ export const PublicLayout: React.FC = () => {
               &copy; {new Date().getFullYear()} CAREFLOW (QFlip) Technologies. Designed for Government Health Clusters &amp; Civil Hospitals.
             </div>
             <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-              <LanguageSelector variant="compact" />
-              <span>•</span>
               <a
                 href="https://www.nhp.gov.in/"
                 target="_blank"

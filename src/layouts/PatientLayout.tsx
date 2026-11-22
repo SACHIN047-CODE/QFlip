@@ -4,7 +4,6 @@ import { Navbar } from '../components/common/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { useQueue } from '../context/QueueContext';
 import { useLanguage } from '../context/LanguageContext';
-import { LanguageSelector } from '../components/common/LanguageSelector';
 import { PageSkeleton } from '../components/common/LoadingSkeleton';
 
 export const PatientLayout: React.FC = () => {
@@ -64,9 +63,6 @@ export const PatientLayout: React.FC = () => {
                 <span className="material-symbols-outlined text-xs text-[#0F766E]">arrow_forward</span>
               </Link>
             )}
-
-            {/* Quick Language Switcher */}
-            <LanguageSelector variant="compact" />
           </div>
         </div>
       </div>

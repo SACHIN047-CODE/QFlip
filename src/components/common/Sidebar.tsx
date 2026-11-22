@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useQueue } from '../../context/QueueContext';
-import { LanguageSelector } from './LanguageSelector';
 
 interface SidebarProps {
   onCloseMobile?: () => void;
@@ -345,9 +344,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </span>
               </div>
               <span className="text-[10px] text-slate-400">Sync: active</span>
-            </div>
-            <div className="pt-1 flex justify-center">
-              <LanguageSelector variant="compact" />
             </div>
           </div>
         ) : (

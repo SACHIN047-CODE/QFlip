@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Sidebar } from '../components/common/Sidebar';
 import { useAuth } from '../context/AuthContext';
-import { useLanguage } from '../context/LanguageContext';
-import { LanguageSelector } from '../components/common/LanguageSelector';
 import { HospitalMapModal } from '../components/common/HospitalMapModal';
 import { VoiceInputModal } from '../components/common/VoiceInputModal';
 
@@ -37,7 +35,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
   };
 
   const { user, role, logout } = useAuth();
-  const { language, toggleLanguage, t } = useLanguage();
   const location = useLocation();
 
   return (
@@ -92,7 +89,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
 
           {/* Quick Header Actions */}
           <div className="flex items-center gap-3">
-            <LanguageSelector variant="compact" />
 
             <button
               onClick={() => setMapOpen(true)}
