@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
-import { HospitalMapModal } from '../../components/common/HospitalMapModal';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
-  const [isMapOpen, setIsMapOpen] = useState(false);
 
   return (
     <div className="space-y-0">
@@ -414,34 +412,34 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* HOSPITAL INTERACTIVE WAYFINDING CALLOUT */}
+      {/* AYUSHMAN BHARAT & CITIZEN SUPPORT CALLOUT */}
       <section className="py-16 bg-light-surface border-b border-light-outline px-6 sm:px-12">
         <div className="max-w-7xl mx-auto bg-gradient-to-r from-light-primary via-slate-800 to-slate-900 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
             <div className="lg:col-span-8 space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-accent/20 border border-accent/40 text-accent text-xs font-bold">
-                <span className="material-symbols-outlined text-sm">explore</span> Indoor Smart Compass
+                <span className="material-symbols-outlined text-sm">verified_user</span> Ayushman ABHA Fast-Track
               </div>
               <h2 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold tracking-tight">
-                Never Get Lost in a Multi-Wing Government Hospital
+                Seamless Patient Onboarding &amp; Dedicated Grievance Desk
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                Color-coded navigation pins connect registration counters directly to OPD rooms, diagnostic laboratories,
-                and Jan Aushadhi pharmacies. Scan the QR marker outside any corridor to open real-time directions on your
-                phone.
+                Empowering patients with 10-second ABHA Scan &amp; Share QR check-ins, automated voice triage in native languages,
+                and transparent queue tracking to minimize waiting times across all clinical OPDs.
               </p>
               <div className="flex flex-wrap items-center gap-4 pt-3">
-                <button
-                  onClick={() => setIsMapOpen(true)}
+                <Link
+                  to="/patient/registration"
                   className="px-6 py-3 bg-accent text-on-accent font-bold text-xs rounded-xl hover:brightness-95 flex items-center gap-2 shadow-sm transition-all"
                 >
-                  <span className="material-symbols-outlined text-sm">map</span>
-                  Open Hospital Interactive Map
-                </button>
+                  <span className="material-symbols-outlined text-sm">add_circle</span>
+                  Book OPD Token Now
+                </Link>
                 <Link
                   to="/feedback"
-                  className="px-5 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10 text-xs font-semibold transition-colors"
+                  className="px-5 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10 text-xs font-semibold transition-colors flex items-center gap-1.5"
                 >
+                  <span className="material-symbols-outlined text-sm">feedback</span>
                   Report a Queue Grievance
                 </Link>
               </div>
@@ -460,7 +458,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Voice & Map Modals */}
+      {/* Voice Input Modal */}
       <VoiceInputModal
         isOpen={isVoiceOpen}
         onClose={() => setIsVoiceOpen(false)}
@@ -470,7 +468,6 @@ export const LandingPage: React.FC = () => {
           });
         }}
       />
-      <HospitalMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
     </div>
   );
 };

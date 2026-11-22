@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueue } from '../../context/QueueContext';
-import { HospitalMapModal } from '../../components/common/HospitalMapModal';
 
 export const SmartQueueTracker: React.FC = () => {
   const { myToken, currentServingToken, tokens, refreshTokens } = useQueue();
-  const [mapOpen, setMapOpen] = useState(false);
   const [audioAnnouncementPlaying, setAudioAnnouncementPlaying] = useState(false);
 
   // Auto-refresh queue every 10 seconds for real-time live feel
@@ -156,19 +154,12 @@ export const SmartQueueTracker: React.FC = () => {
           </button>
         </div>
 
-        {/* Location & Wayfinding Help */}
+        {/* Location & Slip Print */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-light-outline">
           <div className="text-xs text-light-on-surface-variant text-center sm:text-left">
             Assigned Room: <strong className="text-light-primary font-headline">Room 12, 1st Floor, OPD Block B</strong>
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button
-              onClick={() => setMapOpen(true)}
-              className="flex-1 sm:flex-initial px-4 py-2 bg-light-surface border-2 border-light-primary text-light-primary text-xs font-bold rounded-lg hover:bg-light-primary hover:text-white transition-colors flex items-center justify-center gap-1.5"
-            >
-              <span className="material-symbols-outlined text-sm">map</span>
-              <span>Find Room On Map</span>
-            </button>
             <button
               onClick={() => window.print()}
               className="flex-1 sm:flex-initial px-4 py-2 bg-light-surface-variant text-light-primary text-xs font-bold rounded-lg hover:bg-light-outline transition-colors flex items-center justify-center gap-1.5 border border-light-outline"
@@ -235,12 +226,6 @@ export const SmartQueueTracker: React.FC = () => {
             ))}
         </div>
       </div>
-
-      <HospitalMapModal
-        isOpen={mapOpen}
-        onClose={() => setMapOpen(false)}
-        destinationDepartment="OPD Room 12 (General Medicine)"
-      />
     </div>
   );
 };

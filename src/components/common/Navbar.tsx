@@ -3,7 +3,6 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { VoiceInputModal } from './VoiceInputModal';
-import { HospitalMapModal } from './HospitalMapModal';
 
 interface NavbarProps {
   mode?: 'public' | 'patient' | 'dashboard';
@@ -16,7 +15,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
   const navigate = useNavigate();
 
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
-  const [isMapOpen, setIsMapOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   const handleHospitalCommandClick = (e: React.MouseEvent) => {
@@ -45,13 +43,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
           </div>
           <div className="flex items-center gap-6">
             <span className="font-code text-light-primary font-semibold">Toll Free: 1800 180 2026</span>
-            <button
-              onClick={() => setIsMapOpen(true)}
-              className="hover:text-secondary flex items-center gap-1 transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm text-secondary">map</span>
-              Hospital Map
-            </button>
             <button
               onClick={() => setIsVoiceOpen(true)}
               className="hover:text-secondary flex items-center gap-1 transition-colors text-secondary font-bold"
@@ -330,9 +321,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
           });
         }}
       />
-
-      {/* Hospital Interactive Navigation Modal */}
-      <HospitalMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
     </>
   );
 };
