@@ -49,3 +49,26 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-serverpod:
+    name: Deploy Serverpod Cloud Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install Serverpod CLI
+        run: dart pub global activate serverpod_cli
+
+      - name: Deploy Serverpod Backend to Serverpod Cloud
+        run: |
+          cd careflow_server
+          dart pub get
+          scloud deploy --token "${{ secrets.SERVERPOD_CLOUD_TOKEN || 'c2FzAaICQyludcK1qrVWCEShjdOm1grs5NjBVBRFkOC7T6ZVW2LRmjfTHMajekgHcghQ' }}" || serverpod cloud deploy --token "${{ secrets.SERVERPOD_CLOUD_TOKEN || 'c2FzAaICQyludcK1qrVWCEShjdOm1grs5NjBVBRFkOC7T6ZVW2LRmjfTHMajekgHcghQ' }}"
+        env:
+          SERVERPOD_CLOUD_TOKEN: ${{ secrets.SERVERPOD_CLOUD_TOKEN || 'c2FzAaICQyludcK1qrVWCEShjdOm1grs5NjBVBRFkOC7T6ZVW2LRmjfTHMajekgHcghQ' }}
