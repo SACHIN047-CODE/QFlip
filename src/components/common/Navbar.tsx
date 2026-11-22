@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { LanguageSelector } from './LanguageSelector';
 import { VoiceInputModal } from './VoiceInputModal';
 import { HospitalMapModal } from './HospitalMapModal';
 
@@ -83,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
             </a>
           </div>
 
-          {/* Right Utilities: Map, Voice, and One-Click English-Hindi Language Conversion */}
+          {/* Right Utilities: Map, Voice, and One-Click Multi-Language Conversion */}
           <div className="flex items-center gap-3 sm:gap-5 ml-auto">
             <button
               onClick={() => setIsMapOpen(true)}
@@ -102,16 +103,8 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               <span className="md:hidden">Voice OPD</span>
             </button>
 
-            {/* Single Visible Language Conversion Button */}
-            <button
-              type="button"
-              onClick={toggleLanguage}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-secondary/40 bg-secondary/10 hover:bg-secondary/20 text-secondary font-bold text-xs transition-all shadow-sm"
-              title={language === 'en' ? 'हिन्दी में बदलें (Switch to Hindi)' : 'Switch to English'}
-            >
-              <span className="material-symbols-outlined text-sm">translate</span>
-              <span>{language === 'en' ? 'हिन्दी' : 'English'}</span>
-            </button>
+            {/* Language Selector in Top Utility Bar */}
+            <LanguageSelector variant="compact" />
           </div>
         </div>
       </aside>
@@ -206,7 +199,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Dashboard
+                {t('nav.dashboard', 'Dashboard')}
               </NavLink>
               <NavLink
                 to="/patient/queue"
@@ -216,7 +209,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Smart Queue Tracker
+                {t('nav.queue', 'Smart Queue Tracker')}
               </NavLink>
               <NavLink
                 to="/patient/registration"
@@ -226,7 +219,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Book OPD
+                {t('nav.book_opd', 'Book OPD')}
               </NavLink>
               <NavLink
                 to="/patient/prescriptions"
@@ -236,7 +229,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Prescriptions
+                {t('nav.prescriptions', 'Prescriptions')}
               </NavLink>
               <NavLink
                 to="/patient/lab-tests"
@@ -246,7 +239,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Lab Tests
+                {t('nav.lab_tests', 'Lab Tests')}
               </NavLink>
               <NavLink
                 to="/patient/pharmacy"
@@ -256,7 +249,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Pharmacy
+                {t('nav.pharmacy', 'Pharmacy')}
               </NavLink>
               <NavLink
                 to="/patient/medical-history"
@@ -266,23 +259,17 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                   }`
                 }
               >
-                Medical Records
+                {t('nav.medical_history', 'Medical Records')}
               </NavLink>
             </nav>
           )}
 
           {/* Right Action Controls */}
           <div className="flex items-center gap-3">
-            {/* Header Language Toggle Pill */}
-            <button
-              type="button"
-              onClick={toggleLanguage}
-              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-light-outline bg-light-surface hover:bg-light-surface-variant text-light-primary text-xs font-bold transition-all shadow-sm"
-              title={language === 'en' ? 'Switch to Hindi' : 'Switch to English'}
-            >
-              <span className="material-symbols-outlined text-sm text-secondary">translate</span>
-              <span>{language === 'en' ? 'हिन्दी' : 'English'}</span>
-            </button>
+            {/* Header Language Selector */}
+            <div className="hidden sm:block">
+              <LanguageSelector variant="compact" />
+            </div>
 
             {/* Voice Input Quick Button */}
             <button

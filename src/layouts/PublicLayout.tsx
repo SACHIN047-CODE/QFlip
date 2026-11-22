@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
+import { useLanguage } from '../context/LanguageContext';
+import { LanguageSelector } from '../components/common/LanguageSelector';
 import { PageSkeleton } from '../components/common/LoadingSkeleton';
 
 export const PublicLayout: React.FC = () => {
   const location = useLocation();
+  const { t } = useLanguage();
   const [routeLoading, setRouteLoading] = useState(false);
 
   useEffect(() => {
@@ -65,32 +68,32 @@ export const PublicLayout: React.FC = () => {
             {/* Col 2: Patient Portals */}
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-[#14B8A6] mb-4">
-                Patient Portals
+                {t('footer.patient_portals', 'Patient Portals')}
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
                 <li>
                   <Link to="/patient/dashboard" className="hover:text-white transition-colors">
-                    Patient Live Dashboard
+                    {t('nav.dashboard', 'Patient Live Dashboard')}
                   </Link>
                 </li>
                 <li>
                   <Link to="/patient/queue" className="hover:text-white transition-colors">
-                    Real-Time Token Tracker
+                    {t('nav.queue', 'Real-Time Token Tracker')}
                   </Link>
                 </li>
                 <li>
                   <Link to="/patient/registration" className="hover:text-white transition-colors">
-                    ABHA Voice OPD Registration
+                    {t('nav.book_opd', 'ABHA Voice OPD Registration')}
                   </Link>
                 </li>
                 <li>
                   <Link to="/patient/prescriptions" className="hover:text-white transition-colors">
-                    Digital Prescriptions
+                    {t('nav.prescriptions', 'Digital Prescriptions')}
                   </Link>
                 </li>
                 <li>
                   <Link to="/patient/lab-tests" className="hover:text-white transition-colors">
-                    Laboratory Reports
+                    {t('nav.lab_tests', 'Laboratory Reports')}
                   </Link>
                 </li>
               </ul>
@@ -99,7 +102,7 @@ export const PublicLayout: React.FC = () => {
             {/* Col 3: Hospital Command */}
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-[#14B8A6] mb-4">
-                Hospital Command
+                {t('footer.hospital_command', 'Hospital Command')}
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
                 <li>
@@ -133,7 +136,7 @@ export const PublicLayout: React.FC = () => {
             {/* Col 4: Support & Helplines */}
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-[#14B8A6] mb-4">
-                Emergency &amp; Support
+                {t('footer.emergency_support', 'Emergency & Support')}
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
                 <li className="flex items-center gap-1.5">
@@ -182,6 +185,8 @@ export const PublicLayout: React.FC = () => {
               &copy; {new Date().getFullYear()} CAREFLOW (QFlip) Technologies. Designed for Government Health Clusters &amp; Civil Hospitals.
             </div>
             <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+              <LanguageSelector variant="compact" />
+              <span>•</span>
               <a
                 href="https://www.nhp.gov.in/"
                 target="_blank"
