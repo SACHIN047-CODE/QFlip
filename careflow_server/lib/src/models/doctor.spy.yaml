@@ -1,0 +1,12 @@
+class: Doctor
+table: careflow_doctors
+fields:
+  name: String
+  email: String
+  department: String
+  roomNumber: String
+  shift: String
+  isAvailable: bool
+  activePatientsCount: int
+  phone: String?
+  qualification: String?

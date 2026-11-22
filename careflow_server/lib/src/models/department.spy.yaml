@@ -1,0 +1,9 @@
+class: Department
+table: careflow_departments
+fields:
+  name: String
+  code: String
+  description: String
+  activeTokensCount: int
+  averageWaitTimeMinutes: int
+  rooms: List<String>

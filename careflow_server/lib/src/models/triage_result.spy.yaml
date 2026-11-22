@@ -1,0 +1,9 @@
+class: TriageResult
+fields:
+  department: String
+  urgency: String
+  recommendedDoctor: String
+  reason: String
+  confidence: double
+  suggestedRoom: String
+  estimatedWaitMinutes: int

@@ -1,0 +1,17 @@
+name: careflow_server
+description: CareFlow Serverpod Backend Server in Dart
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  serverpod: ^2.3.0
+  serverpod_auth_server: ^2.3.0
+  http: ^1.2.0
+  crypto: ^3.0.3
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.25.0

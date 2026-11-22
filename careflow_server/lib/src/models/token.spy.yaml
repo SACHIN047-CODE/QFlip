@@ -1,0 +1,20 @@
+class: Token
+table: careflow_tokens
+fields:
+  tokenNumber: String
+  department: String
+  doctorName: String
+  roomNumber: String?
+  patientId: String
+  patientName: String
+  patientPhone: String?
+  patientAge: int?
+  patientGender: String?
+  symptoms: String?
+  status: String
+  priority: String
+  estimatedWaitMinutes: int
+  queuePosition: int
+  calledAt: DateTime?
+  completedAt: DateTime?
+  createdAt: DateTime

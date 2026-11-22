@@ -1,0 +1,12 @@
+class: User
+table: careflow_users
+fields:
+  name: String
+  email: String
+  role: String
+  phone: String?
+  abhaId: String?
+  department: String?
+  roomNumber: String?
+  isActive: bool
+  createdAt: DateTime

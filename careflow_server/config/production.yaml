@@ -1,0 +1,30 @@
+# Serverpod Production / Cloud Configuration
+apiServer:
+  port: 8080
+  publicHost: api.careflow.health
+  publicPort: 443
+  publicScheme: https
+
+insightsServer:
+  port: 8081
+  publicHost: insights.careflow.health
+  publicPort: 443
+  publicScheme: https
+
+webServer:
+  port: 8082
+  publicHost: app.careflow.health
+  publicPort: 443
+  publicScheme: https
+
+database:
+  host: postgres
+  port: 5432
+  name: careflow
+  user: postgres
+  requireSsl: false
+
+redis:
+  enabled: true
+  host: redis
+  port: 6379

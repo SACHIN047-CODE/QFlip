@@ -1,0 +1,21 @@
+# Serverpod Cloud Deployment Specification (serverpod cloud deploy)
+name: careflow
+projectId: careflow-health-ops
+region: asia-south1 # Mumbai, India (Low latency for Indian Civil Hospitals)
+
+server:
+  package: careflow_server
+  entrypoint: bin/main.dart
+  scaling:
+    minInstances: 1
+    maxInstances: 5
+  env:
+    GEMINI_API_KEY: ${GEMINI_API_KEY}
+
+database:
+  type: postgres
+  version: "16"
+  storageGb: 20
+
+redis:
+  enabled: true

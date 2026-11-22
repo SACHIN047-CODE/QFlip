@@ -1,0 +1,14 @@
+class: Appointment
+table: careflow_appointments
+fields:
+  appointmentId: String
+  patientId: String
+  patientName: String
+  doctorId: String
+  doctorName: String
+  department: String
+  date: String
+  timeSlot: String
+  status: String
+  tokenNumber: String?
+  createdAt: DateTime

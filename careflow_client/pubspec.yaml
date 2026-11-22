@@ -1,0 +1,13 @@
+name: careflow_client
+description: CareFlow Serverpod Client Package for Flutter
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  serverpod_client: ^2.3.0
+
+dev_dependencies:
+  lints: ^3.0.0
