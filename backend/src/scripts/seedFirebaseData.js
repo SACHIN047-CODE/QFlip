@@ -1,9 +1,15 @@
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '../../../backend/.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
 
 const projectId = process.env.FIREBASE_PROJECT_ID;
 const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
@@ -147,6 +153,33 @@ export const CUSTOM_DEMO_USERS = [
     roomNumber: 'Room 301',
     pin: '7788',
     specialization: 'Head of Pediatric Medicine'
+  },
+  {
+    id: 11,
+    name: 'Anita Devi (Staff Desk)',
+    email: 'staff@careflow.gov.in',
+    password: 'Careflow@2026',
+    role: 'staff',
+    phone: '+91 98100 22002',
+    department: 'Central Registration Counter #01'
+  },
+  {
+    id: 12,
+    name: 'Suresh Kumar (Lab Tech)',
+    email: 'lab@careflow.gov.in',
+    password: 'Careflow@2026',
+    role: 'lab',
+    phone: '+91 98100 33003',
+    department: 'Central Clinical Pathology & Imaging'
+  },
+  {
+    id: 13,
+    name: 'Mohit Verma (Chemist)',
+    email: 'pharmacy@careflow.gov.in',
+    password: 'Careflow@2026',
+    role: 'pharmacy',
+    phone: '+91 98100 44004',
+    department: 'OPD Main Chemist & Jan Aushadhi Counter'
   }
 ];
 

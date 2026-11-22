@@ -99,7 +99,7 @@ export const AppRoutes: React.FC = () => {
         <Route element={<DoctorGuard />}>
           <Route
             path="/doctor"
-            element={<DashboardLayout title="Doctor OPD Consultation Desk" subtitle="Dr. Rajesh Sharma, MD • Room 12" />}
+            element={<DashboardLayout title="Doctor OPD Consultation Desk" subtitle="Clinical Consultation & Patient Care Desk" />}
           >
             <Route index element={<Navigate to="/doctor/dashboard" replace />} />
             <Route path="dashboard" element={<DoctorDashboard />} />

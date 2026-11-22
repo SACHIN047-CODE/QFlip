@@ -5,6 +5,7 @@ import { useNotifications } from '../../context/NotificationContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { VoiceInputModal } from './VoiceInputModal';
+import { VoiceChatAssistantModal } from '../assistant/VoiceChatAssistantModal';
 import { HospitalMapModal } from './HospitalMapModal';
 
 interface NavbarProps {
@@ -492,15 +493,10 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
         )}
       </header>
 
-      {/* Voice Input Modal */}
-      <VoiceInputModal
+      {/* Voice and Chat OPD Assistant Modal */}
+      <VoiceChatAssistantModal
         isOpen={isVoiceOpen}
         onClose={() => setIsVoiceOpen(false)}
-        onComplete={(transcript, dept, symptoms) => {
-          navigate('/patient/registration', {
-            state: { voiceTranscript: transcript, suggestedDepartment: dept, symptoms },
-          });
-        }}
       />
 
       {/* Hospital Interactive Navigation Modal */}

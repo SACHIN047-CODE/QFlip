@@ -87,7 +87,7 @@ export const DoctorDashboard: React.FC = () => {
   const completedTokens = tokens.filter((t) => t.status === 'COMPLETED');
 
   const handleCallNext = async () => {
-    await callNext('General Medicine');
+    await callNext(user?.department || 'All');
   };
 
   const handleCompleteConsultation = async () => {
@@ -105,7 +105,7 @@ export const DoctorDashboard: React.FC = () => {
     });
     await updateStatus(currentServingToken.id, 'COMPLETED');
     // Auto call next
-    await callNext('General Medicine');
+    await callNext(user?.department || 'All');
   };
 
   const handleSkip = async () => {
@@ -183,10 +183,10 @@ export const DoctorDashboard: React.FC = () => {
           </div>
           <div>
             <div className="font-headline text-sm font-bold text-light-primary">
-              Live Clinical OPD Consultation Desk (Room 12)
+              Live Clinical OPD Consultation Desk • {user?.name || 'Dr. Rahul Verma'} ({user?.roomNumber || 'Room 101'})
             </div>
             <div className="text-[11px] text-light-on-surface-variant">
-              {waitingTokens.length} patients currently waiting in queue • Priority triage sorting active
+              Department: <strong>{user?.department || 'General Medicine'}</strong> &bull; {waitingTokens.length} patients currently waiting in queue &bull; Priority triage sorting active
             </div>
           </div>
         </div>

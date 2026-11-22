@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { useLanguage } from '../context/LanguageContext';
 import { PageSkeleton } from '../components/common/LoadingSkeleton';
+import { VoiceChatAssistantFloatingButton } from '../components/assistant/VoiceChatAssistantFloatingButton';
 
 export const PublicLayout: React.FC = () => {
   const location = useLocation();
@@ -204,6 +205,9 @@ export const PublicLayout: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Persistent Voice and Chat OPD Assistant */}
+      <VoiceChatAssistantFloatingButton />
     </div>
   );
 };
