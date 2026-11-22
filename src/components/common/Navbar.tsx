@@ -536,8 +536,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         )}
       </header>
 
-      {/* Voice Input Modal */}
-      <VoiceInputModal
+      {/* Voice and Chat OPD Assistant Modal */}
+      <VoiceChatAssistantModal
         isOpen={isVoiceOpen}
         onClose={() => setIsVoiceOpen(false)}
         onComplete={(transcript, dept, symptoms) => {

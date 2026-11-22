@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { doctorService } from '../../services/doctorService';
 
 export const DigitalPrescriptionsPage: React.FC = () => {
   const { user } = useAuth();
+  const [activeConsultation, setActiveConsultation] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    doctorService.getPatientConsultations(user.id).then((notes) => {
+      if (notes && notes.length > 0) {
+        setActiveConsultation(notes[0]);
+      }
+    });
+  }, [user]);
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -48,8 +59,12 @@ export const DigitalPrescriptionsPage: React.FC = () => {
           </div>
 
           <div className="text-right text-xs">
-            <div className="font-code font-bold text-accent text-sm">Rx-2026-8812</div>
-            <div className="text-slate-300">Date: Today, 10:15 AM</div>
+            <div className="font-code font-bold text-accent text-sm">
+              {activeConsultation ? `Rx-${activeConsultation.id.slice(-6).toUpperCase()}` : 'Rx-2026-8812'}
+            </div>
+            <div className="text-slate-300">
+              Date: {activeConsultation?.date || 'Today, 10:15 AM'}
+            </div>
           </div>
         </div>
 
@@ -69,7 +84,9 @@ export const DigitalPrescriptionsPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-light-on-surface-variant block">Prescribing Doctor</span>
-            <span className="font-bold text-light-primary">Dr. Rajesh Sharma, MD</span>
+            <span className="font-bold text-light-primary">
+              {activeConsultation?.doctorName || 'Dr. Rajesh Sharma, MD'}
+            </span>
           </div>
         </div>
 
@@ -98,63 +115,89 @@ export const DigitalPrescriptionsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-light-outline">
-                <tr>
-                  <td className="p-3 font-bold">1</td>
-                  <td className="p-3 font-bold text-light-primary">Amoxicillin + Clavulanate 625mg</td>
-                  <td className="p-3">1 Tablet</td>
-                  <td className="p-3 font-code">10</td>
-                  <td className="p-3">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
-                      After breakfast
-                    </span>
-                  </td>
-                  <td className="p-3 font-semibold text-secondary">Twice daily</td>
-                  <td className="p-3">5 Days</td>
-                  <td className="p-3">After Food with warm water</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
-                      Available in Jan Aushadhi
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-bold">2</td>
-                  <td className="p-3 font-bold text-light-primary">Paracetamol 650mg Tab</td>
-                  <td className="p-3">1 Tablet</td>
-                  <td className="p-3 font-code">6</td>
-                  <td className="p-3">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
-                      After dinner
-                    </span>
-                  </td>
-                  <td className="p-3 font-semibold text-secondary">Once daily</td>
-                  <td className="p-3">3 Days</td>
-                  <td className="p-3">If fever &gt; 100°F (SOS)</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
-                      Available in Jan Aushadhi
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-bold">3</td>
-                  <td className="p-3 font-bold text-light-primary">Pantoprazole 40mg Tab</td>
-                  <td className="p-3">1 Tablet</td>
-                  <td className="p-3 font-code">5</td>
-                  <td className="p-3">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
-                      Before breakfast
-                    </span>
-                  </td>
-                  <td className="p-3 font-semibold text-secondary">Once daily</td>
-                  <td className="p-3">5 Days</td>
-                  <td className="p-3">30 mins before morning breakfast</td>
-                  <td className="p-3">
-                    <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
-                      Available in Jan Aushadhi
-                    </span>
-                  </td>
-                </tr>
+                {activeConsultation && activeConsultation.prescriptions && activeConsultation.prescriptions.length > 0 ? (
+                  activeConsultation.prescriptions.map((med: any, idx: number) => (
+                    <tr key={med.id || idx}>
+                      <td className="p-3 font-bold">{idx + 1}</td>
+                      <td className="p-3 font-bold text-light-primary">{med.name}</td>
+                      <td className="p-3">{med.dosage || '1 Unit'}</td>
+                      <td className="p-3 font-code">{med.quantity || 10}</td>
+                      <td className="p-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                          {med.consumptionTiming || 'After food'}
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-secondary">{med.frequency || 'Twice daily'}</td>
+                      <td className="p-3">{med.duration || '5 Days'}</td>
+                      <td className="p-3">{med.instructions || 'With warm water'}</td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
+                          Available in Jan Aushadhi
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <>
+                    <tr>
+                      <td className="p-3 font-bold">1</td>
+                      <td className="p-3 font-bold text-light-primary">Amoxicillin + Clavulanate 625mg</td>
+                      <td className="p-3">1 Tablet</td>
+                      <td className="p-3 font-code">10</td>
+                      <td className="p-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                          After breakfast
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-secondary">Twice daily</td>
+                      <td className="p-3">5 Days</td>
+                      <td className="p-3">After Food with warm water</td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
+                          Available in Jan Aushadhi
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">2</td>
+                      <td className="p-3 font-bold text-light-primary">Paracetamol 650mg Tab</td>
+                      <td className="p-3">1 Tablet</td>
+                      <td className="p-3 font-code">6</td>
+                      <td className="p-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                          After dinner
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-secondary">Once daily</td>
+                      <td className="p-3">3 Days</td>
+                      <td className="p-3">If fever &gt; 100°F (SOS)</td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
+                          Available in Jan Aushadhi
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 font-bold">3</td>
+                      <td className="p-3 font-bold text-light-primary">Pantoprazole 40mg Tab</td>
+                      <td className="p-3">1 Tablet</td>
+                      <td className="p-3 font-code">5</td>
+                      <td className="p-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/10 text-secondary border border-secondary/20">
+                          Before breakfast
+                        </span>
+                      </td>
+                      <td className="p-3 font-semibold text-secondary">Once daily</td>
+                      <td className="p-3">5 Days</td>
+                      <td className="p-3">30 mins before morning breakfast</td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 rounded bg-success/15 text-success font-bold text-[10px]">
+                          Available in Jan Aushadhi
+                        </span>
+                      </td>
+                    </tr>
+                  </>
+                )}
               </tbody>
             </table>
           </div>

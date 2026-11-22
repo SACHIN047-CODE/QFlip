@@ -3,6 +3,8 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Sidebar } from '../components/common/Sidebar';
 import { useAuth } from '../context/AuthContext';
 import { VoiceInputModal } from '../components/common/VoiceInputModal';
+import { VoiceChatAssistantModal } from '../components/assistant/VoiceChatAssistantModal';
+import { VoiceChatAssistantFloatingButton } from '../components/assistant/VoiceChatAssistantFloatingButton';
 
 interface DashboardLayoutProps {
   title?: string;
@@ -33,6 +35,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
   };
 
   const { user, role, logout } = useAuth();
+  const { language } = useLanguage();
   const location = useLocation();
 
   return (
@@ -74,13 +77,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
             </button>
             <div>
               <div className="font-headline text-title-md font-bold text-light-primary flex items-center gap-2">
-                <span>{title || 'Operations Management'}</span>
+                <span>{language === 'hi' && title && FULL_PAGE_TRANSLATIONS[title] ? FULL_PAGE_TRANSLATIONS[title] : (title || 'Operations Management')}</span>
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20 uppercase">
-                  {role}
+                  {language === 'hi' && FULL_PAGE_TRANSLATIONS[role] ? FULL_PAGE_TRANSLATIONS[role] : role}
                 </span>
               </div>
               <div className="text-xs text-light-on-surface-variant hidden sm:block">
-                {subtitle || 'Civil Hospital Ambala • Integrated Clinical Health Stream'}
+                {language === 'hi' && subtitle && FULL_PAGE_TRANSLATIONS[subtitle] ? FULL_PAGE_TRANSLATIONS[subtitle] : (subtitle || 'Civil Hospital Ambala • Integrated Clinical Health Stream')}
               </div>
             </div>
           </div>
@@ -122,8 +125,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
       <VoiceInputModal
         isOpen={voiceOpen}
         onClose={() => setVoiceOpen(false)}
-        onComplete={(transcript, dept) => alert(`Voice triage received for ${dept}: "${transcript}"`)}
       />
+      <VoiceChatAssistantFloatingButton />
     </div>
   );
 };

@@ -394,6 +394,215 @@ const translations: Record<SupportedLanguage, Record<string, string>> = {
   },
 };
 
+export const FULL_PAGE_TRANSLATIONS: Record<string, string> = {
+  // Navigation & Headers
+  "Doctor OPD Consultation Desk": "डॉक्टर ओपीडी परामर्श डेस्क",
+  "Doctor Directory & Room Assignment": "डॉक्टर निर्देशिका एवं कमरा आवंटन",
+  "Clinical Roster Control": "क्लिनिकल रोस्टर नियंत्रण",
+  "Clinical Roster Control • Firebase Connected": "क्लिनिकल रोस्टर नियंत्रण • फायरबेस कनेक्टेड",
+  "Hospital Operations Command Admin": "अस्पताल संचालन कमान प्रशासन",
+  "Counter & Triage Staff Management": "काउंटर एवं ट्राइएज स्टाफ प्रबंधन",
+  "Operations Personnel": "अस्पताल संचालन स्टाफ",
+  "Front Desk Registration & Triage": "पंजीकरण एवं ट्राइएज काउंटर",
+  "Clinical Diagnostics & Laboratory": "क्लिनिकल डायग्नोस्टिक्स एवं लैब",
+  "Jan Aushadhi Pharmacy Counter": "जन औषधि दवाखाना / केमिस्ट",
+  "Hospital Operations Command": "अस्पताल संचालन कमान",
+  "AI & Digital Twin Simulation": "एआई एवं डिजिटल ट्विन सिमुलेशन",
+  "Digital Prescriptions": "डिजिटल दवा पर्चियां",
+  "Laboratory Investigations": "प्रयोगशाला जांच आदेश",
+  "Medicine Dispensing Orders": "दवा वितरण आदेश",
+  "Patient Medical History": "मरीज़ का चिकित्सा इतिहास",
+  "Smart Outpatient Queue": "स्मार्ट ओपीडी कतार",
+  "Live Hospital Operations": "लाइव अस्पताल संचालन",
+  "Live Clinical OPD Consultation Desk": "लाइव क्लिनिकल ओपीडी परामर्श डेस्क",
+  "Smart Outpatient Queue & Real-Time Hospital Flow": "स्मार्ट ओपीडी कतार एवं लाइव अस्पताल संचालन",
+  "Hospital SSO & Portal Authentication": "अस्पताल पोर्टल लॉगिन एवं प्रमाणीकरण",
+  "Select Your Role:": "अपनी भूमिका चुनें:",
+
+  // Sidebar Links
+  "Overview Dashboard": "अवलोकन डैशबोर्ड",
+  "Consultation Desk": "परामर्श डेस्क",
+  "Patient Queue": "मरीज़ों की कतार",
+  "Counter & Triage": "काउंटर एवं ट्राइएज",
+  "Token Desk": "टोकन डेस्क",
+  "Diagnostic Orders": "जांच आदेश",
+  "Test Results": "जांच परिणाम",
+  "Dispensary Queue": "दवा वितरण कतार",
+  "Medicine Inventory": "दवा स्टॉक सूची",
+  "Doctor Roster": "डॉक्टर रोस्टर",
+  "Staff Roster": "स्टाफ रोस्टर",
+  "Departments": "विभाग",
+  "Resource Allocations": "संसाधन आवंटन",
+  "Complaints & Grievances": "शिकायतें एवं निवारण",
+  "Operations Command": "अस्पताल संचालन कमान",
+  "Firebase Manager": "फायरबेस प्रबंधक",
+  "AI & Digital Twin": "एआई एवं डिजिटल ट्विन",
+  "Medical History": "चिकित्सा इतिहास",
+  "Lab Tests": "लैब परीक्षण",
+  "Pharmacy": "दवाखाना / केमिस्ट",
+  "Notifications": "सूचनाएं",
+  "Live Queue": "लाइव कतार",
+  "Live Token Tracker": "लाइव टोकन ट्रैकर",
+  "Book / OPD Slip": "ओपीडी पर्ची बनाएं",
+  "Pharmacy Orders": "दवा वितरण आदेश",
+  "Appointments": "अपॉइंटमेंट्स",
+  "Patient Services": "मरीज़ सेवाएं",
+  "Hospital Command": "अस्पताल कमान",
+
+  // Action Buttons
+  "Add New Doctor": "नया डॉक्टर जोड़ें",
+  "Call Next Patient": "अगला मरीज़ बुलाएं",
+  "Call Next": "अगला मरीज़ बुलाएं",
+  "Complete Consultation": "परामर्श पूरा करें",
+  "Skip Patient": "मरीज़ छोड़ें",
+  "Save Doctor": "डॉक्टर सहेजें",
+  "Save Doctor (role=\"doctor\")": "डॉक्टर सहेजें (role=\"doctor\")",
+  "Toggle Shift": "शिफ्ट बदलें",
+  "Review Details & Issue Token": "विवरण जांचें और टोकन बनाएं",
+  "Print Official Prescription Slip": "आधिकारिक पर्ची प्रिंट करें",
+  "Get WhatsApp Copy": "व्हाट्सएप कॉपी प्राप्त करें",
+  "Sign In": "लॉग इन",
+  "Sign Out": "लॉग आउट",
+  "Register": "पंजीकरण",
+  "Search": "खोजें",
+  "Cancel": "रद्द करें",
+  "Confirm": "पुष्टि करें",
+  "Dismiss": "हटाएं",
+  "Book OPD Token": "ओपीडी टोकन बुक करें",
+  "Track Live Queue": "लाइव कतार देखें",
+  "Try Voice OPD": "वॉयस ओपीडी आज़माएं",
+  "Register Patient": "मरीज़ का पंजीकरण करें",
+  "Clear & Retry": "हटाएं व पुनः प्रयास करें",
+  "Speak Again": "पुनः बोलें",
+  "Analyze & Assign Department": "जांचें और विभाग तय करें",
+  "Proceed with this Department": "इस विभाग के साथ आगे बढ़ें",
+  "Register & Assign Doctor (Firebase)": "डॉक्टर पंजीकरण एवं आवंटन (फायरबेस)",
+  "Adding to Firebase...": "फायरबेस में सहेजा जा रहा है...",
+
+  // Table & Form Headers
+  "Doctor Name": "डॉक्टर का नाम",
+  "Doctor Full Name": "डॉक्टर का पूरा नाम",
+  "Doctor Email (Used for Login)": "डॉक्टर की ईमेल (लॉगिन हेतु)",
+  "Doctor Email": "डॉक्टर की ईमेल",
+  "Contact Phone": "संपर्क फोन",
+  "Specialty / Department": "विशेषज्ञता / विभाग",
+  "Specialty": "विशेषज्ञता",
+  "Qualification": "योग्यता",
+  "Assigned OPD Room": "आवंटित ओपीडी कमरा",
+  "OPD Room": "ओपीडी कमरा",
+  "Shift Timing": "शिफ्ट का समय",
+  "Shift Hours": "शिफ्ट का समय",
+  "Patient Load": "मरीज़ों का लोड",
+  "Duty Status": "ड्यूटी की स्थिति",
+  "Actions": "कार्य",
+  "Token Number": "टोकन नंबर",
+  "Token #": "टोकन #",
+  "Patient Details": "मरीज़ का विवरण",
+  "Symptoms": "लक्षण",
+  "Priority": "प्राथमिकता",
+  "Queue Status": "कतार की स्थिति",
+  "Estimated Wait Time": "अनुमानित प्रतीक्षा समय",
+  "Estimated Wait": "अनुमानित प्रतीक्षा",
+  "Currently Serving": "वर्तमान में सेवारत",
+  "Chief Complaints": "मुख्य समस्याएं / लक्षण",
+  "Clinical Findings": "क्लिनिकल जांच निष्कर्ष",
+  "Diagnosis": "निदान (रोग का नाम)",
+  "Advice & Follow-up": "चिकित्सक सलाह व फॉलो-अप",
+  "Advice": "सलाह",
+  "Prescriptions": "दवा पर्ची",
+  "Prescribed Medicines": "निर्धारित दवाइयां",
+  "Medicine & Strength": "दवा एवं खुराक",
+  "Medicine Name": "दवा का नाम",
+  "Dosage": "खुराक",
+  "Quantity": "मात्रा",
+  "Consumption Timing": "दवा लेने का समय",
+  "Stock Status": "स्टॉक स्थिति",
+  "Available in Jan Aushadhi": "जन औषधि में उपलब्ध",
+  "Instructions": "विशेष निर्देश",
+  "Frequency": "आवृत्ति",
+  "Duration": "अवधि",
+  "Total Today": "आज कुल",
+  "Pending Collection": "नमूना संग्रह लंबित",
+  "In Analyzer": "मशीन में जांच जारी",
+  "Reports Completed": "रिपोर्ट्स तैयार",
+  "Total Prescriptions Today": "आज कुल दवा पर्चियां",
+  "Queued for Packaging": "पैकिंग हेतु कतारबद्ध",
+  "Currently Dispensing": "वितरित की जा रही हैं",
+  "Ready at Counter": "काउंटर पर तैयार",
+  "Assigned Desk": "आवंटित काउंटर",
+  "Tokens Issued Today": "आज जारी टोकन",
+  "Duty Shift": "ड्यूटी शिफ्ट",
+  "Password": "पासवर्ड",
+  "Doctor Security Clearance PIN": "डॉक्टर सुरक्षा पिन (Clearance PIN)",
+  "Doctor Security PIN (4-Digits)": "डॉक्टर सुरक्षा पिन (4 अंक)",
+  "Email Address / Username": "ईमेल पता / उपयोगकर्ता नाम",
+
+  // Statuses & Priorities
+  "Active": "सक्रिय",
+  "On Break": "विश्राम पर",
+  "In Session": "सत्र चालू",
+  "Online": "ऑनलाइन",
+  "Offline": "ऑफलाइन",
+  "WAITING": "प्रतीक्षारत",
+  "IN_CONSULTATION": "परामर्श जारी",
+  "COMPLETED": "संपन्न",
+  "SKIPPED": "छोड़ा गया",
+  "PENDING": "लंबित",
+  "PROCESSING": "प्रक्रिया में",
+  "QUEUED": "कतारबद्ध",
+  "READY_FOR_PICKUP": "वितरण हेतु तैयार",
+  "DISPENSING": "वितरित किया जा रहा है",
+  "Normal": "सामान्य",
+  "Senior": "वरिष्ठ नागरिक",
+  "Emergency": "आपातकालीन",
+  "Pediatric": "बाल रोग",
+  "Critical": "गंभीर",
+  "Elevated": "अधिक भीड़",
+  "Optimal": "सामान्य",
+  "Overload": "अत्यधिक भीड़",
+
+  // Departments
+  "General Medicine": "सामान्य चिकित्सा",
+  "Cardiology": "हृदय रोग विभाग",
+  "Orthopedics": "हड्डी रोग विभाग",
+  "Pediatrics": "बाल रोग विभाग",
+  "Obstetrics & Gynecology": "प्रसूति एवं स्त्री रोग",
+  "ENT & Head Neck": "कान, नाक, गला",
+  "Emergency Trauma Care": "आपातकालीन ट्रौमा केयर",
+
+  // Common UI words
+  "Admin": "प्रशासक",
+  "Doctor": "डॉक्टर",
+  "Patient": "मरीज़",
+  "Staff": "स्टाफ",
+  "Lab": "लैब",
+  "Chemist": "केमिस्ट",
+  "Welcome,": "स्वागत है,",
+  "Active OPD Token": "सक्रिय ओपीडी टोकन",
+  "Hospital Map": "अस्पताल का नक्शा",
+  "Voice OPD": "वॉयस ओपीडी",
+  "Patient Full Name": "मरीज़ का पूरा नाम",
+  "Mobile Phone (10 digits)": "मोबाइल फोन (10 अंक)",
+  "Age (Years)": "उम्र (वर्ष)",
+  "Gender": "लिंग",
+  "Male": "पुरुष",
+  "Female": "महिला",
+  "Other": "अन्य",
+  "After breakfast": "नाश्ते के बाद",
+  "Before breakfast": "नाश्ते से पहले",
+  "After lunch": "दोपहर के खाने के बाद",
+  "Before dinner": "रात के खाने से पहले",
+  "After dinner": "रात के खाने के बाद",
+  "At bedtime": "सोते समय",
+  "Once daily": "दिन में 1 बार",
+  "Twice daily": "दिन में 2 बार",
+  "Thrice daily": "दिन में 3 बार",
+  "5 Days": "5 दिन",
+  "3 Days": "3 दिन",
+  "1 Tablet": "1 गोली",
+  "Emergency Helplines": "आपातकालीन हेल्पलाइन"
+};
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -405,6 +614,112 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, language);
     document.documentElement.lang = language;
+
+    if (typeof window === 'undefined' || !document.body) return;
+
+    // Full-page DOM Translation Engine:
+    // Transforms the entire page text into Hindi when 'hi' is active,
+    // and seamlessly restores original English text when 'en' is active.
+    let observer: MutationObserver | null = null;
+
+    const translateNode = (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const textNode = node as Text;
+        const text = textNode.nodeValue;
+        if (!text || !text.trim()) return;
+
+        // Skip script, style, code, pre, svg tags
+        const parent = textNode.parentElement;
+        if (parent) {
+          const tag = parent.tagName.toLowerCase();
+          if (['script', 'style', 'code', 'pre', 'svg', 'noscript'].includes(tag)) return;
+        }
+
+        // Store original English text if not already stored
+        if ((textNode as any).__cf_orig === undefined) {
+          (textNode as any).__cf_orig = text;
+        }
+
+        const trimmed = text.trim();
+        if (FULL_PAGE_TRANSLATIONS[trimmed]) {
+          textNode.nodeValue = text.replace(trimmed, FULL_PAGE_TRANSLATIONS[trimmed]);
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const el = node as HTMLElement;
+        const tag = el.tagName.toLowerCase();
+        if (['script', 'style', 'code', 'pre', 'svg', 'noscript'].includes(tag)) return;
+
+        // Translate placeholders
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+          if (el.placeholder && el.placeholder.trim()) {
+            if ((el as any).__cf_orig_placeholder === undefined) {
+              (el as any).__cf_orig_placeholder = el.placeholder;
+            }
+            const pTrim = el.placeholder.trim();
+            if (FULL_PAGE_TRANSLATIONS[pTrim]) {
+              el.placeholder = FULL_PAGE_TRANSLATIONS[pTrim];
+            }
+          }
+        }
+
+        // Recurse into children
+        node.childNodes.forEach(translateNode);
+      }
+    };
+
+    const restoreNode = (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const textNode = node as Text;
+        if ((textNode as any).__cf_orig !== undefined) {
+          textNode.nodeValue = (textNode as any).__cf_orig;
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const el = node as HTMLElement;
+        if ((el as any).__cf_orig_placeholder !== undefined) {
+          (el as HTMLInputElement).placeholder = (el as any).__cf_orig_placeholder;
+        }
+        node.childNodes.forEach(restoreNode);
+      }
+    };
+
+    if (language === 'hi') {
+      // 1. Initial full DOM tree scan
+      translateNode(document.body);
+
+      // 2. Continuous reactive observer for dynamic components/modals/updates
+      observer = new MutationObserver((mutations) => {
+        for (const mut of mutations) {
+          if (mut.type === 'childList') {
+            mut.addedNodes.forEach(translateNode);
+          } else if (mut.type === 'characterData') {
+            const textNode = mut.target as Text;
+            const text = textNode.nodeValue;
+            if (text && text.trim() && (textNode as any).__cf_orig === undefined) {
+              (textNode as any).__cf_orig = text;
+              const trimmed = text.trim();
+              if (FULL_PAGE_TRANSLATIONS[trimmed]) {
+                textNode.nodeValue = text.replace(trimmed, FULL_PAGE_TRANSLATIONS[trimmed]);
+              }
+            }
+          }
+        }
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    } else {
+      // Restore entire page to original English
+      restoreNode(document.body);
+    }
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
   }, [language]);
 
   const toggleLanguage = () => {

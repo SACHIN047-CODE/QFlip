@@ -126,51 +126,51 @@ export const LoginPage: React.FC = () => {
           <label className="text-[11px] font-bold text-slate-500 uppercase block mb-1.5">
             Select Your Role:
           </label>
-          <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200 text-xs">
+          <div className="flex items-center p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200/80 gap-1 text-xs sm:text-sm">
             <button
               type="button"
-              onClick={() => handleRoleChange('patient')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'patient' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              onClick={() => handleRoleChange('admin')}
+              className={`flex-1 py-2 px-2 rounded-xl font-bold transition-all text-center ${role === 'admin' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 font-medium'
                 }`}
             >
-              Patient
+              Admin
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('doctor')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'doctor' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              className={`flex-1 py-2 px-2 rounded-xl font-bold transition-all text-center ${role === 'doctor' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 font-medium'
                 }`}
             >
               Doctor
             </button>
             <button
               type="button"
-              onClick={() => handleRoleChange('staff')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'staff' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              onClick={() => handleRoleChange('patient')}
+              className={`flex-1 py-2 px-2 rounded-xl font-bold transition-all text-center ${role === 'patient' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 font-medium'
                 }`}
             >
-              Staff Desk
+              Patient
             </button>
             <button
               type="button"
-              onClick={() => handleRoleChange('admin')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'admin' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              onClick={() => handleRoleChange('staff')}
+              className={`flex-1 py-2 px-2 rounded-xl font-bold transition-all text-center ${role === 'staff' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 font-medium'
                 }`}
             >
-              Administrator
+              Staff
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('lab')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'lab' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              className={`flex-1 py-2 px-2 rounded-xl font-bold transition-all text-center ${role === 'lab' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 font-medium'
                 }`}
             >
-              Lab Staff
+              Lab
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('pharmacy')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'pharmacy' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              className={`flex-1 py-2 px-2 rounded-xl font-bold transition-all text-center ${role === 'pharmacy' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 font-medium'
                 }`}
             >
               Chemist
@@ -288,25 +288,31 @@ export const LoginPage: React.FC = () => {
           <span className="text-[10px] font-bold uppercase tracking-wider text-light-on-surface-variant block text-center">
             Demo Credentials (1-Click Fill)
           </span>
-          <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px]">
             <button
               type="button"
-              onClick={() => handleRoleChange('patient')}
-              className={`p-2 rounded-lg border text-left transition-all ${role === 'patient' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-                }`}
+              onClick={() => handleRoleChange('admin')}
+              className={`p-2.5 rounded-xl border text-left transition-all ${
+                role === 'admin'
+                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-700 font-bold'
+                  : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
             >
               <div className="font-bold flex items-center gap-1">
-                <span className="material-symbols-outlined text-xs">person</span>
-                Patient
+                <span className="material-symbols-outlined text-xs">admin_panel_settings</span>
+                Admin
               </div>
-              <div className="text-[10px] text-light-on-surface-variant truncate">patient@careflow.gov.in</div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">admin@careflow.gov.in</div>
             </button>
 
             <button
               type="button"
               onClick={() => handleRoleChange('doctor')}
-              className={`p-2 rounded-lg border text-left transition-all ${role === 'doctor' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-                }`}
+              className={`p-2.5 rounded-xl border text-left transition-all ${
+                role === 'doctor'
+                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-700 font-bold'
+                  : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">stethoscope</span>
@@ -317,35 +323,44 @@ export const LoginPage: React.FC = () => {
 
             <button
               type="button"
+              onClick={() => handleRoleChange('patient')}
+              className={`p-2.5 rounded-xl border text-left transition-all ${
+                role === 'patient'
+                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-700 font-bold'
+                  : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
+            >
+              <div className="font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">person</span>
+                Patient
+              </div>
+              <div className="text-[10px] text-light-on-surface-variant truncate">patient@careflow.gov.in</div>
+            </button>
+
+            <button
+              type="button"
               onClick={() => handleRoleChange('staff')}
-              className={`p-2 rounded-lg border text-left transition-all ${role === 'staff' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-                }`}
+              className={`p-2.5 rounded-xl border text-left transition-all ${
+                role === 'staff'
+                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-700 font-bold'
+                  : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">how_to_reg</span>
-                Registration Staff
+                Staff Desk
               </div>
               <div className="text-[10px] text-light-on-surface-variant truncate">staff@careflow.gov.in</div>
             </button>
 
             <button
               type="button"
-              onClick={() => handleRoleChange('admin')}
-              className={`p-2 rounded-lg border text-left transition-all ${role === 'admin' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-                }`}
-            >
-              <div className="font-bold flex items-center gap-1">
-                <span className="material-symbols-outlined text-xs">admin_panel_settings</span>
-                Administrator
-              </div>
-              <div className="text-[10px] text-light-on-surface-variant truncate">admin@careflow.gov.in</div>
-            </button>
-
-            <button
-              type="button"
               onClick={() => handleRoleChange('lab')}
-              className={`p-2 rounded-lg border text-left transition-all ${role === 'lab' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-                }`}
+              className={`p-2.5 rounded-xl border text-left transition-all ${
+                role === 'lab'
+                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-700 font-bold'
+                  : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">biotech</span>
@@ -357,12 +372,15 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleRoleChange('pharmacy')}
-              className={`p-2 rounded-lg border text-left transition-all ${role === 'pharmacy' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-                }`}
+              className={`p-2.5 rounded-xl border text-left transition-all ${
+                role === 'pharmacy'
+                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20 text-blue-700 font-bold'
+                  : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+              }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">medication</span>
-                Pharmacy Staff
+                Chemist
               </div>
               <div className="text-[10px] text-light-on-surface-variant truncate">pharmacy@careflow.gov.in</div>
             </button>
