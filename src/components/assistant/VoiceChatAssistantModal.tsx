@@ -216,8 +216,9 @@ export const VoiceChatAssistantModal: React.FC<VoiceChatAssistantModalProps> = (
                 <h3 className="font-headline font-bold text-base tracking-tight text-white">
                   CareFlow Voice & Chat Assistant
                 </h3>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                  OPD Live Triage
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30 flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[12px] text-teal-300">smart_toy</span>
+                  Gemini AI • 1-Prompt Booking
                 </span>
               </div>
               <p className="text-[11px] text-slate-300 flex items-center gap-1">

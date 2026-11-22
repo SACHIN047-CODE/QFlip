@@ -103,6 +103,87 @@ export const OPD_KNOWLEDGE_BASE: KnowledgeDocument[] = [
     content: 'For direct assistance, lost slips, wheel-chair service, or grievance escalation, please visit Central Helpdesk Counter #01 at the Main Entrance Porch, or call our hospital helpline at 0171-2550100 (Ext. 101/102).',
     source: 'Civil Hospital Ambala Public Relations Desk',
     keywords: ['helpdesk', 'phone number', 'contact', 'customer care', 'wheelchair', 'lost slip', 'helpline', 'human agent', 'support']
+  },
+  // Grounded items from CAREFLOW (QFlip) — AI Agent Knowledge Base PDF
+  {
+    id: 'kb-pdf-faq-login',
+    category: 'general',
+    title: 'Can I book without logging in?',
+    content: 'No. You must log in or register first before booking an appointment in CareFlow.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 11 (FAQ)',
+    keywords: ['book without login', 'login required', 'register first', 'without account', 'guest booking']
+  },
+  {
+    id: 'kb-pdf-faq-family',
+    category: 'general',
+    title: 'Can I book for a family member?',
+    content: 'Only if they have their own patient profile; confirm their identity first. Registration staff can book for walk-in patients.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 11 (FAQ)',
+    keywords: ['family', 'family member', 'book for someone else', 'book for child', 'book for relative', 'book for mother', 'book for father']
+  },
+  {
+    id: 'kb-pdf-faq-token',
+    category: 'general',
+    title: 'How do I get a token?',
+    content: 'A queue token is issued when you check in for your appointment or register as a walk-in at the hospital.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 11 (FAQ)',
+    keywords: ['how do i get a token', 'token issue', 'walk in token', 'check in token', 'get token', 'token number']
+  },
+  {
+    id: 'kb-pdf-faq-cancel',
+    category: 'general',
+    title: 'Can I cancel an appointment?',
+    content: 'Yes, scheduled appointments can be cancelled. Completed appointments cannot be cancelled.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 11 (FAQ)',
+    keywords: ['can i cancel', 'cancel appointment', 'cancellation', 'cancel booking']
+  },
+  {
+    id: 'kb-pdf-faq-doctor-late',
+    category: 'general',
+    title: 'What if the doctor is late or absent?',
+    content: 'Queue wait times update in real time; the registration desk can transfer you to another doctor in the department.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 11 (FAQ)',
+    keywords: ['doctor late', 'doctor absent', 'doctor delayed', 'doctor not available', 'doctor not coming']
+  },
+  {
+    id: 'kb-pdf-faq-pharmacy-lab',
+    category: 'preparation',
+    title: 'Where do I pick up medicines / get lab tests?',
+    content: 'Pharmacy and laboratory are separate counters; prescriptions and lab requests created by the doctor appear in your account. Ask the registration desk for the exact location if the data does not list it.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 11 (FAQ)',
+    keywords: ['pick up medicines', 'lab tests', 'pharmacy', 'laboratory', 'prescription', 'where to collect medicines']
+  },
+  {
+    id: 'kb-pdf-faq-privacy',
+    category: 'general',
+    title: 'Is my data private and secure?',
+    content: 'Yes. Access is role-based (RBAC) with JWT authentication and all medical records are strictly protected.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 11 (FAQ)',
+    keywords: ['is my data private', 'data privacy', 'confidential', 'medical records protected', 'security', 'privacy']
+  },
+  {
+    id: 'kb-pdf-queue-triage',
+    category: 'general',
+    title: 'Queue Ordering and Triage Levels',
+    content: 'Queue ordering is by emergency priority first, then sequence. CareFlow uses three triage levels: Red (most urgent), Yellow (priority/moderate), and Green (routine). Real-time position and wait times update via Socket.IO.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 7 (Day-of-visit & Queue)',
+    keywords: ['triage levels', 'red yellow green', 'triage color', 'queue ordering', 'priority', 'socket.io', 'wait time live']
+  },
+  {
+    id: 'kb-pdf-doctor-location',
+    category: 'departments',
+    title: 'Where does a doctor sit? (Doctor Room and Floor Directory)',
+    content: 'Dr. Rahul Verma (General Medicine) sits in Room 101, Ground Floor. Dr. Priya Singh (Cardiology) sits in Room 201, Floor 1. Dr. Karan Malhotra (Orthopedics) sits in Room 108, Ground Floor. Dr. Simran Kaur (Pediatrics) sits in Room 301, Floor 2. If room or floor is not listed, please consult the registration desk.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 4 (Where does Dr. X sit?)',
+    keywords: ['where does doctor sit', 'which room is doctor', 'doctor location', 'doctor cabin', 'doctor floor', 'where to find doctor']
+  },
+  {
+    id: 'kb-pdf-booking-rules',
+    category: 'general',
+    title: 'Appointment Booking Rules & Requirements',
+    content: 'Required info: Patient, Department, Doctor, Date, Time slot, and Symptoms. Rules: Never book in the past, never double-book overlapping times, and do not exceed daily capacity. Booking status becomes scheduled.',
+    source: 'CAREFLOW AI Knowledge Base PDF, Section 6 (How to book an appointment)',
+    keywords: ['booking rules', 'how to book', 'required information', 'double booking', 'appointment rules']
   }
 ];
 

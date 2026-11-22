@@ -24,7 +24,7 @@ export class PredictionService {
     // If Gemini API is available, try generative analysis
     if (genAI) {
       try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash' });
         const prompt = `You are an AI Clinical Triage Assistant for CareFlow, a hospital OPD queue management system.
 Evaluate the following patient symptoms (may be in English, Hindi, Punjabi, or Tamil):
 Symptoms: "${symptoms}"
