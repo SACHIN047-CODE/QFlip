@@ -603,23 +603,39 @@ export const FULL_PAGE_TRANSLATIONS: Record<string, string> = {
   "Emergency Helplines": "आपातकालीन हेल्पलाइन"
 };
 
+// Auto-generate reverse dictionary for Hindi -> English restoration
+const REVERSE_TRANSLATIONS: Record<string, string> = {};
+for (const [enKey, hiVal] of Object.entries(FULL_PAGE_TRANSLATIONS)) {
+  if (hiVal && typeof hiVal === 'string') {
+    REVERSE_TRANSLATIONS[hiVal.trim()] = enKey.trim();
+  }
+}
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<SupportedLanguage>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as SupportedLanguage | null;
-    return saved === 'hi' || saved === 'pa' ? saved : 'en';
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) as SupportedLanguage | null;
+      if (saved === 'hi' || saved === 'pa' || saved === 'en') {
+        return saved;
+      }
+    } catch {
+      // ignore
+    }
+    return 'en';
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, language);
+    try {
+      localStorage.setItem(STORAGE_KEY, language);
+    } catch {
+      // ignore
+    }
     document.documentElement.lang = language;
 
     if (typeof window === 'undefined' || !document.body) return;
 
-    // Full-page DOM Translation Engine:
-    // Transforms the entire page text into Hindi when 'hi' is active,
-    // and seamlessly restores original English text when 'en' is active.
     let observer: MutationObserver | null = null;
 
     const translateNode = (node: Node) => {
@@ -635,12 +651,13 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
           if (['script', 'style', 'code', 'pre', 'svg', 'noscript'].includes(tag)) return;
         }
 
-        // Store original English text if not already stored
-        if ((textNode as any).__cf_orig === undefined) {
+        const trimmed = text.trim();
+
+        // Only store original English text if it's NOT already a Hindi translated string
+        if (!REVERSE_TRANSLATIONS[trimmed] && (textNode as any).__cf_orig === undefined) {
           (textNode as any).__cf_orig = text;
         }
 
-        const trimmed = text.trim();
         if (FULL_PAGE_TRANSLATIONS[trimmed]) {
           textNode.nodeValue = text.replace(trimmed, FULL_PAGE_TRANSLATIONS[trimmed]);
         }
@@ -652,12 +669,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
         // Translate placeholders
         if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
           if (el.placeholder && el.placeholder.trim()) {
-            if ((el as any).__cf_orig_placeholder === undefined) {
+            const pTrim = el.placeholder.trim();
+            if (!REVERSE_TRANSLATIONS[pTrim] && (el as any).__cf_orig_placeholder === undefined) {
               (el as any).__cf_orig_placeholder = el.placeholder;
             }
-            const pTrim = el.placeholder.trim();
             if (FULL_PAGE_TRANSLATIONS[pTrim]) {
-              el.placeholder = FULL_PAGE_TRANSLATIONS[pTrim];
+              el.placeholder = el.placeholder.replace(pTrim, FULL_PAGE_TRANSLATIONS[pTrim]);
             }
           }
         }
@@ -670,13 +687,32 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     const restoreNode = (node: Node) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const textNode = node as Text;
-        if ((textNode as any).__cf_orig !== undefined) {
+        const text = textNode.nodeValue;
+        if (!text) return;
+        const trimmed = text.trim();
+
+        // 1. Check reverse dictionary to restore from Hindi to English
+        if (REVERSE_TRANSLATIONS[trimmed]) {
+          textNode.nodeValue = text.replace(trimmed, REVERSE_TRANSLATIONS[trimmed]);
+        } else if ((textNode as any).__cf_orig !== undefined) {
           textNode.nodeValue = (textNode as any).__cf_orig;
         }
+        delete (textNode as any).__cf_orig;
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const el = node as HTMLElement;
-        if ((el as any).__cf_orig_placeholder !== undefined) {
-          (el as HTMLInputElement).placeholder = (el as any).__cf_orig_placeholder;
+        const tag = el.tagName.toLowerCase();
+        if (['script', 'style', 'code', 'pre', 'svg', 'noscript'].includes(tag)) return;
+
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+          if (el.placeholder) {
+            const pTrim = el.placeholder.trim();
+            if (REVERSE_TRANSLATIONS[pTrim]) {
+              el.placeholder = el.placeholder.replace(pTrim, REVERSE_TRANSLATIONS[pTrim]);
+            } else if ((el as any).__cf_orig_placeholder !== undefined) {
+              el.placeholder = (el as any).__cf_orig_placeholder;
+            }
+            delete (el as any).__cf_orig_placeholder;
+          }
         }
         node.childNodes.forEach(restoreNode);
       }
@@ -694,9 +730,11 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
           } else if (mut.type === 'characterData') {
             const textNode = mut.target as Text;
             const text = textNode.nodeValue;
-            if (text && text.trim() && (textNode as any).__cf_orig === undefined) {
-              (textNode as any).__cf_orig = text;
+            if (text && text.trim()) {
               const trimmed = text.trim();
+              if (!REVERSE_TRANSLATIONS[trimmed] && (textNode as any).__cf_orig === undefined) {
+                (textNode as any).__cf_orig = text;
+              }
               if (FULL_PAGE_TRANSLATIONS[trimmed]) {
                 textNode.nodeValue = text.replace(trimmed, FULL_PAGE_TRANSLATIONS[trimmed]);
               }
@@ -711,7 +749,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
         characterData: true,
       });
     } else {
-      // Restore entire page to original English
+      // Completely restore entire page to English
       restoreNode(document.body);
     }
 
