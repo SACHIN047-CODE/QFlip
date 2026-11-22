@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
-import { HospitalMapModal } from '../../components/common/HospitalMapModal';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const LandingPage: React.FC = () => {
@@ -469,7 +468,6 @@ export const LandingPage: React.FC = () => {
           });
         }}
       />
-      <HospitalMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQueue } from '../../context/QueueContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { HospitalMapModal } from '../../components/common/HospitalMapModal';
 import { PageHeader } from '../../components/common/PageHeader';
 import { Button } from '../../components/common/Button';
 import { BentoCard } from '../../components/common/BentoCard';
@@ -249,12 +248,6 @@ export const SmartQueueTracker: React.FC = () => {
             ))}
         </div>
       </BentoCard>
-
-      <HospitalMapModal
-        isOpen={mapOpen}
-        onClose={() => setMapOpen(false)}
-        destinationDepartment="OPD Room 12 (General Medicine)"
-      />
     </div>
   );
 };
