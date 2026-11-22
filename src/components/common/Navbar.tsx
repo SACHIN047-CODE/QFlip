@@ -380,13 +380,7 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
               <span className="text-xs font-bold text-slate-400 uppercase">
                 Language
               </span>
-              <button
-                type="button"
-                onClick={toggleLanguage}
-                className="px-3 py-1 rounded bg-[#0F766E]/10 border border-[#0F766E]/30 text-[#0F766E] text-xs font-bold"
-              >
-                {language === 'en' ? 'Switch to हिन्दी' : 'Switch to English'}
-              </button>
+              <LanguageSelector variant="compact" />
             </div>
 
             {mode === 'patient' ? (
