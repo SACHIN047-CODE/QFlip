@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useQueue } from '../../context/QueueContext';
-import { useLanguage, FULL_PAGE_TRANSLATIONS } from '../../context/LanguageContext';
+import { useLanguage, translateText } from '../../context/LanguageContext';
 
 interface SidebarProps {
   onCloseMobile?: () => void;
@@ -35,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     badge?: React.ReactNode;
     end?: boolean;
   }) => {
-    const displayLabel = language === 'hi' && FULL_PAGE_TRANSLATIONS[label] ? FULL_PAGE_TRANSLATIONS[label] : label;
+    const displayLabel = translateText(label, language);
     return (
     <div className="relative group">
       <NavLink
