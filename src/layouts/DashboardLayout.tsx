@@ -12,14 +12,37 @@ interface DashboardLayoutProps {
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitle }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [voiceOpen, setVoiceOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('qflip_sidebar_collapsed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const toggleSidebarCollapse = () => {
+    setIsCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('qflip_sidebar_collapsed', String(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
   const { user, role, logout } = useAuth();
   const location = useLocation();
 
   return (
     <div className="bg-light-bg text-light-on-surface font-body min-h-screen flex antialiased">
       {/* Desktop Sidebar */}
-      <div className="hidden md:block">
-        <Sidebar />
+      <div className="hidden md:block h-full">
+        <Sidebar
+          isCollapsed={isCollapsed}
+          onToggleCollapse={toggleSidebarCollapse}
+        />
       </div>
 
       {/* Mobile Drawer Sidebar */}
@@ -30,7 +53,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
             onClick={() => setMobileMenuOpen(false)}
           ></div>
           <div className="relative z-10 w-64 bg-light-surface shadow-2xl h-full flex flex-col">
-            <Sidebar onCloseMobile={() => setMobileMenuOpen(false)} />
+            <Sidebar
+              isCollapsed={false}
+              onCloseMobile={() => setMobileMenuOpen(false)}
+            />
           </div>
         </div>
       )}
@@ -61,6 +87,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
 
           {/* Quick Header Actions */}
           <div className="flex items-center gap-3">
+
             <button
               onClick={() => setVoiceOpen(true)}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-secondary/30 bg-secondary/10 text-secondary text-xs font-bold hover:bg-secondary/20 transition-colors"

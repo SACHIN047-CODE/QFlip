@@ -1,181 +1,75 @@
-import React from 'react';
-import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { useQueue } from '../context/QueueContext';
+import { useLanguage } from '../context/LanguageContext';
+import { PageSkeleton } from '../components/common/LoadingSkeleton';
 
 export const PatientLayout: React.FC = () => {
   const { user } = useAuth();
   const { myToken } = useQueue();
+  const { t } = useLanguage();
   const location = useLocation();
+  const [routeLoading, setRouteLoading] = useState(false);
 
-  const isDashboardActive = location.pathname === '/patient' || location.pathname === '/patient/dashboard';
+  useEffect(() => {
+    setRouteLoading(true);
+    const timeout = window.setTimeout(() => setRouteLoading(false), 260);
+    return () => window.clearTimeout(timeout);
+  }, [location.pathname]);
 
   return (
-    <div className="bg-light-bg text-light-on-surface font-body min-h-screen flex flex-col selection:bg-accent selection:text-on-accent">
+    <div className="bg-[#F8FAFC] text-slate-900 font-sans min-h-screen flex flex-col selection:bg-[#E6F4F1] selection:text-[#0F766E]">
+      {/* Single Unified Navbar for Patient Section */}
       <Navbar mode="patient" />
 
-      {/* Patient Subheader Banner */}
-      <div className="bg-light-surface border-b border-light-outline px-6 sm:px-12 py-3">
+      {/* Compact Patient Clinical Profile & Active Token Bar */}
+      <div className="bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 py-2.5 shadow-sm">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          {/* Patient Details */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-secondary/15 text-secondary flex items-center justify-center font-bold text-sm">
+            <div className="w-8 h-8 rounded-lg bg-[#E6F4F1] text-[#0F766E] flex items-center justify-center font-bold text-xs flex-shrink-0">
               {user?.name?.slice(0, 2).toUpperCase() || 'PT'}
             </div>
-            <div>
-              <div className="font-headline text-sm font-bold text-light-primary flex items-center gap-2">
-                <span>Welcome, {user?.name || 'Patient'}</span>
-                <span className="text-[11px] font-code font-bold px-2 py-0.2 rounded bg-light-surface-variant text-light-on-surface-variant border border-light-outline">
-                  {user?.id || 'PT-10088'}
-                </span>
-              </div>
-              <div className="text-xs text-light-on-surface-variant">
-                ABHA ID: <strong className="font-code text-light-primary">{user?.abhaId || '91-8274-1049-9812'}</strong>
-              </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold text-slate-900">
+                {t('patient.welcome', 'Welcome')}, {user?.name || 'Patient'}
+              </span>
+              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                {t('patient.patient_id', 'ID')}: {user?.id || 'PT-10088'}
+              </span>
+              <span className="text-[10px] text-slate-500 hidden sm:inline">
+                • {t('patient.abha_id', 'ABHA')}: <strong className="font-mono text-slate-700">{user?.abhaId || '91-8274-1049-9812'}</strong>
+              </span>
             </div>
           </div>
 
-          {/* Current Live Token Chip */}
-          {myToken && (
-            <Link
-              to="/patient/queue"
-              className="inline-flex items-center gap-3 bg-accent/20 hover:bg-accent/30 border border-accent p-2 px-3.5 rounded-xl transition-all"
-            >
-              <div>
-                <span className="text-[10px] uppercase font-bold text-on-accent block">Active OPD Token</span>
-                <span className="font-headline text-base font-black text-on-accent font-code">
+          <div className="flex items-center gap-3">
+            {/* Active Token Notification Chip (Only when patient has a live token) */}
+            {myToken && (
+              <Link
+                to="/patient/queue"
+                className="inline-flex items-center gap-2.5 bg-[#E6F4F1] hover:bg-[#CCFBF1] border border-[#0F766E]/30 py-1.5 px-3 rounded-xl transition-all"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse"></span>
+                <span className="text-[11px] font-semibold text-slate-700">{t('patient.active_token', 'Active Token')}:</span>
+                <span className="text-xs font-black text-[#0F766E] font-mono">
                   {myToken.tokenNumber}
                 </span>
-              </div>
-              <div className="pl-3 border-l border-accent/40 text-right">
-                <span className="text-[10px] text-on-accent block font-medium">Estimated Wait</span>
-                <span className="font-headline text-sm font-bold text-on-accent font-code">
-                  {myToken.estimatedWaitMinutes} mins
+                <span className="text-[10px] text-slate-500 pl-1 border-l border-[#0F766E]/20">
+                  {t('patient.est_wait', 'Est. wait')}: <strong className="font-mono text-[#0F766E]">{myToken.estimatedWaitMinutes}m</strong>
                 </span>
-              </div>
-              <span className="material-symbols-outlined text-sm text-on-accent">arrow_forward</span>
-            </Link>
-          )}
+                <span className="material-symbols-outlined text-xs text-[#0F766E]">arrow_forward</span>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Patient Sub-navigation Tabs */}
-      <div className="bg-light-surface border-b border-light-outline/70 px-6 sm:px-12 overflow-x-auto">
-        <div className="max-w-7xl mx-auto flex items-center gap-1 text-xs font-label">
-          <NavLink
-            to="/patient/dashboard"
-            className={`py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-              isDashboardActive
-                ? 'border-secondary text-secondary'
-                : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-            }`}
-          >
-            <span className="material-symbols-outlined text-base">dashboard</span>
-            <span>Dashboard</span>
-          </NavLink>
-
-          <NavLink
-            to="/patient/queue"
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined text-base">pin</span>
-            <span>Live Token Tracker</span>
-          </NavLink>
-
-          <NavLink
-            to="/patient/registration"
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined text-base">add_circle</span>
-            <span>Book / OPD Slip</span>
-          </NavLink>
-
-          <NavLink
-            to="/patient/prescriptions"
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined text-base">prescriptions</span>
-            <span>Prescriptions</span>
-          </NavLink>
-
-          <NavLink
-            to="/patient/lab-tests"
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined text-base">biotech</span>
-            <span>Lab Reports</span>
-          </NavLink>
-
-          <NavLink
-            to="/patient/pharmacy"
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined text-base">medication</span>
-            <span>Medicine Orders</span>
-          </NavLink>
-
-          <NavLink
-            to="/patient/medical-history"
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined text-base">history</span>
-            <span>Health History</span>
-          </NavLink>
-
-          <NavLink
-            to="/feedback"
-            className={({ isActive }) =>
-              `py-3 px-4 border-b-2 font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
-                isActive
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-light-on-surface-variant hover:text-light-primary'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined text-base">feedback</span>
-            <span>Feedback</span>
-          </NavLink>
-        </div>
-      </div>
-
-      <main className="flex-grow p-6 sm:p-8 max-w-7xl mx-auto w-full">
-        <Outlet />
+      {/* Main Content Area */}
+      <main className="flex-grow p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+        {routeLoading ? <PageSkeleton variant="content" /> : <Outlet />}
       </main>
     </div>
   );

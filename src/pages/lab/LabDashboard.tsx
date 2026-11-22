@@ -3,7 +3,12 @@ import { laboratoryService } from '../../services/laboratoryService';
 import { LabTestRequest } from '../../types';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { SearchBar } from '../../components/common/SearchBar';
+import { PageHeader } from '../../components/common/PageHeader';
+import { Button } from '../../components/common/Button';
 import { Modal } from '../../components/common/Modal';
+import { BentoCard } from '../../components/common/BentoCard';
+import { FlaskConical, Clock, CheckCircle2, AlertTriangle, FileEdit, Upload } from 'lucide-react';
+import { PageSkeleton } from '../../components/common/LoadingSkeleton';
 
 export const LabDashboard: React.FC = () => {
   const [tests, setTests] = useState<LabTestRequest[]>([]);
@@ -13,9 +18,14 @@ export const LabDashboard: React.FC = () => {
   const [selectedTest, setSelectedTest] = useState<LabTestRequest | null>(null);
   const [findingsInput, setFindingsInput] = useState('');
   const [statusInput, setStatusInput] = useState<LabTestRequest['status']>('COMPLETED');
+  const [loading, setLoading] = useState(true);
 
   const loadTests = () => {
-    laboratoryService.getTestRequests().then(setTests);
+    setLoading(true);
+    laboratoryService.getTestRequests().then((data) => {
+      setTests(data);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
@@ -44,64 +54,91 @@ export const LabDashboard: React.FC = () => {
   const processingCount = tests.filter((t) => t.status === 'PROCESSING').length;
   const completedCount = tests.filter((t) => t.status === 'COMPLETED').length;
 
+  if (loading) return <PageSkeleton />;
+
   return (
     <div className="space-y-6">
-      {/* Top Ribbon */}
+      <PageHeader
+        title="Laboratory &amp; Diagnostics Workspace"
+        subtitle="Pathology, Hematology &amp; Imaging Requisitions • Central Diagnostic Lab"
+      />
+
+      {/* Top Bento Ribbon (Glass Stat Cards) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-light-surface p-4 rounded-xl border border-light-outline shadow-card">
-          <span className="text-xs font-semibold text-light-on-surface-variant uppercase">
-            Total Requests Today
-          </span>
-          <div className="font-headline text-2xl font-black text-light-primary font-code mt-1">
+        <div className="glass-card p-4 sm:p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Total Today
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center text-[#0F766E]">
+              <FlaskConical className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-slate-900 mt-2 font-mono tabular-nums">
             {tests.length}
           </div>
-          <div className="text-[11px] text-light-on-surface-variant mt-1">Pathology &amp; Radiology</div>
+          <div className="text-xs text-slate-500 mt-1">Pathology & Radiology</div>
         </div>
 
-        <div className="bg-accent/15 p-4 rounded-xl border-2 border-accent shadow-card">
-          <span className="text-xs font-semibold text-on-accent uppercase">
-            Pending Collection
-          </span>
-          <div className="font-headline text-2xl font-black text-on-accent font-code mt-1">
+        <div className="glass-card p-4 sm:p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Pending Collection
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+              <Clock className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-amber-600 mt-2 font-mono tabular-nums">
             {pendingCount}
           </div>
-          <div className="text-[11px] text-on-accent font-medium mt-1">In Queue Room 04</div>
+          <div className="text-xs text-slate-500 mt-1">Room 04 Phlebotomy</div>
         </div>
 
-        <div className="bg-light-surface p-4 rounded-xl border border-light-outline shadow-card">
-          <span className="text-xs font-semibold text-light-on-surface-variant uppercase">
-            In Processing / Analyzer
-          </span>
-          <div className="font-headline text-2xl font-black text-amber-600 font-code mt-1">
+        <div className="glass-card p-4 sm:p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              In Analyzer
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+              <FlaskConical className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-blue-600 mt-2 font-mono tabular-nums">
             {processingCount}
           </div>
-          <div className="text-[11px] text-light-on-surface-variant mt-1">Hematology &amp; Bio</div>
+          <div className="text-xs text-slate-500 mt-1">Hematology & Bio</div>
         </div>
 
-        <div className="bg-light-surface p-4 rounded-xl border border-light-outline shadow-card">
-          <span className="text-xs font-semibold text-light-on-surface-variant uppercase">
-            Reports Completed
-          </span>
-          <div className="font-headline text-2xl font-black text-success font-code mt-1">
+        <div className="glass-card p-4 sm:p-5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Reports Completed
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+              <CheckCircle2 className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-emerald-600 mt-2 font-mono tabular-nums">
             {completedCount}
           </div>
-          <div className="text-[11px] text-light-on-surface-variant mt-1">Synced to Doctor OPD</div>
+          <div className="text-xs text-slate-500 mt-1">Synced to Doctor OPD</div>
         </div>
       </div>
 
-      {/* Filter and Search Bar */}
-      <div className="bg-light-surface p-4 rounded-2xl border border-light-outline shadow-card flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Filter and Search Bar (Glass Surface) */}
+      <div className="glass-card p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="w-full sm:w-80">
           <SearchBar value={search} onChange={setSearch} placeholder="Search patient, test or token..." />
         </div>
 
         <div className="flex flex-wrap items-center gap-3 text-xs w-full sm:w-auto">
           <div className="flex items-center gap-1.5">
-            <span className="font-semibold text-light-on-surface-variant">Category:</span>
+            <span className="font-semibold text-slate-600">Category:</span>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="p-2 rounded-lg border border-light-outline bg-white font-medium"
+              className="p-2 rounded-xl border border-slate-200/90 bg-white/90 font-medium text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
             >
               <option value="ALL">All Categories</option>
               <option value="Hematology">Hematology</option>
@@ -111,11 +148,11 @@ export const LabDashboard: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="font-semibold text-light-on-surface-variant">Status:</span>
+            <span className="font-semibold text-slate-600">Status:</span>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="p-2 rounded-lg border border-light-outline bg-white font-medium"
+              className="p-2 rounded-xl border border-slate-200/90 bg-white/90 font-medium text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
             >
               <option value="ALL">All Status</option>
               <option value="PENDING">Pending</option>
@@ -127,56 +164,60 @@ export const LabDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Tests Grid */}
+      {/* Tests Bento Grid (Solid Cards for clinical clarity) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filtered.map((test) => (
-          <div
+          <BentoCard
             key={test.id}
-            className="bg-light-surface rounded-2xl border border-light-outline p-5 shadow-card space-y-3"
+            variant="solid"
+            padding="md"
+            className="space-y-3"
           >
             <div className="flex items-start justify-between">
               <div>
-                <span className="font-code font-bold text-secondary text-sm">{test.tokenNumber}</span>
-                <h3 className="font-headline text-base font-bold text-light-primary mt-0.5">
+                <span className="font-mono font-bold text-[#0F766E] text-sm">{test.tokenNumber}</span>
+                <h3 className="text-base font-bold text-slate-900 mt-0.5">
                   {test.testName}
                 </h3>
-                <div className="text-xs text-light-on-surface-variant">
-                  Patient: <strong>{test.patientName}</strong> ({test.gender}, {test.age}y) • ID: {test.patientId}
+                <div className="text-xs text-slate-500">
+                  Patient: <strong className="text-slate-800">{test.patientName}</strong> ({test.gender}, {test.age}y) • ID: {test.patientId}
                 </div>
               </div>
               <StatusBadge status={test.status} />
             </div>
 
-            <div className="p-3 bg-light-surface-variant rounded-xl border border-light-outline text-xs space-y-1">
+            <div className="p-3 bg-slate-50/80 rounded-xl border border-slate-200 text-xs space-y-1">
               <div className="flex justify-between">
-                <span>Ordered By:</span>
-                <strong className="text-light-primary">{test.orderedByDoctor}</strong>
+                <span className="text-slate-500">Ordered By:</span>
+                <strong className="text-slate-800">{test.orderedByDoctor}</strong>
               </div>
               <div className="flex justify-between">
-                <span>Ordered At:</span>
-                <strong className="text-light-primary font-code">{test.orderedAt}</strong>
+                <span className="text-slate-500">Ordered At:</span>
+                <strong className="text-slate-800 font-mono">{test.orderedAt}</strong>
               </div>
               {test.summaryFindings && (
-                <div className="pt-1 text-light-primary">
+                <div className="pt-1 text-slate-800 border-t border-slate-200 mt-1">
                   <strong>Findings:</strong> {test.summaryFindings}
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-light-outline text-xs">
-              <span className="text-light-on-surface-variant">Category: <strong>{test.category}</strong></span>
-              <button
+            <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+              <span className="text-slate-500">Category: <strong className="text-slate-700">{test.category}</strong></span>
+              <Button
+                variant="primary"
+                size="sm"
+                icon={<FileEdit className="w-3.5 h-3.5" />}
                 onClick={() => {
                   setSelectedTest(test);
                   setStatusInput(test.status);
                   setFindingsInput(test.summaryFindings || '');
                 }}
-                className="px-3.5 py-1.5 bg-secondary text-white font-bold rounded-lg hover:bg-secondary/90 shadow-sm"
               >
-                Update Report / Results
-              </button>
+                Update Results
+              </Button>
             </div>
-          </div>
+          </BentoCard>
         ))}
       </div>
 
@@ -190,11 +231,11 @@ export const LabDashboard: React.FC = () => {
         >
           <form onSubmit={handleUpdateStatus} className="space-y-4 text-xs">
             <div>
-              <label className="font-bold text-light-primary block mb-1">Investigation Status</label>
+              <label className="font-semibold text-slate-800 block mb-1">Investigation Status</label>
               <select
                 value={statusInput}
                 onChange={(e) => setStatusInput(e.target.value as any)}
-                className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface font-bold text-light-primary"
+                className="w-full p-2.5 rounded-lg border border-slate-200 bg-white font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20"
               >
                 <option value="PENDING">Sample Pending</option>
                 <option value="PROCESSING">Under Processing in Analyzer</option>
@@ -204,7 +245,7 @@ export const LabDashboard: React.FC = () => {
             </div>
 
             <div>
-              <label className="font-bold text-light-primary block mb-1">
+              <label className="font-semibold text-slate-800 block mb-1">
                 Clinical Diagnostic Findings / Lab Values
               </label>
               <textarea
@@ -213,35 +254,38 @@ export const LabDashboard: React.FC = () => {
                 value={findingsInput}
                 onChange={(e) => setFindingsInput(e.target.value)}
                 placeholder="Enter quantitative values (e.g. Hemoglobin 12.8 g/dL, Platelets 2.4 Lakhs, etc.)..."
-                className="w-full p-3 rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white"
+                className="w-full p-3 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 text-xs"
               />
             </div>
 
-            <div className="p-3 bg-secondary/5 rounded-xl border border-secondary/20 flex items-center justify-between">
-              <span className="text-light-primary font-medium">Attach Digital Machine PDF:</span>
+            <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between">
+              <span className="text-slate-700 font-medium">Attach Digital Machine PDF:</span>
               <button
                 type="button"
                 onClick={() => alert('Diagnostic analyzer waveform attached')}
-                className="px-3 py-1 bg-white border border-light-outline rounded font-semibold text-xs"
+                className="px-3 py-1 bg-white border border-slate-200 rounded font-semibold text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-1"
               >
-                Browse Files
+                <Upload className="w-3.5 h-3.5" />
+                Browse
               </button>
             </div>
 
-            <div className="flex justify-end gap-3 pt-3 border-t border-light-outline">
-              <button
+            <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-200">
+              <Button
                 type="button"
+                variant="outline"
+                size="md"
                 onClick={() => setSelectedTest(null)}
-                className="px-4 py-2 border rounded-lg"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className="px-5 py-2 bg-accent text-on-accent font-bold rounded-lg"
+                variant="primary"
+                size="md"
               >
                 Sign &amp; Publish Findings
-              </button>
+              </Button>
             </div>
           </form>
         </Modal>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   return (
     <div className="space-y-0">
@@ -15,16 +18,15 @@ export const LandingPage: React.FC = () => {
           <div className="lg:col-span-6 flex flex-col justify-center pr-0 lg:pr-6 z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-secondary/10 border border-secondary/20 text-secondary text-label-sm font-semibold mb-6 w-fit">
               <span className="material-symbols-outlined text-sm">local_hospital</span>
-              Designed for Indian Civil &amp; District Hospitals
+              {t('landing.badge', 'Designed for Indian Civil & District Hospitals')}
             </div>
 
             <h1 className="font-headline text-display-lg-mobile sm:text-display-lg text-light-primary font-extrabold tracking-tight mb-6 leading-[1.1] text-balance">
-              Smarter Hospitals. Shorter Waiting Times.
+              {t('landing.hero_title_1', 'Smarter Hospitals. Shorter Waiting Times.')}
             </h1>
 
             <p className="font-body text-body-lg text-light-on-surface-variant max-w-xl mb-8 leading-relaxed text-pretty">
-              Transforming government healthcare through intelligent patient-flow management, real-time hospital
-              operations, and AI-powered queue planning for OPDs, diagnostic laboratories, and pharmacies.
+              {t('landing.hero_sub', 'Transforming government healthcare through intelligent patient-flow management, real-time hospital operations, and AI-powered queue planning for OPDs, diagnostic laboratories, and pharmacies.')}
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
@@ -32,14 +34,14 @@ export const LandingPage: React.FC = () => {
                 to="/patient/registration"
                 className="inline-flex items-center gap-2.5 bg-accent hover:brightness-95 text-on-accent font-label text-label-lg font-bold px-7 py-3.5 rounded-md shadow-sm transition-all"
               >
-                <span>Get Started / Book Token</span>
+                <span>{t('landing.get_started', 'Get Started / Book Token')}</span>
                 <span className="material-symbols-outlined text-base">arrow_forward</span>
               </Link>
               <Link
                 to="/patient/dashboard"
                 className="inline-flex items-center gap-2 bg-light-surface border-2 border-light-primary hover:bg-light-primary hover:text-white text-light-primary font-label text-label-lg font-semibold px-6 py-3.5 rounded-md transition-all"
               >
-                <span>Access Patient Portal</span>
+                <span>{t('landing.open_portal', 'Access Patient Portal')}</span>
               </Link>
             </div>
 
@@ -51,10 +53,10 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <div>
                   <div className="font-headline text-xs font-bold text-light-primary">
-                    बोलकर पर्ची बनाएं (Voice OPD Booking)
+                    {t('landing.voice_banner_title', 'बोलकर पर्ची बनाएं (Voice OPD Booking)')}
                   </div>
                   <div className="text-[11px] text-light-on-surface-variant">
-                    Hindi, Punjabi &amp; English instant symptom triage
+                    {t('landing.voice_banner_sub', 'English, Hindi, Punjabi & Tamil instant symptom triage')}
                   </div>
                 </div>
               </div>
@@ -62,7 +64,7 @@ export const LandingPage: React.FC = () => {
                 onClick={() => setIsVoiceOpen(true)}
                 className="px-4 py-2 bg-secondary text-white font-headline text-xs font-bold rounded-lg hover:bg-secondary/90 shadow-sm"
               >
-                Try Voice OPD
+                {t('landing.try_voice', 'Try Voice OPD')}
               </button>
             </div>
 
@@ -151,22 +153,22 @@ export const LandingPage: React.FC = () => {
                 2.4M+
               </span>
               <span className="block font-label text-title-md font-bold text-light-primary mt-1">
-                Patients Registered
+                {t('stats.patients_reg', 'Patients Registered')}
               </span>
               <p className="font-body text-body-sm text-light-on-surface-variant mt-1">
-                Across 18 participating district hospital clusters.
+                {t('stats.patients_sub', 'Across 18 participating district hospital clusters.')}
               </p>
             </div>
 
             <div className="pt-4 sm:pt-0 sm:px-6">
               <span className="block font-headline text-display-md font-extrabold text-secondary tracking-tight font-code">
-                18 Mins
+                14 Mins
               </span>
               <span className="block font-label text-title-md font-bold text-light-primary mt-1">
-                Average Waiting Time
+                {t('stats.avg_wait', 'Average Waiting Time')}
               </span>
               <p className="font-body text-body-sm text-light-on-surface-variant mt-1">
-                Reduced from historical 145 min manual OPD wait.
+                {t('stats.avg_wait_sub', 'Reduced from historical 145 min manual OPD wait.')}
               </p>
             </div>
 
@@ -175,10 +177,10 @@ export const LandingPage: React.FC = () => {
                 85+
               </span>
               <span className="block font-label text-title-md font-bold text-light-primary mt-1">
-                Departments Connected
+                {t('stats.connected_depts', 'Departments Connected')}
               </span>
               <p className="font-body text-body-sm text-light-on-surface-variant mt-1">
-                General Medicine, Paediatrics, Ortho, Labs, &amp; Chemist.
+                {t('stats.connected_depts_sub', 'General Medicine, Paediatrics, Ortho, Labs, & Chemist.')}
               </p>
             </div>
 
@@ -187,10 +189,10 @@ export const LandingPage: React.FC = () => {
                 99.4%
               </span>
               <span className="block font-label text-title-md font-bold text-light-primary mt-1">
-                Appointments Managed
+                {t('stats.sync_appointments', 'Appointments Managed')}
               </span>
               <p className="font-body text-body-sm text-light-on-surface-variant mt-1">
-                Zero lost tokens with real-time SMS &amp; voice calls.
+                {t('stats.sync_sub', 'Zero lost tokens with real-time SMS & voice calls.')}
               </p>
             </div>
           </div>
@@ -203,14 +205,14 @@ export const LandingPage: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-secondary">
-                End-to-End Orchestration
+                {t('journey.badge', 'End-to-End Orchestration')}
               </span>
               <h2 className="font-headline text-display-md font-extrabold text-light-primary mt-1">
-                The Intelligent Patient Journey
+                {t('journey.title', 'The Intelligent Patient Journey')}
               </h2>
             </div>
             <p className="font-body text-body-md text-light-on-surface-variant max-w-md mt-2 md:mt-0">
-              Every step is connected digitally to eliminate physical counter congestion and confusion.
+              {t('journey.sub', 'Every step is connected digitally to eliminate physical counter congestion and confusion.')}
             </p>
           </div>
 
@@ -435,6 +437,14 @@ export const LandingPage: React.FC = () => {
                   <span className="material-symbols-outlined text-sm">add_circle</span>
                   Book OPD Token Now
                 </Link>
+                <button
+                  type="button"
+                  onClick={() => setIsMapOpen(true)}
+                  className="px-6 py-3 bg-white text-light-primary font-bold text-xs rounded-xl hover:bg-slate-100 flex items-center gap-2 shadow-sm transition-all"
+                >
+                  <span className="material-symbols-outlined text-sm">map</span>
+                  {t('map.open_btn', 'Open Hospital Interactive Map')}
+                </button>
                 <Link
                   to="/feedback"
                   className="px-5 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10 text-xs font-semibold transition-colors flex items-center gap-1.5"

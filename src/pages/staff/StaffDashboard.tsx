@@ -1,26 +1,41 @@
 import React, { useState } from 'react';
 import { useQueue } from '../../context/QueueContext';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
+import { PageHeader } from '../../components/common/PageHeader';
+import { Button } from '../../components/common/Button';
+import { BentoCard } from '../../components/common/BentoCard';
+import { PriorityIndicator } from '../../components/common/PriorityIndicator';
 import { PatientToken, PriorityLevel } from '../../types';
+import { 
+  Search, 
+  Printer, 
+  Mic, 
+  QrCode, 
+  Clock, 
+  AlertTriangle, 
+  History,
+  CheckCircle2,
+  UserCheck
+} from 'lucide-react';
 
 export const StaffDashboard: React.FC = () => {
   const { tokens, generateToken } = useQueue();
 
   const [voiceOpen, setVoiceOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('9812401824');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isEmergency, setIsEmergency] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    patientName: 'Ramesh Chander Gupta',
-    phone: '9812401824',
-    age: 58,
+    patientName: '',
+    phone: '',
+    age: 30,
     gender: 'Male' as 'Male' | 'Female' | 'Other',
-    abhaId: '91-8274-1049-3321',
+    abhaId: '',
     department: 'General Medicine',
     priority: 'Normal' as PriorityLevel,
-    symptoms: ['Chest Congestion', 'Mild Fever for 3 days', 'Dry Cough'],
-    symptomSummary: 'Chronic chest heaviness with productive cough for 4 days.',
+    symptoms: [] as string[],
+    symptomSummary: '',
   });
 
   const [lastIssuedToken, setLastIssuedToken] = useState<PatientToken | null>(() => tokens[tokens.length - 1] || null);
@@ -87,44 +102,37 @@ export const StaffDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Top Counter Header Ribbon (Matching Stitch Counter Staff Desk) */}
-      <div className="bg-light-surface rounded-2xl border border-light-outline px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-card">
-        <div className="flex items-center gap-3">
-          <span className="font-headline text-title-md font-bold text-light-primary">
-            Registration Counter #02 • OPD Main Hall
-          </span>
-          <span className="px-2.5 py-0.5 rounded bg-success/15 text-success font-code text-xs font-bold">
-            Counter Open
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4 text-xs">
-          <div className="hidden md:flex items-center gap-2 bg-light-surface-variant px-3 py-1.5 rounded-lg border border-light-outline">
-            <span className="material-symbols-outlined text-sm text-secondary">timer</span>
-            <span>
-              Avg Token Issue Time: <strong className="font-code text-light-primary">14.2 sec</strong>
+      {/* Top Header */}
+      <PageHeader
+        title="Registration Counter #02 • OPD Main Hall"
+        subtitle="Staff: Anita Devi (ID: REG-8812) • Civil Hospital OPD"
+        badge={
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Counter Active
             </span>
+            <div className="hidden md:flex items-center gap-1.5 bg-slate-100 px-3 py-1 rounded-lg text-xs text-slate-600 font-medium border border-slate-200">
+              <Clock className="w-3.5 h-3.5 text-slate-500" />
+              <span>Avg Speed: <strong className="text-slate-900 font-mono">14.2 sec</strong></span>
+            </div>
           </div>
-          <div className="flex items-center gap-2 pl-3 border-l border-light-outline">
-            <span className="font-semibold text-light-primary">Staff: Anita Devi</span>
-            <span className="font-code text-light-on-surface-variant">(ID: REG-8812)</span>
-          </div>
-        </div>
-      </div>
+        }
+      />
 
-      {/* Main Split Counter Screen: Left Rapid Form (7 cols), Right Live Issue Slip & Recent Queue (5 cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* LEFT: Rapid Patient Registration & Triage Form (7 cols) */}
+      {/* Main Split Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* LEFT: Rapid Registration & Triage Form (7 cols) */}
         <div className="lg:col-span-7 space-y-5">
-          {/* ABHA & Quick Search Bar */}
-          <div className="bg-light-surface rounded-2xl border-2 border-secondary/30 p-5 shadow-card">
-            <div className="flex items-center justify-between mb-3">
-              <label className="font-headline text-label-lg font-bold text-light-primary flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">search</span>
-                Search Existing Patient or Scan ABHA / Aadhaar QR
+          {/* ABHA & Fast Search Card (Glass Surface) */}
+          <BentoCard variant="glass" padding="md" className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                <Search className="w-4 h-4 text-[#0F766E]" />
+                Search Existing Patient or Scan ABHA / Aadhaar
               </label>
-              <span className="text-xs text-secondary font-semibold cursor-pointer flex items-center gap-1">
-                <span className="material-symbols-outlined text-sm">qr_code_scanner</span> USB Scanner Ready
+              <span className="text-xs text-[#0F766E] font-medium flex items-center gap-1">
+                <QrCode className="w-3.5 h-3.5" /> USB Scanner Ready
               </span>
             </div>
 
@@ -134,39 +142,40 @@ export const StaffDashboard: React.FC = () => {
                 placeholder="Enter ABHA Address (e.g. 91-8274-1049), Mobile (10 Digits) or Name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-grow text-xs rounded-lg border border-light-outline p-3 bg-light-surface-variant font-code focus:bg-white focus:outline-none focus:ring-2 focus:ring-secondary/30"
+                className="flex-grow text-xs rounded-xl border border-slate-200/90 p-2.5 bg-white/80 font-mono text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
               />
-              <button
+              <Button
                 type="submit"
-                className="px-5 py-3 bg-light-primary text-white font-headline text-xs font-bold rounded-lg hover:bg-slate-800 flex items-center gap-1.5 shadow-sm transition-all"
+                variant="primary"
+                size="md"
+                icon={<UserCheck className="w-4 h-4" />}
               >
-                <span className="material-symbols-outlined text-sm">person_search</span>
                 Find
-              </button>
+              </Button>
             </form>
-          </div>
+          </BentoCard>
 
-          {/* Rapid Registration Form */}
-          <form
-            onSubmit={handleIssueToken}
-            className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4 text-xs"
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-light-outline">
-              <h3 className="font-headline text-title-md font-bold text-light-primary flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">app_registration</span>
-                Patient Demographics &amp; Triage Desk
+          {/* Registration Form (Solid Surface for crisp form contrast) */}
+          <BentoCard variant="solid" padding="lg">
+            <form
+              onSubmit={handleIssueToken}
+              className="space-y-4 text-xs"
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h3 className="text-sm font-bold text-slate-900">
+                Patient Demographics &amp; Triage Form
               </h3>
 
               {/* Emergency Marking Toggle */}
-              <label className="inline-flex items-center gap-2 cursor-pointer bg-danger/10 px-3 py-1 rounded-lg border border-danger/30">
+              <label className="inline-flex items-center gap-2 cursor-pointer bg-red-50 px-3 py-1.5 rounded-lg border border-red-200">
                 <input
                   type="checkbox"
                   checked={isEmergency}
                   onChange={(e) => setIsEmergency(e.target.checked)}
-                  className="rounded text-danger focus:ring-danger w-4 h-4"
+                  className="rounded text-red-600 focus:ring-red-600 w-4 h-4"
                 />
-                <span className="font-bold text-danger text-xs uppercase flex items-center gap-1">
-                  <span className="material-symbols-outlined text-sm">emergency</span>
+                <span className="font-bold text-red-700 text-xs uppercase flex items-center gap-1">
+                  <AlertTriangle className="w-3.5 h-3.5" />
                   Mark as Emergency
                 </span>
               </label>
@@ -174,31 +183,31 @@ export const StaffDashboard: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="font-bold text-light-primary block mb-1">Patient Name</label>
+                <label className="font-semibold text-slate-800 block mb-1">Patient Full Name</label>
                 <input
                   type="text"
                   required
                   value={formData.patientName}
                   onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
-                  className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-light-primary block mb-1">Mobile Phone</label>
+                <label className="font-semibold text-slate-800 block mb-1">Mobile Phone (10 digits)</label>
                 <input
                   type="tel"
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary font-code focus:bg-white"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="font-bold text-light-primary block mb-1">Age</label>
+                <label className="font-semibold text-slate-800 block mb-1">Age</label>
                 <input
                   type="number"
                   required
@@ -206,16 +215,16 @@ export const StaffDashboard: React.FC = () => {
                   max={120}
                   value={formData.age}
                   onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
-                  className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary font-code focus:bg-white"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                 />
               </div>
 
               <div>
-                <label className="font-bold text-light-primary block mb-1">Gender</label>
+                <label className="font-semibold text-slate-800 block mb-1">Gender</label>
                 <select
                   value={formData.gender}
                   onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
-                  className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                 >
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -224,12 +233,12 @@ export const StaffDashboard: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-bold text-light-primary block mb-1">Priority</label>
+                <label className="font-semibold text-slate-800 block mb-1">Priority</label>
                 <select
                   value={isEmergency ? 'Emergency' : formData.priority}
                   disabled={isEmergency}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                  className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white"
+                  className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
                 >
                   <option value="Normal">Standard OPD</option>
                   <option value="Senior">Senior (60+)</option>
@@ -240,11 +249,11 @@ export const StaffDashboard: React.FC = () => {
             </div>
 
             <div>
-              <label className="font-bold text-light-primary block mb-1">Assigned OPD Department</label>
+              <label className="font-semibold text-slate-800 block mb-1">Assigned OPD Department</label>
               <select
                 value={formData.department}
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary font-headline font-bold focus:bg-white"
+                className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
               >
                 {departments.map((dept) => (
                   <option key={dept} value={dept}>
@@ -255,123 +264,129 @@ export const StaffDashboard: React.FC = () => {
             </div>
 
             {/* Voice Registration Verification Button */}
-            <div className="flex items-center justify-between p-3 bg-secondary/5 rounded-xl border border-secondary/20">
+            <div className="flex items-center justify-between p-3 bg-teal-50/60 rounded-lg border border-teal-200">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">mic</span>
-                <span className="text-light-primary font-medium">
-                  Voice Registration Verification (Hindi / Punjabi / English)
+                <Mic className="w-4 h-4 text-teal-700" />
+                <span className="text-slate-800 font-medium text-xs">
+                  Multilingual Voice Triage (Hindi / Punjabi / English)
                 </span>
               </div>
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={() => setVoiceOpen(true)}
-                className="px-3 py-1.5 bg-secondary text-white font-bold rounded-lg hover:bg-secondary/90 text-xs shadow-sm"
               >
-                Launch Voice Triage
-              </button>
+                Launch Voice
+              </Button>
             </div>
 
             <div>
-              <label className="font-bold text-light-primary block mb-1">Reported Symptoms &amp; Notes</label>
+              <label className="font-semibold text-slate-800 block mb-1">Reported Symptoms &amp; Notes</label>
               <input
                 type="text"
                 value={formData.symptomSummary}
                 onChange={(e) => setFormData({ ...formData, symptomSummary: e.target.value })}
-                className="w-full p-2.5 rounded-lg border border-light-outline bg-light-surface text-light-primary focus:bg-white"
+                className="w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700"
               />
             </div>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3.5 bg-accent hover:brightness-95 text-on-accent font-headline font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined text-sm">print</span>
-                <span>{loading ? 'Issuing Token...' : 'Issue & Print Digital OPD Token Slip'}</span>
-              </button>
-            </div>
-          </form>
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  disabled={loading}
+                  className="w-full justify-center"
+                  icon={<Printer className="w-4 h-4" />}
+                >
+                  {loading ? 'Issuing Token...' : 'Issue & Print Digital OPD Token Slip'}
+                </Button>
+              </div>
+            </form>
+          </BentoCard>
         </div>
 
         {/* RIGHT: Live Issue Slip & Recent Queue (5 cols) */}
         <div className="lg:col-span-5 space-y-5">
-          {/* Last Generated OPD Slip Preview */}
+          {/* Last Generated OPD Slip Preview (Teal Glass Bento Card) */}
           {lastIssuedToken && (
-            <div className="bg-light-surface rounded-2xl border-2 border-accent/80 p-6 shadow-lg space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-light-outline">
-                <span className="text-xs font-bold uppercase tracking-wider text-on-accent bg-accent px-2 py-0.5 rounded">
-                  Last Generated OPD Slip
+            <BentoCard variant="teal" padding="lg" className="space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-[#0F766E]/20">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E] bg-white/80 px-2.5 py-0.5 rounded-lg border border-[#0F766E]/20">
+                  Last Issued OPD Slip
                 </span>
-                <span className="font-code text-xs text-light-on-surface-variant">
+                <span className="font-mono text-xs text-slate-600 font-semibold">
                   {lastIssuedToken.registeredAt}
                 </span>
               </div>
 
               <div className="text-center py-2">
-                <span className="text-xs text-light-on-surface-variant font-bold uppercase block">Token Number</span>
-                <span className="font-headline text-5xl font-black text-secondary font-code">
+                <span className="text-xs text-slate-500 font-semibold uppercase block">Token Number</span>
+                <div className="text-5xl font-black text-[#0F766E] font-mono tracking-tight my-1">
                   {lastIssuedToken.tokenNumber}
-                </span>
-                <div className="font-headline text-sm font-bold text-light-primary mt-1">
+                </div>
+                <div className="text-base font-bold text-slate-900">
                   {lastIssuedToken.patientName}
                 </div>
-                <div className="text-xs text-light-on-surface-variant mt-0.5">
+                <div className="text-xs text-slate-600 mt-0.5">
                   {lastIssuedToken.department} • {lastIssuedToken.roomNumber || 'Room 12'}
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-center text-xs">
-                <div className="p-2.5 bg-light-surface-variant rounded-xl border border-light-outline">
-                  <span className="text-[10px] text-light-on-surface-variant uppercase block">Est. Wait Time</span>
-                  <span className="font-headline font-bold text-light-primary">
+                <div className="p-3 bg-white/85 rounded-xl border border-slate-200/80 shadow-xs">
+                  <span className="text-[10px] text-slate-500 uppercase block font-medium">Est. Wait</span>
+                  <span className="font-bold text-slate-900 text-sm font-mono">
                     {lastIssuedToken.estimatedWaitMinutes} mins
                   </span>
                 </div>
-                <div className="p-2.5 bg-light-surface-variant rounded-xl border border-light-outline">
-                  <span className="text-[10px] text-light-on-surface-variant uppercase block">Counter Number</span>
-                  <span className="font-headline font-bold text-light-primary">Counter #02</span>
+                <div className="p-3 bg-white/85 rounded-xl border border-slate-200/80 shadow-xs">
+                  <span className="text-[10px] text-slate-500 uppercase block font-medium">Counter</span>
+                  <span className="font-bold text-slate-900 text-sm font-mono">Counter #02</span>
                 </div>
               </div>
 
-              <button
+              <Button
                 type="button"
+                variant="secondary"
+                size="md"
+                className="w-full justify-center"
+                icon={<Printer className="w-4 h-4" />}
                 onClick={() => window.print()}
-                className="w-full py-2.5 bg-light-primary text-white font-bold text-xs rounded-xl hover:bg-slate-800 flex items-center justify-center gap-1.5 shadow-sm transition-all"
               >
-                <span className="material-symbols-outlined text-sm">print</span>
-                <span>Print Physical Thermal Receipt</span>
-              </button>
-            </div>
+                Print Thermal Slip
+              </Button>
+            </BentoCard>
           )}
 
-          {/* Recent Tokens Issued Stream */}
-          <div className="bg-light-surface rounded-2xl border border-light-outline p-5 shadow-card space-y-4">
-            <h4 className="font-headline text-title-md font-bold text-light-primary flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary">history</span>
-              Recently Issued Tokens at Counter #02
+          {/* Recent Tokens Issued Stream (Solid Bento Card) */}
+          <BentoCard variant="solid" padding="md" className="space-y-4">
+            <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <History className="w-4 h-4 text-[#0F766E]" />
+              Recent Tokens at Counter #02
             </h4>
 
-            <div className="divide-y divide-light-outline-variant text-xs">
+            <div className="divide-y divide-slate-100 text-xs">
               {recentTokens.map((t) => (
-                <div key={t.id} className="py-2.5 flex items-center justify-between">
+                <div key={t.id} className="py-2.5 flex items-center justify-between hover:bg-slate-50/50 px-1 rounded transition-colors">
                   <div className="flex items-center gap-2.5">
-                    <span className="font-headline font-code font-bold text-secondary text-sm">
+                    <span className="font-mono font-bold text-slate-900 text-sm">
                       {t.tokenNumber}
                     </span>
                     <div>
-                      <div className="font-bold text-light-primary">{t.patientName}</div>
-                      <div className="text-[10px] text-light-on-surface-variant">{t.department}</div>
+                      <div className="font-semibold text-slate-900">{t.patientName}</div>
+                      <div className="text-[11px] text-slate-500">{t.department}</div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="font-code text-xs text-light-primary font-bold">{t.registeredAt}</span>
-                    <span className="block text-[10px] text-success">Printed</span>
+                    <span className="font-mono text-xs text-slate-700 font-semibold">{t.registeredAt}</span>
+                    <span className="block text-[10px] text-[#16A34A] font-medium">Printed</span>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </BentoCard>
         </div>
       </div>
 

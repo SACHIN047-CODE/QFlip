@@ -1,5 +1,5 @@
 import { apiClient, delay, USE_MOCK } from './api';
-import { PatientToken, TokenStatus, PriorityLevel } from '../types';
+import { PatientToken, TokenStatus, PriorityLevel, DoctorCapacityInfo } from '../types';
 import { INITIAL_TOKENS } from './mockData';
 
 // In-memory reactive state stored in localStorage for persistence across pages
@@ -23,6 +23,34 @@ const saveTokens = (tokens: PatientToken[]) => {
 };
 
 export const queueService = {
+  async addDemoPatients(): Promise<void> {
+    if (USE_MOCK) {
+      await delay(300);
+      const demoPatients: PatientToken[] = [
+        { id: 'tok-demo-1', tokenNumber: 'OPD-GEN-301', patientId: 'PT-DEMO-1', patientName: 'Riya Sharma', age: 27, gender: 'Female', phone: '+91 98765 43101', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Fever', 'Body ache'], priority: 'Normal', status: 'WAITING', registeredAt: '09:40 AM', estimatedWaitMinutes: 12 },
+        { id: 'tok-demo-2', tokenNumber: 'OPD-GEN-302', patientId: 'PT-DEMO-2', patientName: 'Mohit Verma', age: 68, gender: 'Male', phone: '+91 98765 43102', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Joint pain'], priority: 'Senior', status: 'WAITING', registeredAt: '09:42 AM', estimatedWaitMinutes: 10 },
+        { id: 'tok-demo-3', tokenNumber: 'OPD-GEN-303', patientId: 'PT-DEMO-3', patientName: 'Kabir Singh', age: 8, gender: 'Male', phone: '+91 98765 43103', department: 'Pediatrics', assignedDoctorName: 'Dr. Priya Singh', roomNumber: 'OPD Room 103', symptoms: ['Cough'], priority: 'Pediatric', status: 'WAITING', registeredAt: '09:44 AM', estimatedWaitMinutes: 8 },
+        { id: 'tok-demo-4', tokenNumber: 'OPD-GEN-304', patientId: 'PT-DEMO-4', patientName: 'Sunita Devi', age: 54, gender: 'Female', phone: '+91 98765 43104', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Chest discomfort'], priority: 'Emergency', status: 'WAITING', registeredAt: '09:46 AM', estimatedWaitMinutes: 5 },
+        { id: 'tok-demo-5', tokenNumber: 'OPD-GEN-305', patientId: 'PT-DEMO-5', patientName: 'Aarav Jain', age: 34, gender: 'Male', phone: '+91 98765 43105', department: 'Orthopedics', assignedDoctorName: 'Dr. Harpreet Singh', roomNumber: 'OPD Room 108', symptoms: ['Knee pain'], priority: 'Normal', status: 'WAITING', registeredAt: '09:48 AM', estimatedWaitMinutes: 15 },
+        { id: 'tok-demo-6', tokenNumber: 'OPD-GEN-306', patientId: 'PT-DEMO-6', patientName: 'Meera Kapoor', age: 31, gender: 'Female', phone: '+91 98765 43106', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Migraine'], priority: 'Normal', status: 'WAITING', registeredAt: '09:50 AM', estimatedWaitMinutes: 18 },
+      ];
+      const existing = getStoredTokens();
+      const newIds = new Set(demoPatients.map((token) => token.id));
+      saveTokens([...existing.filter((token) => !newIds.has(token.id)), ...demoPatients]);
+      return;
+    }
+    await apiClient.post('/queue/demo-patients');
+  },
+
+  async resetDemoQueue(): Promise<void> {
+    if (USE_MOCK) {
+      await delay(300);
+      saveTokens(INITIAL_TOKENS);
+      return;
+    }
+    await apiClient.post('/queue/reset-demo');
+  },
+
   async getTokens(department?: string): Promise<PatientToken[]> {
     if (USE_MOCK) {
       await delay(200);
@@ -37,9 +65,128 @@ export const queueService = {
     if (USE_MOCK) {
       await delay(150);
       const tokens = getStoredTokens();
-      return tokens.find((t) => t.tokenNumber.toLowerCase() === tokenNumber.toLowerCase()) || null;
+      return (
+        tokens.find(
+          (t) => t.tokenNumber.toLowerCase() === tokenNumber.toLowerCase() || t.id === tokenNumber
+        ) || null
+      );
     }
     return apiClient.get(`/queue/tokens/${tokenNumber}`);
+  },
+
+  /**
+   * Get all tokens in the separate Skipped Patients Queue
+   */
+  async getSkippedTokens(department?: string): Promise<PatientToken[]> {
+    if (USE_MOCK) {
+      await delay(150);
+      const tokens = getStoredTokens();
+      const skipped = tokens.filter(
+        (t) => t.status === 'SKIPPED' || t.status === 'SKIPPED_AWAITING_RECEPTION'
+      );
+      if (!department || department === 'All') return skipped;
+      return skipped.filter((t) => t.department.toLowerCase().includes(department.toLowerCase()));
+    }
+    return apiClient.get('/queue/skipped', { params: { departmentId: department } });
+  },
+
+  /**
+   * Check live doctor capacity, remaining OPD time, and buffer limits
+   */
+  async checkDoctorCapacity(doctorId?: string, department = 'General Medicine'): Promise<DoctorCapacityInfo> {
+    if (USE_MOCK) {
+      await delay(150);
+      const tokens = getStoredTokens();
+      // Count active queue workload for doctor
+      const activeWorkload = tokens.filter(
+        (t) =>
+          t.department.toLowerCase().includes(department.toLowerCase()) &&
+          (t.status === 'WAITING' || t.status === 'IN_CONSULTATION')
+      ).length;
+
+      const avgDuration = 6.5; // minutes per patient
+      const bufferLimit = 5;
+
+      // Simulated OPD shift: 08:30 AM to 02:00 PM
+      const now = new Date();
+      const shiftEnd = new Date();
+      shiftEnd.setHours(14, 0, 0, 0); // 2:00 PM
+
+      const remainingOpdMinutes = Math.max(0, Math.floor((shiftEnd.getTime() - now.getTime()) / 60000));
+      const estimatedCompletionMinutes = Math.round(activeWorkload * avgDuration);
+      const isClosed = remainingOpdMinutes <= 0;
+
+      // Count current buffer patients
+      const currentBufferPatients = tokens.filter(
+        (t) =>
+          t.department.toLowerCase().includes(department.toLowerCase()) &&
+          t.isBuffer &&
+          (t.status === 'WAITING' || t.status === 'IN_CONSULTATION')
+      ).length;
+
+      const remainingBufferCapacity = Math.max(0, bufferLimit - currentBufferPatients);
+      const standardCapacity = Math.floor(remainingOpdMinutes / avgDuration);
+      const remainingStandardCapacity = Math.max(0, standardCapacity - activeWorkload);
+
+      let canAccept = true;
+      let isBuffer = false;
+      let reason = 'Standard queue capacity available.';
+
+      if (isClosed) {
+        canAccept = false;
+        reason = 'Doctor OPD session has closed for today.';
+      } else if (estimatedCompletionMinutes < remainingOpdMinutes) {
+        canAccept = true;
+        isBuffer = false;
+        reason = 'Standard queue capacity available.';
+      } else {
+        // Standard capacity reached -> check buffer
+        if (currentBufferPatients < bufferLimit) {
+          canAccept = true;
+          isBuffer = true;
+          reason = `Doctor queue reached standard capacity. Accepted under Extended Buffer Capacity (${remainingBufferCapacity} slot${remainingBufferCapacity === 1 ? '' : 's'} left).`;
+        } else {
+          canAccept = false;
+          isBuffer = false;
+          reason = `Doctor's queue has reached its maximum booking capacity (including buffer limit of ${bufferLimit}).`;
+        }
+      }
+
+      return {
+        canAccept,
+        isBuffer,
+        reason,
+        remainingOpdMinutes,
+        activeWorkload,
+        avgConsultationDurationMinutes: avgDuration,
+        estimatedCompletionMinutes,
+        remainingStandardCapacity,
+        currentBufferPatients,
+        remainingBufferCapacity,
+        bufferLimit,
+        isAvailable: true,
+        isClosed,
+        alternativeDoctors: [
+          {
+            id: 'doc-ortho',
+            name: 'Dr. Harpreet Singh, MS',
+            specialization: 'Orthopedics',
+            roomNumber: 'OPD Room 08',
+            activeQueueCount: 4,
+            estimatedWaitMinutes: 20
+          },
+          {
+            id: 'doc-peds',
+            name: 'Dr. Priya Patel, MD',
+            specialization: 'Pediatrics',
+            roomNumber: 'OPD Room 03',
+            activeQueueCount: 3,
+            estimatedWaitMinutes: 15
+          }
+        ]
+      };
+    }
+    return apiClient.get(`/queue/doctor/${doctorId}/capacity`);
   },
 
   async createToken(payload: {
@@ -52,15 +199,23 @@ export const queueService = {
     symptoms: string[];
     priority?: PriorityLevel;
     voiceNoteUrl?: string;
+    doctorId?: string;
   }): Promise<PatientToken> {
     if (USE_MOCK) {
       await delay(400);
+
+      // Check capacity first
+      const capacity = await this.checkDoctorCapacity(payload.doctorId, payload.department);
+      if (!capacity.canAccept) {
+        throw new Error(capacity.reason);
+      }
+
       const tokens = getStoredTokens();
       const nextNum = tokens.length + 98;
       const tokenNumber = `OPD-${nextNum.toString().padStart(3, '0')}`;
       const patientId = `PT-${Math.floor(10000 + Math.random() * 90000)}`;
 
-      // Calculate wait time: 5 mins per patient ahead
+      // Calculate wait time: 5 mins per patient ahead in active queue
       const waitingAhead = tokens.filter(
         (t) => t.department === payload.department && (t.status === 'WAITING' || t.status === 'IN_CONSULTATION')
       ).length;
@@ -83,6 +238,15 @@ export const queueService = {
         registeredAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         estimatedWaitMinutes: Math.max(5, waitingAhead * 5),
         voiceNoteUrl: payload.voiceNoteUrl,
+        isBuffer: capacity.isBuffer,
+        entryType: capacity.isBuffer ? 'buffer' : 'standard',
+        statusHistory: [
+          {
+            status: 'WAITING',
+            timestamp: new Date().toISOString(),
+            note: capacity.isBuffer ? 'Registered under Extended Buffer Capacity quota' : 'Standard OPD token issued'
+          }
+        ]
       };
 
       // Emergency cases jump ahead
@@ -107,6 +271,12 @@ export const queueService = {
   async updateTokenStatus(tokenId: string, status: TokenStatus): Promise<PatientToken> {
     if (USE_MOCK) {
       await delay(200);
+      if (status === 'SKIPPED' || status === 'SKIPPED_AWAITING_RECEPTION') {
+        await this.skipToken(tokenId);
+        const tokens = getStoredTokens();
+        return tokens.find((t) => t.id === tokenId || t.tokenNumber === tokenId)!;
+      }
+
       const tokens = getStoredTokens();
       const updated = tokens.map((t) => {
         if (t.id === tokenId || t.tokenNumber === tokenId) {
@@ -132,16 +302,17 @@ export const queueService = {
       await delay(300);
       const tokens = getStoredTokens();
       
-      // Find current in consultation and mark completed or skipped
+      // Find current in consultation and mark completed
       const currentInConsult = tokens.find((t) => t.department === department && t.status === 'IN_CONSULTATION');
       let updated = tokens.map((t) => {
         if (t.id === currentInConsult?.id) {
-          return { ...t, status: 'COMPLETED' as TokenStatus };
+          return { ...t, status: 'COMPLETED' as TokenStatus, consultationEndTime: new Date().toISOString() };
         }
         return t;
       });
 
-      // Find next waiting (priority cases first)
+      // Find next waiting (priority cases first: Emergency > Senior > Standard)
+      // Note: Skipped patients are in separate queue and NEVER called here!
       const emergencyNext = updated.find((t) => t.department === department && t.status === 'WAITING' && t.priority === 'Emergency');
       const seniorNext = updated.find((t) => t.department === department && t.status === 'WAITING' && t.priority === 'Senior');
       const standardNext = updated.find((t) => t.department === department && t.status === 'WAITING');
@@ -150,7 +321,12 @@ export const queueService = {
       if (nextToCall) {
         updated = updated.map((t) => {
           if (t.id === nextToCall.id) {
-            return { ...t, status: 'IN_CONSULTATION' as TokenStatus, estimatedWaitMinutes: 0 };
+            return {
+              ...t,
+              status: 'IN_CONSULTATION' as TokenStatus,
+              estimatedWaitMinutes: 0,
+              consultationStartTime: new Date().toISOString()
+            };
           }
           return t;
         });
@@ -162,58 +338,169 @@ export const queueService = {
     return apiClient.post('/queue/call-next', { department });
   },
 
-  async skipToken(tokenId: string): Promise<void> {
+  /**
+   * Skip a patient in the priority queue.
+   * Completely removes them from active main queue into separate Skipped Patients Queue.
+   * Patient must not occupy a position in the active main queue while waiting.
+   */
+  async skipToken(tokenId: string, reason = 'Patient not present when called'): Promise<void> {
     if (USE_MOCK) {
       await delay(200);
       const tokens = getStoredTokens();
-      const updated = tokens.map((t) => (t.id === tokenId || t.tokenNumber === tokenId ? { ...t, status: 'SKIPPED' as TokenStatus } : t));
+      const updated = tokens.map((t) => {
+        if (t.id === tokenId || t.tokenNumber === tokenId) {
+          return {
+            ...t,
+            status: 'SKIPPED' as TokenStatus,
+            skippedAt: new Date().toISOString(),
+            statusHistory: [
+              ...(t.statusHistory || []),
+              {
+                status: 'SKIPPED',
+                timestamp: new Date().toISOString(),
+                note: reason || 'Patient skipped – awaiting physical reception check-in'
+              }
+            ]
+          };
+        }
+        return t;
+      });
+
+      // Recalculate wait times for all remaining waiting patients
+      let countAhead = 0;
+      for (let i = 0; i < updated.length; i++) {
+        if (updated[i].status === 'WAITING') {
+          updated[i].estimatedWaitMinutes = Math.max(5, countAhead * 5);
+          countAhead++;
+        }
+      }
+
       saveTokens(updated);
       return;
     }
-    return apiClient.post(`/queue/tokens/${tokenId}/skip`);
+    return apiClient.put(`/queue/${tokenId}/status`, { status: 'skipped', delayReason: reason });
   },
 
-  async addDemoPatients(): Promise<PatientToken[]> {
-    const current = getStoredTokens();
-    const demoPatients = [
-      { name: 'Kavita Chawla', age: 31, gender: 'Female' as const, phone: '9812001122', symptoms: ['Persistent Migraine', 'Photophobia', 'Nausea'], priority: 'Normal' as PriorityLevel, vitals: { bp: '110/70', pulse: 72, spo2: 99, temp: 98.6, weight: 58 } },
-      { name: 'Baldev Raj', age: 71, gender: 'Male' as const, phone: '9876543210', symptoms: ['Exertional Chest Tightness', 'Chronic Hypertension'], priority: 'Senior' as PriorityLevel, vitals: { bp: '150/95', pulse: 84, spo2: 96, temp: 98.4, weight: 70 } },
-      { name: 'Simranpreet Kaur', age: 19, gender: 'Female' as const, phone: '9814400221', symptoms: ['High Fever (102°F)', 'Severe Body Aches', 'Chills'], priority: 'Emergency' as PriorityLevel, vitals: { bp: '115/75', pulse: 108, spo2: 97, temp: 102.1, weight: 52 } },
-      { name: 'Harpreet Singh', age: 45, gender: 'Male' as const, phone: '9815522334', symptoms: ['Chronic Lower Back Pain', 'Lumbago with Sciatica'], priority: 'Normal' as PriorityLevel, vitals: { bp: '130/85', pulse: 76, spo2: 98, temp: 98.2, weight: 80 } },
-      { name: 'Ananya Gupta', age: 5, gender: 'Female' as const, phone: '9811224455', symptoms: ['Acute Otitis Media', 'Ear Pain with Persistent Fever'], priority: 'Pediatric' as PriorityLevel, vitals: { bp: '100/65', pulse: 98, spo2: 99, temp: 99.8, weight: 18 } },
-      { name: 'Gurpreet Singh', age: 52, gender: 'Male' as const, phone: '9872110099', symptoms: ['Uncontrolled Type-2 Diabetes', 'Fasting Sugar 240 mg/dL'], priority: 'Normal' as PriorityLevel, vitals: { bp: '138/88', pulse: 80, spo2: 98, temp: 98.6, weight: 77 } }
-    ];
+  /**
+   * Reception Physical Arrival Verification & Rejoining with THREE-PLACE PENALTY.
+   * Scans QR/token code, confirms physical arrival, prevents duplicate scans,
+   * reinserts into active main queue 3 positions behind normal priority position.
+   */
+  async rejoinToken(tokenNumberOrId: string, staffId = 'Front Desk Staff'): Promise<{ token: PatientToken; newPosition: number }> {
+    if (USE_MOCK) {
+      await delay(300);
+      const tokens = getStoredTokens();
+      const token = tokens.find(
+        (t) =>
+          t.tokenNumber.toLowerCase() === tokenNumberOrId.trim().toLowerCase() ||
+          t.id === tokenNumberOrId.trim()
+      );
 
-    const startNum = current.length + 105;
-    const newTokens: PatientToken[] = demoPatients.map((p, idx) => ({
-      id: `tok-demo-${Date.now()}-${idx}`,
-      tokenNumber: `OPD-${(startNum + idx).toString().padStart(3, '0')}`,
-      patientId: `PT-${Math.floor(10000 + Math.random() * 90000)}`,
-      patientName: p.name,
-      age: p.age,
-      gender: p.gender,
-      phone: p.phone,
-      abhaId: `91-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`,
-      department: 'General Medicine',
-      assignedDoctorId: 'doc-rajesh',
-      assignedDoctorName: 'Dr. Rajesh Sharma',
-      roomNumber: 'OPD Room 12',
-      symptoms: p.symptoms,
-      priority: p.priority,
-      status: 'WAITING',
-      registeredAt: new Date(Date.now() - (demoPatients.length - idx) * 180000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      estimatedWaitMinutes: (idx + 1) * 6,
-      vitals: p.vitals
-    }));
+      if (!token) {
+        throw new Error(`Token "${tokenNumberOrId}" not found in hospital registry.`);
+      }
 
-    const updated = [...current, ...newTokens];
-    saveTokens(updated);
-    return updated;
-  },
+      // Duplicate scan prevention:
+      if (token.status === 'WAITING') {
+        const activeWaiting = tokens.filter((t) => t.department === token.department && t.status === 'WAITING');
+        const pos = activeWaiting.findIndex((t) => t.id === token.id) + 1;
+        throw new Error(`Duplicate scan: Token ${token.tokenNumber} is already active in the queue at position #${pos}.`);
+      }
 
-  async resetDemoQueue(): Promise<PatientToken[]> {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_TOKENS));
-    return INITIAL_TOKENS;
+      if (token.status === 'IN_CONSULTATION') {
+        throw new Error(`Duplicate scan: Token ${token.tokenNumber} is currently inside the consultation room.`);
+      }
+
+      if (token.status === 'COMPLETED') {
+        throw new Error(`Token ${token.tokenNumber} has already completed consultation today.`);
+      }
+
+      if (token.status !== 'SKIPPED' && token.status !== 'SKIPPED_AWAITING_RECEPTION') {
+        throw new Error(`Token ${token.tokenNumber} is not in the skipped queue (current status: ${token.status}).`);
+      }
+
+      // 1. Get currently active waiting tokens for this department
+      const activeWaiting = tokens.filter((t) => t.department === token.department && t.status === 'WAITING');
+
+      // 2. Determine natural position based on priority rules
+      let naturalIndex = 0;
+      if (token.priority === 'Emergency') {
+        // Place after existing emergencies
+        naturalIndex = activeWaiting.filter((t) => t.priority === 'Emergency').length;
+      } else if (token.priority === 'Senior') {
+        // Place after emergencies and existing seniors
+        naturalIndex = activeWaiting.filter((t) => t.priority === 'Emergency' || t.priority === 'Senior').length;
+      } else {
+        // Normal: natural position is behind higher priorities
+        naturalIndex = activeWaiting.filter((t) => t.priority !== 'Normal').length;
+      }
+
+      // 3. Apply THREE-PLACE PENALTY:
+      // Re-entry token is placed 3 positions behind where it would otherwise be placed
+      let targetIndex = naturalIndex + 3;
+      if (targetIndex > activeWaiting.length) {
+        targetIndex = activeWaiting.length;
+      }
+
+      // Emergency rule preservation: non-emergency can NEVER jump ahead of an emergency patient
+      const emergencyCount = activeWaiting.filter((t) => t.priority === 'Emergency').length;
+      if (token.priority !== 'Emergency' && targetIndex < emergencyCount) {
+        targetIndex = emergencyCount;
+      }
+
+      // 4. Update token record
+      const updatedToken: PatientToken = {
+        ...token,
+        status: 'WAITING',
+        rejoinedAt: new Date().toISOString(),
+        reentryPenaltyApplied: true,
+        reentryPenaltyPositions: 3,
+        queuePosition: targetIndex + 1,
+        verifiedByStaff: staffId,
+        estimatedWaitMinutes: Math.max(5, targetIndex * 5),
+        statusHistory: [
+          ...(token.statusHistory || []),
+          {
+            status: 'WAITING',
+            timestamp: new Date().toISOString(),
+            note: `Physical arrival verified at reception. Rejoined active main queue at position #${targetIndex + 1} with 3-position penalty applied.`
+          }
+        ]
+      };
+
+      // 5. Reinsert into tokens array preserving the new order
+      const remainingTokens = tokens.filter((t) => t.id !== token.id);
+      
+      // Find insertion point in the full list
+      const deptWaiting = remainingTokens.filter(
+        (t) => t.department === token.department && t.status === 'WAITING'
+      );
+      
+      let insertIndex = remainingTokens.length;
+      if (deptWaiting.length > 0 && targetIndex < deptWaiting.length) {
+        const referenceToken = deptWaiting[targetIndex];
+        insertIndex = remainingTokens.findIndex((t) => t.id === referenceToken.id);
+      }
+
+      const finalTokens = [...remainingTokens];
+      finalTokens.splice(insertIndex, 0, updatedToken);
+
+      // Recalculate wait times
+      let waitingCount = 0;
+      for (let i = 0; i < finalTokens.length; i++) {
+        if (finalTokens[i].department === token.department && finalTokens[i].status === 'WAITING') {
+          finalTokens[i].estimatedWaitMinutes = Math.max(5, waitingCount * 5);
+          waitingCount++;
+        }
+      }
+
+      saveTokens(finalTokens);
+      return { token: updatedToken, newPosition: targetIndex + 1 };
+    }
+
+    const res: any = await apiClient.post('/queue/rejoin', { tokenNumber: tokenNumberOrId });
+    return { token: res.data.queueEntry, newPosition: res.data.newPosition };
   }
 };
 
+export default queueService;

@@ -76,7 +76,46 @@ const queueSchema = new mongoose.Schema(
     delayReason: {
       type: String,
       default: ''
-    }
+    },
+    // Skipped & Reception Re-entry tracking
+    skippedAt: {
+      type: Date
+    },
+    rejoinedAt: {
+      type: Date
+    },
+    reentryPenaltyApplied: {
+      type: Boolean,
+      default: false
+    },
+    reentryPenaltyPositions: {
+      type: Number,
+      default: 3
+    },
+    verifiedByStaff: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    // Doctor Capacity & Buffer tracking
+    isBuffer: {
+      type: Boolean,
+      default: false,
+      index: true
+    },
+    entryType: {
+      type: String,
+      enum: ['standard', 'buffer'],
+      default: 'standard'
+    },
+    // Status transition audit history
+    statusHistory: [
+      {
+        status: { type: String, required: true },
+        timestamp: { type: Date, default: Date.now },
+        updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        note: { type: String, default: '' }
+      }
+    ]
   },
   {
     timestamps: true

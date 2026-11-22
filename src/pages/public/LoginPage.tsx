@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { UserRole } from '../../types';
 
 export const LoginPage: React.FC = () => {
   const { user, isAuthenticated, login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const [role, setRole] = useState<UserRole>('patient');
@@ -15,6 +17,10 @@ export const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    document.title = 'Secure Portal Sign In — QFlip Healthcare';
+  }, []);
 
   const handleRoleChange = (selectedRole: UserRole) => {
     setRole(selectedRole);
@@ -88,90 +94,84 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-light-surface-variant/30">
-      <div className="max-w-md w-full bg-light-surface rounded-2xl border border-light-outline p-8 shadow-xl space-y-6">
+    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
+      <div className="max-w-md w-full glass-card p-8 shadow-xl space-y-6">
         {/* Header */}
-        <div className="text-center">
+        <div className="text-center relative">
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
             <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8">
               <path
                 d="M4 18L10 6L18 28L24 14L30 22"
-                stroke="#2585E8"
+                stroke="#0F766E"
                 strokeWidth="3.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               ></path>
-              <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
+              <circle cx="30" cy="22" r="3.5" fill="#14B8A6"></circle>
             </svg>
             <span className="font-headline text-headline-sm font-extrabold text-light-primary">
-              Q<span className="text-secondary font-medium">Flip</span>
+              CARE<span className="text-secondary font-medium">FLOW</span>
             </span>
           </Link>
           <h2 className="font-headline text-title-lg font-bold text-light-primary">
-            Hospital SSO &amp; Portal Authentication
+            {t('auth.login_title', 'Hospital SSO & Portal Authentication')}
           </h2>
-          <p className="text-xs text-light-on-surface-variant mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Access role-protected clinical workflows, ABHA gateway, and live OPD dashboards
           </p>
         </div>
 
         {/* Role Selector Tabs */}
         <div>
-          <label className="text-[11px] font-bold text-light-on-surface-variant uppercase block mb-1.5">
+          <label className="text-[11px] font-bold text-slate-500 uppercase block mb-1.5">
             Select Your Role:
           </label>
-          <div className="grid grid-cols-3 gap-1.5 p-1 bg-light-surface-variant rounded-xl border border-light-outline text-xs">
+          <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200 text-xs">
             <button
               type="button"
               onClick={() => handleRoleChange('patient')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${
-                role === 'patient' ? 'bg-white shadow text-secondary' : 'text-light-on-surface-variant hover:text-light-primary'
-              }`}
+              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'patient' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
             >
               Patient
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('doctor')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${
-                role === 'doctor' ? 'bg-white shadow text-secondary' : 'text-light-on-surface-variant hover:text-light-primary'
-              }`}
+              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'doctor' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
             >
               Doctor
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('staff')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${
-                role === 'staff' ? 'bg-white shadow text-secondary' : 'text-light-on-surface-variant hover:text-light-primary'
-              }`}
+              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'staff' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
             >
               Staff Desk
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('admin')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${
-                role === 'admin' ? 'bg-white shadow text-secondary' : 'text-light-on-surface-variant hover:text-light-primary'
-              }`}
+              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'admin' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
             >
               Administrator
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('lab')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${
-                role === 'lab' ? 'bg-white shadow text-secondary' : 'text-light-on-surface-variant hover:text-light-primary'
-              }`}
+              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'lab' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
             >
               Lab Staff
             </button>
             <button
               type="button"
               onClick={() => handleRoleChange('pharmacy')}
-              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${
-                role === 'pharmacy' ? 'bg-white shadow text-secondary' : 'text-light-on-surface-variant hover:text-light-primary'
-              }`}
+              className={`py-2 px-1 rounded-lg font-bold transition-all text-center ${role === 'pharmacy' ? 'bg-[#E6F4F1] text-[#0F766E] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
             >
               Chemist
             </button>
@@ -292,9 +292,8 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleRoleChange('patient')}
-              className={`p-2 rounded-lg border text-left transition-all ${
-                role === 'patient' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-              }`}
+              className={`p-2 rounded-lg border text-left transition-all ${role === 'patient' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+                }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">person</span>
@@ -306,9 +305,8 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleRoleChange('doctor')}
-              className={`p-2 rounded-lg border text-left transition-all ${
-                role === 'doctor' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-              }`}
+              className={`p-2 rounded-lg border text-left transition-all ${role === 'doctor' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+                }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">stethoscope</span>
@@ -320,9 +318,8 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleRoleChange('staff')}
-              className={`p-2 rounded-lg border text-left transition-all ${
-                role === 'staff' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-              }`}
+              className={`p-2 rounded-lg border text-left transition-all ${role === 'staff' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+                }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">how_to_reg</span>
@@ -334,9 +331,8 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleRoleChange('admin')}
-              className={`p-2 rounded-lg border text-left transition-all ${
-                role === 'admin' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-              }`}
+              className={`p-2 rounded-lg border text-left transition-all ${role === 'admin' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+                }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">admin_panel_settings</span>
@@ -348,9 +344,8 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleRoleChange('lab')}
-              className={`p-2 rounded-lg border text-left transition-all ${
-                role === 'lab' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-              }`}
+              className={`p-2 rounded-lg border text-left transition-all ${role === 'lab' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+                }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">biotech</span>
@@ -362,9 +357,8 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleRoleChange('pharmacy')}
-              className={`p-2 rounded-lg border text-left transition-all ${
-                role === 'pharmacy' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
-              }`}
+              className={`p-2 rounded-lg border text-left transition-all ${role === 'pharmacy' ? 'bg-secondary/10 border-secondary text-secondary font-bold' : 'border-light-outline hover:bg-light-surface-variant text-light-primary'
+                }`}
             >
               <div className="font-bold flex items-center gap-1">
                 <span className="material-symbols-outlined text-xs">medication</span>

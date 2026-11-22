@@ -26,7 +26,7 @@ export class PredictionService {
       try {
         const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const prompt = `You are an AI Clinical Triage Assistant for CareFlow, a hospital OPD queue management system.
-Evaluate the following patient symptoms (may be in English, Hindi, or Punjabi):
+Evaluate the following patient symptoms (may be in English, Hindi, Punjabi, or Tamil):
 Symptoms: "${symptoms}"
 
 Respond ONLY with a valid JSON object matching this schema:
@@ -65,6 +65,10 @@ Respond ONLY with a valid JSON object matching this schema:
       text.includes('cardiac') ||
       text.includes('छाती') ||
       text.includes('दिल') ||
+      text.includes('ਧੜਕਨ') ||
+      text.includes('ਦਿਲ') ||
+      text.includes('இதயம்') ||
+      text.includes('marbu') ||
       text.includes('breathless') ||
       text.includes('palpitation')
     ) {
@@ -81,7 +85,13 @@ Respond ONLY with a valid JSON object matching this schema:
       text.includes('knee') ||
       text.includes('back pain') ||
       text.includes('हड्डी') ||
-      text.includes('जोड़ों')
+      text.includes('जोड़ों') ||
+      text.includes('ਗਿੱਟਾ') ||
+      text.includes('ਗੋਡਾ') ||
+      text.includes('gitta') ||
+      text.includes('எலும்பு') ||
+      text.includes('மூட்டு') ||
+      text.includes('mootu')
     ) {
       department = 'Orthopedics';
       departmentCode = 'ORTHO';
@@ -92,6 +102,9 @@ Respond ONLY with a valid JSON object matching this schema:
       text.includes('baby') ||
       text.includes('infant') ||
       text.includes('बच्चा') ||
+      text.includes('ਬੱਚਾ') ||
+      text.includes('குழந்தை') ||
+      text.includes('kulanthai') ||
       text.includes('kid')
     ) {
       department = 'Pediatrics';
@@ -105,6 +118,11 @@ Respond ONLY with a valid JSON object matching this schema:
       text.includes('कान') ||
       text.includes('नाक') ||
       text.includes('गला') ||
+      text.includes('ਕੰਨ') ||
+      text.includes('ਗਲਾ') ||
+      text.includes('காது') ||
+      text.includes('தொண்டை') ||
+      text.includes('thondai') ||
       text.includes('sinus')
     ) {
       department = 'ENT';
@@ -116,6 +134,7 @@ Respond ONLY with a valid JSON object matching this schema:
       text.includes('maternity') ||
       text.includes('pregnancy') ||
       text.includes('गर्भावस्था') ||
+      text.includes('கர்ப்பம்') ||
       text.includes('period') ||
       text.includes('gynec')
     ) {
@@ -128,7 +147,8 @@ Respond ONLY with a valid JSON object matching this schema:
       text.includes('bleeding heavily') ||
       text.includes('unconscious') ||
       text.includes('emergency') ||
-      text.includes('आपातकालीन')
+      text.includes('आपातकालीन') ||
+      text.includes('அவசரம்')
     ) {
       department = 'Emergency Medicine';
       departmentCode = 'EMG';

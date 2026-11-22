@@ -28,4 +28,7 @@ dist-ssr
 
 # Output files
 repomix-output.xml
+.cache
+backend/backend/
+
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../../services/adminService';
 import { HospitalDepartment, HospitalResource } from '../../types';
+import { BentoCard } from '../../components/common/BentoCard';
 
 export const DepartmentsManagement: React.FC = () => {
   const [departments, setDepartments] = useState<HospitalDepartment[]>([]);
@@ -20,51 +21,51 @@ export const DepartmentsManagement: React.FC = () => {
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {departments.map((d) => (
-          <div key={d.id} className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-light-outline">
+          <BentoCard key={d.id} variant="solid" padding="md" className="space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
-                <span className="font-headline font-code text-xs font-bold text-secondary">{d.code}</span>
-                <h3 className="font-headline text-title-md font-bold text-light-primary">{d.name}</h3>
+                <span className="font-code text-xs font-bold text-[#0F766E]">{d.code}</span>
+                <h3 className="text-base font-bold text-slate-900">{d.name}</h3>
               </div>
               <span
                 className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                   d.capacityStatus === 'OVERLOAD'
-                    ? 'bg-danger/15 text-danger border border-danger/30'
+                    ? 'bg-red-50 text-[#DC2626] border border-red-200'
                     : d.capacityStatus === 'ELEVATED'
-                    ? 'bg-warning/20 text-on-warning border border-warning/40'
-                    : 'bg-success/15 text-success border border-success/30'
+                    ? 'bg-amber-50 text-[#D97706] border border-amber-200'
+                    : 'bg-green-50 text-[#16A34A] border border-green-200'
                 }`}
               >
                 {d.capacityStatus}
               </span>
             </div>
 
-            <div className="text-xs text-light-on-surface-variant">
-              Head: <strong className="text-light-primary">{d.headDoctor}</strong>
+            <div className="text-xs text-slate-500">
+              Head: <strong className="text-slate-800">{d.headDoctor}</strong>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 bg-light-surface-variant p-3 rounded-xl border border-light-outline text-center text-xs">
+            <div className="grid grid-cols-3 gap-2 bg-slate-50/80 p-3 rounded-xl border border-slate-200 text-center text-xs">
               <div>
-                <span className="text-[10px] uppercase block text-light-on-surface-variant">Waiting</span>
-                <span className="font-code font-bold text-secondary text-sm">{d.waitingCount}</span>
+                <span className="text-[10px] uppercase block text-slate-400 font-semibold">Waiting</span>
+                <span className="font-mono font-bold text-[#0F766E] text-sm tabular-nums">{d.waitingCount}</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase block text-light-on-surface-variant">Completed</span>
-                <span className="font-code font-bold text-success text-sm">{d.completedTodayCount}</span>
+                <span className="text-[10px] uppercase block text-slate-400 font-semibold">Completed</span>
+                <span className="font-mono font-bold text-[#16A34A] text-sm tabular-nums">{d.completedTodayCount}</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase block text-light-on-surface-variant">Avg Wait</span>
-                <span className="font-code font-bold text-light-primary text-sm">{d.avgWaitTimeMinutes}m</span>
+                <span className="text-[10px] uppercase block text-slate-400 font-semibold">Avg Wait</span>
+                <span className="font-mono font-bold text-slate-900 text-sm tabular-nums">{d.avgWaitTimeMinutes}m</span>
               </div>
             </div>
 
-            <div className="text-xs text-light-on-surface-variant">
+            <div className="text-xs text-slate-500">
               <span>Assigned Rooms: </span>
-              <strong className="text-light-primary">{d.rooms.join(', ')}</strong>
+              <strong className="text-slate-800">{d.rooms.join(', ')}</strong>
             </div>
-          </div>
+          </BentoCard>
         ))}
       </div>
     </div>
@@ -101,18 +102,18 @@ export const ResourceManagement: React.FC = () => {
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {resources.map((r) => (
-          <div key={r.id} className="bg-light-surface rounded-2xl border border-light-outline p-6 shadow-card space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-light-outline">
-              <span className="text-xs font-bold text-secondary uppercase tracking-wider">{r.category}</span>
+          <BentoCard key={r.id} variant="glass" padding="md" className="space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/70">
+              <span className="text-xs font-bold text-[#0F766E] uppercase tracking-wider">{r.category}</span>
               <span
                 className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                   r.status === 'CRITICAL'
-                    ? 'bg-danger/15 text-danger border border-danger/30'
+                    ? 'bg-red-50 text-[#DC2626] border border-red-200'
                     : r.status === 'LOW'
-                    ? 'bg-warning/20 text-on-warning border border-warning/40'
-                    : 'bg-success/15 text-success border border-success/30'
+                    ? 'bg-amber-50 text-[#D97706] border border-amber-200'
+                    : 'bg-green-50 text-[#16A34A] border border-green-200'
                 }`}
               >
                 {r.status}
@@ -120,46 +121,46 @@ export const ResourceManagement: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="font-headline text-title-md font-bold text-light-primary">{r.name}</h3>
-              <div className="text-xs text-light-on-surface-variant">{r.department}</div>
+              <h3 className="text-base font-bold text-slate-900">{r.name}</h3>
+              <div className="text-xs text-slate-500">{r.department}</div>
             </div>
 
-            <div className="p-4 bg-light-surface-variant rounded-xl border border-light-outline flex items-center justify-between text-center">
+            <div className="p-4 bg-white/80 rounded-xl border border-slate-200 flex items-center justify-between text-center">
               <div>
-                <span className="text-[10px] text-light-on-surface-variant uppercase block">Total Capacity</span>
-                <span className="font-code font-bold text-light-primary text-base">{r.total}</span>
+                <span className="text-[10px] text-slate-500 uppercase block">Total Capacity</span>
+                <span className="font-code font-bold text-slate-900 text-base">{r.total}</span>
               </div>
-              <div className="border-x border-light-outline px-4">
-                <span className="text-[10px] text-light-on-surface-variant uppercase block">Occupied</span>
-                <span className="font-code font-bold text-danger text-base">{r.occupied}</span>
+              <div className="border-x border-slate-200 px-4">
+                <span className="text-[10px] text-slate-500 uppercase block">Occupied</span>
+                <span className="font-code font-bold text-[#DC2626] text-base">{r.occupied}</span>
               </div>
               <div>
-                <span className="text-[10px] text-light-on-surface-variant uppercase block">Available</span>
-                <span className="font-code font-bold text-success text-base">{r.available}</span>
+                <span className="text-[10px] text-slate-500 uppercase block">Available</span>
+                <span className="font-code font-bold text-[#16A34A] text-base">{r.available}</span>
               </div>
             </div>
 
             {/* Quick adjust controls */}
             <div className="flex items-center justify-between gap-2 pt-2">
-              <span className="text-[11px] font-semibold text-light-on-surface-variant">Update Live Allocation:</span>
+              <span className="text-[11px] font-semibold text-slate-500">Update Live Allocation:</span>
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => handleUpdate(r.id, 1)}
                   disabled={r.available === 0}
-                  className="px-2.5 py-1 bg-light-primary text-white text-xs font-bold rounded hover:bg-slate-800 disabled:opacity-40"
+                  className="px-2.5 py-1 bg-[#0F766E] text-white text-xs font-bold rounded-lg hover:bg-[#115E59] disabled:opacity-40 transition-colors"
                 >
                   + Admit
                 </button>
                 <button
                   onClick={() => handleUpdate(r.id, -1)}
                   disabled={r.occupied === 0}
-                  className="px-2.5 py-1 bg-light-surface border border-light-outline text-light-primary text-xs font-bold rounded hover:bg-light-surface-variant disabled:opacity-40"
+                  className="px-2.5 py-1 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 disabled:opacity-40 transition-colors"
                 >
                   - Discharge
                 </button>
               </div>
             </div>
-          </div>
+          </BentoCard>
         ))}
       </div>
     </div>
