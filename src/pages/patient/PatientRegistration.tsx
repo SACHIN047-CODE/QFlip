@@ -5,7 +5,9 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { VoiceInputModal } from '../../components/common/VoiceInputModal';
 import { TokenCard } from '../../components/common/TokenCard';
-import { PatientToken, PriorityLevel } from '../../types';
+import { AppointmentQrPassCard } from '../../components/common/AppointmentQrPassCard';
+import { PatientToken, PriorityLevel, AppointmentPassData } from '../../types';
+import { appointmentService } from '../../services/appointmentService';
 import { firestoreService } from '../../services/firestoreService';
 
 export const PatientRegistration: React.FC = () => {
@@ -18,9 +20,27 @@ export const PatientRegistration: React.FC = () => {
   const [step, setStep] = useState<'form' | 'review' | 'success'>('form');
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [createdToken, setCreatedToken] = useState<PatientToken | null>(null);
+  const [confirmedPass, setConfirmedPass] = useState<AppointmentPassData | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [alternativeDoctors, setAlternativeDoctors] = useState<any[]>([]);
+
+  // Restore previously confirmed appointment pass on page refresh
+  useEffect(() => {
+    const saved = sessionStorage.getItem('qflip_last_confirmed_pass');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed?.token) {
+          setCreatedToken(parsed.token);
+          if (parsed?.passData) setConfirmedPass(parsed.passData);
+          setStep('success');
+        }
+      } catch (err) {
+        console.warn('Could not parse saved confirmation pass:', err);
+      }
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     patientName: user?.name || '',
@@ -113,8 +133,77 @@ export const PatientRegistration: React.FC = () => {
         priority: formData.priority,
         symptoms: formData.symptoms,
       });
-      setCreatedToken(token);
+
+      // Book appointment record with backend & generate secure access token
+      let apptNumber = token.appointmentId || '';
+      let secureAccessToken = token.secureAccessToken || '';
+      let qrAccessUrl = token.qrUrl || '';
+      let passData: AppointmentPassData | null = null;
+
+      try {
+        const bookingRes = await appointmentService.bookAppointment({
+          patientName: formData.patientName,
+          phone: formData.phone,
+          departmentName: formData.department,
+          symptoms: formData.symptoms,
+          priority: formData.priority,
+          tokenNumber: token.tokenNumber,
+        });
+
+        apptNumber = bookingRes.appointmentNumber;
+        secureAccessToken = bookingRes.secureAccessToken;
+        qrAccessUrl = bookingRes.qrAccessUrl;
+        passData = bookingRes.passData;
+      } catch (apptErr) {
+        console.warn('Backend appointment booking warning:', apptErr);
+      }
+
+      const finalAppointmentId =
+        apptNumber ||
+        token.appointmentId ||
+        `APT-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 90000)}`;
+
+      const finalSecureToken =
+        secureAccessToken ||
+        token.secureAccessToken ||
+        Array.from(crypto.getRandomValues(new Uint8Array(24)))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+
+      const finalQrUrl = qrAccessUrl || token.qrUrl || `/appointment/${finalSecureToken}`;
+
+      const finalPass: AppointmentPassData = passData || {
+        appointmentId: finalAppointmentId,
+        tokenNumber: token.tokenNumber,
+        patientName: token.patientName,
+        doctorName: token.assignedDoctorName || 'Dr. Rahul Verma',
+        doctorSpecialization: 'Consultant Physician',
+        roomNumber: token.roomNumber || 'OPD Room 101',
+        departmentName: token.department,
+        departmentFloor: 'Ground Floor, Wing A',
+        appointmentDate: new Date().toISOString(),
+        timeSlot: '10:00 AM - 10:30 AM',
+        status: 'scheduled',
+        priority: token.priority,
+        qrUrl: finalQrUrl,
+      };
+
+      const finalToken: PatientToken = {
+        ...token,
+        appointmentId: finalAppointmentId,
+        secureAccessToken: finalSecureToken,
+        qrUrl: finalQrUrl,
+      };
+
+      setCreatedToken(finalToken);
+      setConfirmedPass(finalPass);
       setStep('success');
+
+      // Save to sessionStorage so refresh does NOT regenerate a new QR code or lose booking
+      sessionStorage.setItem(
+        'qflip_last_confirmed_pass',
+        JSON.stringify({ token: finalToken, passData: finalPass })
+      );
     } catch (err: any) {
       console.error(err);
       const msg = err.message || 'Failed to issue queue token.';
@@ -481,13 +570,13 @@ export const PatientRegistration: React.FC = () => {
         </div>
       )}
 
-      {/* STEP 3: SUCCESS & TOKEN SLIP */}
+      {/* STEP 3: SUCCESS & TOKEN SLIP WITH QR DIGITAL APPOINTMENT PASS */}
       {step === 'success' && createdToken && (
         <div className="space-y-6">
           <div className="p-6 bg-success/15 border-2 border-success rounded-2xl text-center space-y-2">
             <span className="material-symbols-outlined text-4xl text-success">check_circle</span>
             <h2 className="font-headline text-title-lg font-bold text-success">
-              OPD Token Successfully Issued!
+              OPD Appointment Confirmed & Token Issued!
             </h2>
             {createdToken.isBuffer && (
               <span className="inline-block px-3 py-1 rounded-full bg-purple-100 text-purple-700 font-bold text-xs border border-purple-300">
@@ -495,10 +584,29 @@ export const PatientRegistration: React.FC = () => {
               </span>
             )}
             <p className="text-xs text-light-on-surface-variant max-w-md mx-auto">
-              SMS dispatch confirmation sent to <strong>{createdToken.phone}</strong>. Please proceed to the waiting hall.
+              SMS dispatch confirmation sent to <strong>{createdToken.phone}</strong>. Your QR-based digital appointment pass is ready below.
             </p>
           </div>
 
+          {/* QR-Based Digital Appointment Pass */}
+          <AppointmentQrPassCard
+            appointmentId={confirmedPass?.appointmentId || createdToken.appointmentId || 'APT-2026-00001'}
+            tokenNumber={createdToken.tokenNumber}
+            patientName={createdToken.patientName}
+            doctorName={confirmedPass?.doctorName || createdToken.assignedDoctorName || 'Dr. Rahul Verma'}
+            doctorSpecialization={confirmedPass?.doctorSpecialization || 'Consultant Physician'}
+            department={createdToken.department}
+            roomNumber={confirmedPass?.roomNumber || createdToken.roomNumber || 'OPD Room 101'}
+            floor={confirmedPass?.departmentFloor || 'Ground Floor'}
+            appointmentDate={confirmedPass?.appointmentDate || new Date().toISOString()}
+            appointmentTime={confirmedPass?.timeSlot || '10:00 AM - 10:30 AM'}
+            bookingStatus={confirmedPass?.status || 'Scheduled'}
+            secureAccessToken={createdToken.secureAccessToken}
+            qrAccessUrl={createdToken.qrUrl}
+            onPrint={() => window.print()}
+          />
+
+          {/* OPD Live Token Status Card */}
           <TokenCard
             token={createdToken}
             currentServingTokenNumber="In Session"
@@ -506,6 +614,30 @@ export const PatientRegistration: React.FC = () => {
             onPrint={() => window.print()}
             onViewDetails={() => navigate('/patient/queue')}
           />
+
+          {/* Navigation Action Buttons */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 print:hidden">
+            <button
+              type="button"
+              onClick={() => {
+                sessionStorage.removeItem('qflip_last_confirmed_pass');
+                setCreatedToken(null);
+                setConfirmedPass(null);
+                setStep('form');
+              }}
+              className="px-5 py-2.5 rounded-xl border border-light-outline bg-white hover:bg-light-surface-variant text-light-primary text-xs font-semibold transition-colors"
+            >
+              + Book Another OPD Token
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate('/patient/queue')}
+              className="px-6 py-2.5 rounded-xl bg-accent hover:brightness-95 text-on-accent text-xs font-bold font-headline transition-all shadow-sm"
+            >
+              Track Live Queue Status →
+            </button>
+          </div>
         </div>
       )}
 

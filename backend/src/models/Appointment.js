@@ -38,6 +38,26 @@ const appointmentSchema = new mongoose.Schema(
       default: 'scheduled',
       index: true
     },
+    tokenNumber: {
+      type: String,
+      trim: true
+    },
+    accessToken: {
+      type: String
+    },
+    accessTokenHash: {
+      type: String,
+      required: true,
+      index: true
+    },
+    accessTokenExpiry: {
+      type: Date,
+      required: true
+    },
+    isRevoked: {
+      type: Boolean,
+      default: false
+    },
     symptoms: {
       type: String,
       default: ''

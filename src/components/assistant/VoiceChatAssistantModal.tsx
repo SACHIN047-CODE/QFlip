@@ -373,17 +373,32 @@ export const VoiceChatAssistantModal: React.FC<VoiceChatAssistantModalProps> = (
                       <span>Room: {msg.createdToken.roomNumber}</span>
                       <span>Est. Wait: ~{msg.createdToken.estimatedWaitMinutes} mins</span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        navigate('/patient/dashboard');
-                      }}
-                      className="w-full mt-1 py-2 bg-white text-emerald-900 rounded-lg font-bold text-xs hover:bg-emerald-50 transition-colors flex items-center justify-center gap-1.5 shadow-xs"
-                    >
-                      <span className="material-symbols-outlined text-sm">schedule</span>
-                      Open in Live Smart Queue Tracker
-                    </button>
+                    <div className="flex gap-2 mt-2">
+                      {msg.createdToken.secureAccessToken && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onClose();
+                            navigate(`/appointment/${msg.createdToken?.secureAccessToken}`);
+                          }}
+                          className="flex-1 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <span className="material-symbols-outlined text-sm">qr_code</span>
+                          View QR Pass
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onClose();
+                          navigate('/patient/dashboard');
+                        }}
+                        className="flex-1 py-2 bg-white text-emerald-900 rounded-lg font-bold text-xs hover:bg-emerald-50 transition-colors flex items-center justify-center gap-1.5 shadow-xs"
+                      >
+                        <span className="material-symbols-outlined text-sm">schedule</span>
+                        Smart Tracker
+                      </button>
+                    </div>
                   </div>
                 )}
 
