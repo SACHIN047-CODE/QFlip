@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useQueue } from '../../context/QueueContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { patientService } from '../../services/patientService';
 import { TokenCard } from '../../components/common/TokenCard';
 import { ConsultationNote } from '../../types';
@@ -9,6 +10,7 @@ import { ConsultationNote } from '../../types';
 export const PatientDashboard: React.FC = () => {
   const { user } = useAuth();
   const { myToken, currentServingToken, tokens } = useQueue();
+  const { t } = useLanguage();
   const [medicalHistory, setMedicalHistory] = useState<ConsultationNote[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
@@ -111,7 +113,7 @@ export const PatientDashboard: React.FC = () => {
               <div className="w-10 h-10 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                 <span className="material-symbols-outlined">add_circle</span>
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">New OPD Slip</span>
+              <span className="font-headline text-xs font-bold text-light-primary">{t('nav.book_opd', 'New OPD Slip')}</span>
               <span className="text-[10px] text-light-on-surface-variant">Instant booking</span>
             </Link>
 
@@ -122,7 +124,7 @@ export const PatientDashboard: React.FC = () => {
               <div className="w-10 h-10 rounded-lg bg-accent/20 text-on-accent flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                 <span className="material-symbols-outlined">prescriptions</span>
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">Prescriptions</span>
+              <span className="font-headline text-xs font-bold text-light-primary">{t('nav.prescriptions', 'Prescriptions')}</span>
               <span className="text-[10px] text-light-on-surface-variant">Generic Digital Rx</span>
             </Link>
 
@@ -133,7 +135,7 @@ export const PatientDashboard: React.FC = () => {
               <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                 <span className="material-symbols-outlined">biotech</span>
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">Lab Reports</span>
+              <span className="font-headline text-xs font-bold text-light-primary">{t('nav.lab_tests', 'Lab Reports')}</span>
               <span className="text-[10px] text-light-on-surface-variant">Diagnostics</span>
             </Link>
 
@@ -144,7 +146,7 @@ export const PatientDashboard: React.FC = () => {
               <div className="w-10 h-10 rounded-lg bg-success/10 text-success flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                 <span className="material-symbols-outlined">medication</span>
               </div>
-              <span className="font-headline text-xs font-bold text-light-primary">Jan Aushadhi</span>
+              <span className="font-headline text-xs font-bold text-light-primary">{t('nav.pharmacy', 'Jan Aushadhi')}</span>
               <span className="text-[10px] text-light-on-surface-variant">Counter #03</span>
             </Link>
           </div>
