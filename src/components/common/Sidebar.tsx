@@ -340,14 +340,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Status indicator */}
         {!isCollapsed ? (
-          <div className="text-[11px] text-light-on-surface-variant pt-1 border-t border-light-outline/60">
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <span className="w-2 h-2 rounded-full bg-success inline-block"></span>
-              <span className="font-semibold text-light-primary text-[10px]">
-                ABHA Gateway Live
-              </span>
+          <div className="text-[11px] text-light-on-surface-variant pt-1 border-t border-light-outline/60 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-success inline-block"></span>
+                <span className="font-semibold text-light-primary text-[10px]">
+                  ABHA Gateway Live
+                </span>
+              </div>
+              <span className="text-[10px] text-slate-400">Sync: active</span>
             </div>
-            <div className="text-[10px]">Telemetry sync: active</div>
           </div>
         ) : (
           <div className="flex justify-center pt-1" title="ABHA Gateway Live">
