@@ -30,7 +30,8 @@ export type TokenStatus =
   | 'SKIPPED_AWAITING_RECEPTION'
   | 'REJOINED'
   | 'LAB_PENDING' 
-  | 'PHARMACY_PENDING';
+  | 'PHARMACY_PENDING'
+  | 'CANCELLED';
 
 export interface PatientToken {
   id: string;

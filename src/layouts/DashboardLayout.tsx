@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage, FULL_PAGE_TRANSLATIONS } from '../context/LanguageContext';
 import { HospitalMapModal } from '../components/common/HospitalMapModal';
 import { VoiceInputModal } from '../components/common/VoiceInputModal';
+import { VoiceChatAssistantModal } from '../components/assistant/VoiceChatAssistantModal';
+import { VoiceChatAssistantFloatingButton } from '../components/assistant/VoiceChatAssistantFloatingButton';
 
 interface DashboardLayoutProps {
   title?: string;
@@ -132,11 +134,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
       </div>
 
       <HospitalMapModal isOpen={mapOpen} onClose={() => setMapOpen(false)} />
-      <VoiceInputModal
+      <VoiceChatAssistantModal
         isOpen={voiceOpen}
         onClose={() => setVoiceOpen(false)}
-        onComplete={(transcript, dept) => alert(`Voice triage received for ${dept}: "${transcript}"`)}
       />
+      <VoiceChatAssistantFloatingButton />
     </div>
   );
 };
