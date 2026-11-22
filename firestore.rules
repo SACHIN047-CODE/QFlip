@@ -49,10 +49,14 @@ service cloud.firestore {
 
     // Users Collection (Authentication & Profiles):
     // - Read allowed to verify user existence during login
-    // - Create allowed for patient registration (role="patient")
+    // - Create/Update allowed for patient (role="patient") and doctor (role="doctor") registrations
     match /users/{userId} {
-      allow read: if true;
-      allow create, update: if true;
+      allow read, write: if true;
+    }
+
+    // Doctors Collection (Clinical Roster & Availability):
+    match /doctors/{doctorId} {
+      allow read, write: if true;
     }
 
     // Fallback: Deny all other collections by default

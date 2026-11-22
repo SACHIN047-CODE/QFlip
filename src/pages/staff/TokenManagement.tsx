@@ -203,42 +203,42 @@ export const TokenManagement: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="pb-3 border-b border-light-outline">
-        <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+      <div className="pb-3 border-b border-slate-200">
+        <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
           Front Desk Queue Administration
         </span>
-        <h1 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold text-light-primary">
+        <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
           Hospital Token Master Registry
         </h1>
-        <p className="text-xs text-light-on-surface-variant mt-1">
+        <p className="text-xs text-slate-500 mt-1">
           Monitor active OPD queues, verify physical re-entry of skipped patients, and manage capacity quotas.
         </p>
       </div>
 
       {/* Reception QR/Token Scan & Physical Arrival Verification Panel */}
-      <div className="bg-light-surface rounded-2xl border-2 border-secondary/40 p-5 shadow-card space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-light-outline">
+      <div className="glass-card p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200/70">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-secondary/15 text-secondary flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 text-[#0F766E] flex items-center justify-center border border-teal-100">
               <span className="material-symbols-outlined text-xl">qr_code_scanner</span>
             </div>
             <div>
-              <h3 className="font-headline text-title-md font-bold text-light-primary">
+              <h3 className="text-sm font-bold text-slate-900">
                 Physical Re-entry &amp; Token Verification Desk
               </h3>
-              <p className="text-[11px] text-light-on-surface-variant">
+              <p className="text-[11px] text-slate-500">
                 Scan patient token barcode or enter token number to verify physical arrival and apply three-position penalty.
               </p>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-bold font-code self-start sm:self-center">
+          <span className="px-2.5 py-1 rounded-full bg-[#E6F4F1] text-[#0F766E] text-xs font-bold font-mono self-start sm:self-center border border-[#0F766E]/20">
             {skippedTokens.length} Skipped Patient{skippedTokens.length === 1 ? '' : 's'} Waiting
           </span>
         </div>
 
         <form onSubmit={handleScanLookup} className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-grow">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-light-on-surface-variant text-sm">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
               pin
             </span>
             <input
@@ -246,12 +246,12 @@ export const TokenManagement: React.FC = () => {
               value={scanInput}
               onChange={(e) => setScanInput(e.target.value)}
               placeholder="Scan QR or enter token number (e.g. OPD-098, OPD-104)..."
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-light-outline bg-white text-xs font-code font-bold text-light-primary focus:border-secondary focus:ring-1 focus:ring-secondary uppercase"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-mono font-bold text-slate-900 focus:border-[#0F766E] focus:outline-none focus:ring-1 focus:ring-[#0F766E]/20 uppercase"
             />
           </div>
           <button
             type="submit"
-            className="px-5 py-2.5 bg-secondary text-white font-bold text-xs rounded-xl hover:bg-secondary/90 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+            className="px-5 py-2.5 bg-[#0F766E] text-white font-bold text-xs rounded-xl hover:bg-[#115E59] transition-colors flex items-center justify-center gap-1.5 shadow-xs"
           >
             <span className="material-symbols-outlined text-sm">search</span>
             <span>Verify Token</span>
@@ -263,10 +263,10 @@ export const TokenManagement: React.FC = () => {
           <div
             className={`p-3.5 rounded-xl border text-xs font-semibold flex items-center justify-between gap-3 ${
               scanMessage.type === 'success'
-                ? 'bg-success/10 border-success/30 text-success'
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
                 : scanMessage.type === 'error'
-                ? 'bg-danger/10 border-danger/30 text-danger'
-                : 'bg-amber-50 border-amber-300 text-amber-800'
+                ? 'bg-red-50 border-red-200 text-red-800'
+                : 'bg-amber-50 border-amber-200 text-amber-800'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -291,19 +291,19 @@ export const TokenManagement: React.FC = () => {
 
         {/* Scanned Token Preview Card if Skipped */}
         {scannedToken && (
-          <div className="p-4 bg-light-surface-variant/70 rounded-xl border border-light-outline space-y-3">
+          <div className="p-4 bg-white/80 rounded-xl border border-slate-200 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-headline font-code text-xl font-black text-secondary">
+                  <span className="font-mono text-xl font-black text-[#0F766E]">
                     {scannedToken.tokenNumber}
                   </span>
                   <StatusBadge status={scannedToken.status} priority={scannedToken.priority} />
                 </div>
-                <div className="text-xs font-bold text-light-primary mt-1">
+                <div className="text-xs font-bold text-slate-900 mt-1">
                   {scannedToken.patientName} • {scannedToken.department} ({scannedToken.roomNumber || 'OPD Room 12'})
                 </div>
-                <div className="text-[11px] text-light-on-surface-variant">
+                <div className="text-[11px] text-slate-500">
                   Phone: {scannedToken.phone} • Registered: {scannedToken.registeredAt}
                 </div>
               </div>
@@ -313,7 +313,7 @@ export const TokenManagement: React.FC = () => {
                   type="button"
                   onClick={() => handleConfirmReentry(scannedToken.tokenNumber)}
                   disabled={isVerifying}
-                  className="px-5 py-2.5 bg-accent hover:brightness-95 text-on-accent font-headline font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                  className="px-5 py-2.5 bg-[#0F766E] hover:bg-[#115E59] text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2"
                 >
                   <span className="material-symbols-outlined text-sm">verified</span>
                   <span>Confirm Arrival &amp; Rejoin Queue (+3 Penalty)</span>
@@ -325,66 +325,70 @@ export const TokenManagement: React.FC = () => {
       </div>
 
       {/* Navigation Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-light-outline pb-2">
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
         <button
           onClick={() => setActiveTab('all')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
             activeTab === 'all'
-              ? 'bg-light-primary text-white shadow-sm'
-              : 'text-light-on-surface-variant hover:bg-light-surface-variant'
+              ? 'bg-[#0F766E] text-white shadow-xs'
+              : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           <span>All Hospital Tokens</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">
+          <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px]">
             {tokens.length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveTab('skipped')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
             activeTab === 'skipped'
-              ? 'bg-amber-600 text-white shadow-sm'
+              ? 'bg-amber-600 text-white shadow-xs'
               : 'text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200'
           }`}
         >
           <span className="material-symbols-outlined text-sm">fast_forward</span>
           <span>Skipped Patients Queue</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-white/30 text-[10px] font-bold">
+          <span className="px-1.5 py-0.5 rounded-full bg-white/30 text-[10px] font-bold">
             {skippedTokens.length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveTab('buffer')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
             activeTab === 'buffer'
-              ? 'bg-purple-600 text-white shadow-sm'
+              ? 'bg-purple-600 text-white shadow-xs'
               : 'text-purple-800 bg-purple-50 hover:bg-purple-100 border border-purple-200'
           }`}
         >
           <span className="material-symbols-outlined text-sm">hourglass_top</span>
           <span>Extended Buffer Quota</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-white/30 text-[10px]">
+          <span className="px-1.5 py-0.5 rounded-full bg-white/30 text-[10px]">
             {tokens.filter((t) => t.isBuffer).length}
           </span>
         </button>
       </div>
 
-      <SearchBar
-        value={search}
-        onChange={setSearch}
-        placeholder="Filter by token number, patient name or mobile..."
-      />
+      <div className="glass-card p-4">
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder="Filter by token number, patient name or mobile..."
+        />
+      </div>
 
       {filtered.length === 0 ? (
-        <div className="p-10 bg-light-surface rounded-2xl border border-light-outline text-center text-xs text-light-on-surface-variant space-y-2">
-          <span className="material-symbols-outlined text-3xl text-light-outline">inbox</span>
-          <p className="font-semibold text-light-primary">No active patient records available in this view.</p>
+        <div className="p-10 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-500 space-y-2">
+          <span className="material-symbols-outlined text-3xl text-slate-300">inbox</span>
+          <p className="font-semibold text-slate-900">No active patient records available in this view.</p>
           <p className="text-[11px]">Any new OPD slips or skipped patients will be listed here in real time.</p>
         </div>
       ) : (
-        <DataTable columns={columns} data={filtered} />
+        <div className="bento-card-solid rounded-2xl overflow-hidden border border-slate-200/80 shadow-xs">
+          <DataTable columns={columns} data={filtered} />
+        </div>
       )}
     </div>
   );

@@ -40,18 +40,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
         onClick={onCloseMobile}
         className={({ isActive }) =>
           `flex items-center ${
-            isCollapsed ? 'justify-center p-3' : 'gap-3 px-3 py-2.5'
-          } rounded-xl text-label-md font-label transition-all ${
+            isCollapsed ? 'justify-center p-3' : 'gap-3 px-3.5 py-2.5'
+          } rounded-xl text-xs font-semibold transition-all duration-200 ${
             isActive
-              ? 'bg-secondary text-white font-semibold shadow-sm'
-              : 'text-light-on-surface-variant hover:bg-light-surface-variant hover:text-light-primary'
+              ? 'bg-[#E6F4F1] text-[#0F766E] border border-[#0F766E]/20 shadow-xs'
+              : 'text-slate-600 hover:bg-slate-100/70 hover:text-slate-900 border border-transparent'
           }`
         }
       >
         <div className="relative flex items-center justify-center flex-shrink-0">
           <span className="material-symbols-outlined text-xl">{icon}</span>
           {isCollapsed && badge && (
-            <span className="absolute -top-1.5 -right-2 px-1 py-0.2 min-w-4 h-4 rounded-full bg-accent text-on-accent text-[9px] font-bold font-code flex items-center justify-center ring-2 ring-white">
+            <span className="absolute -top-1.5 -right-2 px-1 py-0.2 min-w-4 h-4 rounded-full bg-[#0F766E] text-white text-[9px] font-bold font-code flex items-center justify-center ring-2 ring-white">
               {badge}
             </span>
           )}
@@ -231,33 +231,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside
       className={`${
         isCollapsed ? 'w-20' : 'w-64'
-      } bg-light-surface border-r border-light-outline flex-shrink-0 flex flex-col justify-between h-full min-h-screen transition-all duration-300 ease-in-out select-none`}
+      } bg-white/80 backdrop-blur-md border-r border-slate-200/80 flex-shrink-0 flex flex-col justify-between h-full min-h-screen transition-all duration-300 ease-in-out select-none shadow-[2px_0_12px_rgba(15,23,42,0.02)]`}
     >
       <div>
         {/* Brand & Doctor/Staff Identity */}
-        <div className="p-4 sm:p-5 border-b border-light-outline">
+        <div className="p-4 sm:p-5 border-b border-slate-200/80">
           <div className="flex items-center justify-between mb-4">
             <Link
               to="/"
               className={`flex items-center ${isCollapsed ? 'justify-center w-full' : 'gap-2.5'} group`}
-              title="QFlip - Civil Hospital Ambala"
+              title="CAREFLOW - Civil Hospital Ambala"
             >
               <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8 flex-shrink-0">
                 <path
                   d="M4 18L10 6L18 28L24 14L30 22"
-                  stroke="#2585E8"
+                  stroke="#0F766E"
                   strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 ></path>
-                <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
+                <circle cx="30" cy="22" r="3.5" fill="#14B8A6"></circle>
               </svg>
               {!isCollapsed && (
                 <div className="flex flex-col min-w-0">
-                  <span className="font-headline text-headline-sm font-extrabold tracking-tight text-light-primary leading-none">
-                    Q<span className="text-secondary font-medium">Flip</span>
+                  <span className="font-sans text-lg font-black tracking-tight text-slate-900 leading-none">
+                    CARE<span className="text-[#0F766E] font-medium">FLOW</span>
                   </span>
-                  <span className="text-[9px] uppercase tracking-wider text-light-on-surface-variant font-bold truncate">
+                  <span className="text-[9px] uppercase tracking-wider text-slate-500 font-bold truncate mt-0.5">
                     Civil Hospital Ambala
                   </span>
                 </div>
@@ -271,7 +271,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={onToggleCollapse}
                 aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                 title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                className="hidden md:flex p-1.5 rounded-lg border border-light-outline text-light-on-surface-variant hover:text-light-primary hover:bg-light-surface-variant transition-colors"
+                className="hidden md:flex p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors"
               >
                 <span className="material-symbols-outlined text-base">
                   {isCollapsed ? 'chevron_right' : 'chevron_left'}
@@ -291,14 +291,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&q=80'
               }
               alt={user?.name || 'User avatar'}
-              className="w-10 h-10 rounded-full object-cover border border-light-outline flex-shrink-0"
+              className="w-10 h-10 rounded-full object-cover border border-slate-200 flex-shrink-0"
             />
             {!isCollapsed && (
               <div className="min-w-0 flex-1">
-                <div className="font-headline text-xs font-bold text-light-primary truncate">
+                <div className="font-sans text-xs font-bold text-slate-900 truncate">
                   {user?.name}
                 </div>
-                <div className="text-[11px] text-light-on-surface-variant truncate">
+                <div className="text-[11px] text-slate-500 truncate">
                   {user?.department || 'Civil Hospital Ambala'}
                 </div>
               </div>
@@ -311,12 +311,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* User Session & Status Footer */}
-      <div className="p-3 border-t border-light-outline bg-light-surface-variant/30 space-y-2">
+      <div className="p-3 border-t border-slate-200/80 bg-white/50 backdrop-blur-sm space-y-2">
         <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {!isCollapsed && (
             <div className="min-w-0 pr-2">
-              <div className="text-xs font-bold text-light-primary truncate">{user?.name}</div>
-              <div className="text-[10px] uppercase font-bold text-secondary truncate">
+              <div className="text-xs font-bold text-slate-900 truncate">{user?.name}</div>
+              <div className="text-[10px] uppercase font-bold text-[#0F766E] truncate">
                 {role} • {user?.id}
               </div>
             </div>
@@ -327,7 +327,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               navigate('/login');
             }}
             title="Sign out of hospital session"
-            className="p-1.5 rounded-lg border border-danger/30 bg-danger/10 text-danger hover:bg-danger/20 transition-colors flex items-center justify-center flex-shrink-0"
+            className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors flex items-center justify-center flex-shrink-0"
           >
             <span className="material-symbols-outlined text-sm">logout</span>
           </button>
@@ -335,11 +335,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Status indicator */}
         {!isCollapsed ? (
-          <div className="text-[11px] text-light-on-surface-variant pt-1 border-t border-light-outline/60 space-y-2">
+          <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-100 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-success inline-block"></span>
-                <span className="font-semibold text-light-primary text-[10px]">
+                <span className="w-2 h-2 rounded-full bg-[#16A34A] inline-block animate-pulse"></span>
+                <span className="font-semibold text-slate-800 text-[10px]">
                   ABHA Gateway Live
                 </span>
               </div>
@@ -348,7 +348,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         ) : (
           <div className="flex justify-center pt-1" title="ABHA Gateway Live">
-            <span className="w-2.5 h-2.5 rounded-full bg-success inline-block"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A] inline-block animate-pulse"></span>
           </div>
         )}
       </div>

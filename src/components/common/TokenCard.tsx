@@ -23,11 +23,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden ${className}`}>
+    <div className={`glass-card overflow-hidden shadow-lg border border-slate-200/80 rounded-2xl ${className}`}>
       {/* Top Banner */}
-      <div className="bg-teal-800 text-white px-5 py-3 flex items-center justify-between">
+      <div className="bg-[#0F766E] text-white px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-teal-200" />
+          <Activity className="w-4 h-4 text-teal-200 animate-pulse" />
           <span className="text-xs font-bold uppercase tracking-wider text-teal-100">
             Live OPD Digital Token
           </span>
@@ -96,28 +96,28 @@ export const TokenCard: React.FC<TokenCardProps> = ({
 
         {/* Live Wait Diagnostics Grid */}
         <div className="grid grid-cols-3 gap-3 text-center">
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+          <div className="p-3 bg-white/80 rounded-xl border border-slate-200 shadow-xs">
             <span className="text-[11px] text-slate-500 block font-medium">Now Serving</span>
-            <span className="text-lg sm:text-xl font-bold text-slate-900 font-mono block mt-0.5">
+            <span className="text-lg sm:text-xl font-bold text-slate-900 font-mono block mt-0.5 tabular-nums">
               {currentServingTokenNumber}
             </span>
           </div>
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+          <div className="p-3 bg-white/80 rounded-xl border border-slate-200 shadow-xs">
             <span className="text-[11px] text-slate-500 block font-medium">Ahead of You</span>
-            <span className="text-lg sm:text-xl font-bold text-amber-600 font-mono block mt-0.5">
+            <span className="text-lg sm:text-xl font-bold text-[#D97706] font-mono block mt-0.5 tabular-nums">
               {String(patientsAhead).padStart(2, '0')}
             </span>
           </div>
-          <div className="p-3 bg-teal-50 rounded-lg border border-teal-200">
-            <span className="text-[11px] text-teal-800 block font-medium">Est. Wait</span>
-            <span className="text-lg sm:text-xl font-bold text-teal-700 font-mono block mt-0.5">
+          <div className="p-3 bg-[#E6F4F1]/80 rounded-xl border border-[#0F766E]/20 shadow-xs">
+            <span className="text-[11px] text-[#0F766E] block font-medium">Est. Wait</span>
+            <span className="text-lg sm:text-xl font-bold text-[#0F766E] font-mono block mt-0.5 tabular-nums">
               {token.estimatedWaitMinutes}m
             </span>
           </div>
         </div>
 
         {/* Doctor and Patient metadata */}
-        <div className="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <div className="space-y-1.5 text-xs text-slate-600 bg-white/70 backdrop-blur-sm p-3.5 rounded-xl border border-slate-200">
           <div className="flex justify-between">
             <span>Patient Name:</span>
             <strong className="text-slate-900">{token.patientName}</strong>

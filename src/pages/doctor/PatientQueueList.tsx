@@ -24,7 +24,7 @@ export const PatientQueueList: React.FC = () => {
       key: 'tokenNumber',
       header: 'Token #',
       render: (row) => (
-        <span className="font-headline font-code font-bold text-secondary text-sm">
+        <span className="font-mono font-bold text-[#0F766E] text-sm tabular-nums">
           {row.tokenNumber}
         </span>
       ),
@@ -34,8 +34,8 @@ export const PatientQueueList: React.FC = () => {
       header: 'Patient Details',
       render: (row) => (
         <div>
-          <div className="font-bold text-light-primary">{row.patientName}</div>
-          <div className="text-[10px] text-light-on-surface-variant font-code">
+          <div className="font-bold text-slate-900">{row.patientName}</div>
+          <div className="text-[10px] text-slate-500 font-mono">
             {row.patientId} • {row.gender}, {row.age}y
           </div>
         </div>
@@ -46,8 +46,8 @@ export const PatientQueueList: React.FC = () => {
       header: 'Department',
       render: (row) => (
         <div>
-          <span className="font-semibold text-light-primary">{row.department}</span>
-          <span className="block text-[10px] text-light-on-surface-variant">{row.roomNumber}</span>
+          <span className="font-semibold text-slate-900">{row.department}</span>
+          <span className="block text-[10px] text-slate-500">{row.roomNumber}</span>
         </div>
       ),
     },
@@ -55,7 +55,7 @@ export const PatientQueueList: React.FC = () => {
       key: 'symptoms',
       header: 'Symptoms',
       render: (row) => (
-        <div className="max-w-xs truncate text-[11px] text-light-on-surface-variant">
+        <div className="max-w-xs truncate text-[11px] text-slate-500">
           {row.symptoms.join(', ')}
         </div>
       ),
@@ -73,7 +73,7 @@ export const PatientQueueList: React.FC = () => {
     {
       key: 'registeredAt',
       header: 'Time',
-      render: (row) => <span className="font-code text-xs">{row.registeredAt}</span>,
+      render: (row) => <span className="font-mono text-xs text-slate-600">{row.registeredAt}</span>,
     },
     {
       key: 'actions',
@@ -83,7 +83,7 @@ export const PatientQueueList: React.FC = () => {
           {row.status === 'WAITING' && (
             <button
               onClick={() => updateStatus(row.id, 'IN_CONSULTATION')}
-              className="px-2.5 py-1 bg-secondary text-white rounded text-xs font-bold hover:bg-secondary/90 transition-colors"
+              className="px-2.5 py-1 bg-[#0F766E] text-white rounded-lg text-xs font-bold hover:bg-[#115E59] transition-colors shadow-xs"
             >
               Call In
             </button>
@@ -91,7 +91,7 @@ export const PatientQueueList: React.FC = () => {
           {row.status === 'IN_CONSULTATION' && (
             <button
               onClick={() => updateStatus(row.id, 'COMPLETED')}
-              className="px-2.5 py-1 bg-success text-white rounded text-xs font-bold hover:bg-success/90 transition-colors"
+              className="px-2.5 py-1 bg-[#16A34A] text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors shadow-xs"
             >
               Complete
             </button>
@@ -103,23 +103,27 @@ export const PatientQueueList: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-light-outline">
+      <div className="glass-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#0F766E]">
             OPD Roster Management
           </span>
-          <h1 className="font-headline text-display-md-mobile sm:text-display-md font-extrabold text-light-primary">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
             Patient Queue Registry
           </h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Complete list of registered outpatients awaiting consultation across OPD wings
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-light-on-surface-variant">Filter Priority:</span>
+
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-semibold text-slate-500">Priority:</span>
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="text-xs rounded-lg border border-light-outline bg-white px-2.5 py-1.5 font-bold text-light-primary"
+            className="text-xs rounded-xl border border-slate-200 bg-white px-3 py-2 font-bold text-slate-900 shadow-xs focus:border-[#0F766E]"
           >
-            <option value="ALL">All Patients</option>
+            <option value="ALL">All Patients ({tokens.length})</option>
             <option value="Emergency">Emergency Only</option>
             <option value="Senior">Senior Citizens</option>
             <option value="Pediatric">Pediatric</option>
@@ -128,13 +132,17 @@ export const PatientQueueList: React.FC = () => {
         </div>
       </div>
 
-      <SearchBar
-        value={search}
-        onChange={setSearch}
-        placeholder="Filter by patient name, token number, or mobile..."
-      />
+      <div className="glass-card p-4">
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder="Filter by patient name, token number, or mobile..."
+        />
+      </div>
 
-      <DataTable columns={columns} data={filtered} />
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-1">
+        <DataTable columns={columns} data={filtered} />
+      </div>
     </div>
   );
 };

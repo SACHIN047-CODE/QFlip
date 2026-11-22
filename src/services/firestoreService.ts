@@ -209,6 +209,79 @@ export const firestoreService = {
       abhaId: userData.abhaId || `91-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`,
       createdAt: new Date().toISOString()
     }, { merge: true });
+  },
+
+  /**
+   * Doctor Registration (Collection: "users" & "doctors"):
+   * Saves a doctor with role="doctor" directly into Firebase Firestore.
+   */
+  async registerDoctor(doctorData: {
+    name: string;
+    email: string;
+    phone?: string;
+    password?: string;
+    pin?: string;
+    department?: string;
+    specialty?: string;
+    qualification?: string;
+    room?: string;
+    shift?: string;
+  }): Promise<void> {
+    const normalizedEmail = doctorData.email.toLowerCase().trim();
+    const userDocRef = doc(db, 'users', normalizedEmail);
+    
+    // 1. Save to 'users' collection with role="doctor"
+    await setDoc(userDocRef, {
+      name: doctorData.name,
+      email: normalizedEmail,
+      password: doctorData.password || 'Demo@12346',
+      role: 'doctor',
+      phone: doctorData.phone || '+91 98765 43210',
+      pin: doctorData.pin || '7788',
+      department: doctorData.specialty || doctorData.department || 'General Medicine',
+      specialty: doctorData.specialty || doctorData.department || 'General Medicine',
+      qualification: doctorData.qualification || 'MBBS, MD',
+      roomNumber: doctorData.room || 'OPD-14',
+      room: doctorData.room || 'OPD-14',
+      shift: doctorData.shift || '08:30 - 14:00',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
+    // 2. Also save to 'doctors' collection for roster listing
+    try {
+      const docId = `doc-${normalizedEmail.replace(/[^a-zA-Z0-9]/g, '_')}`;
+      const doctorDocRef = doc(db, 'doctors', docId);
+      await setDoc(doctorDocRef, {
+        id: docId,
+        name: doctorData.name,
+        email: normalizedEmail,
+        specialty: doctorData.specialty || doctorData.department || 'General Medicine',
+        qualification: doctorData.qualification || 'MBBS, MD',
+        room: doctorData.room || 'OPD-14',
+        shift: doctorData.shift || '08:30 - 14:00',
+        phone: doctorData.phone || '+91 98765 43210',
+        status: 'Active',
+        load: '0 Patients',
+        role: 'doctor',
+        createdAt: new Date().toISOString()
+      }, { merge: true });
+    } catch (e) {
+      console.warn('Could not mirror to doctors collection:', e);
+    }
+  },
+
+  async getDoctors(): Promise<any[]> {
+    try {
+      const doctorsCol = collection(db, 'doctors');
+      const snapshot = await getDocs(doctorsCol);
+      if (!snapshot.empty) {
+        return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      }
+    } catch (e) {
+      console.warn('Error fetching doctors from firestore:', e);
+    }
+    return [];
   }
 };
 

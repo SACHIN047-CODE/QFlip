@@ -135,20 +135,20 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
                 <svg viewBox="0 0 36 36" fill="none" className="w-8 h-8">
                   <path
                     d="M4 18L10 6L18 28L24 14L30 22"
-                    stroke="#2585E8"
+                    stroke="#0F766E"
                     strokeWidth="3.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   ></path>
-                  <circle cx="30" cy="22" r="3.5" fill="#F2D500"></circle>
+                  <circle cx="30" cy="22" r="3.5" fill="#14B8A6"></circle>
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="font-headline text-headline-sm font-extrabold tracking-tight text-light-primary leading-none">
-                  Q<span className="text-secondary font-medium">Flip</span>
+                <span className="font-headline text-headline-sm font-extrabold tracking-tight text-slate-900 leading-none">
+                  CARE<span className="text-[#0F766E] font-medium">FLOW</span>
                 </span>
-                <span className="text-[9px] uppercase tracking-wider text-light-on-surface-variant font-bold">
-                  Health Logistics
+                <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">
+                  QFlip Health Logistics
                 </span>
               </div>
             </Link>
