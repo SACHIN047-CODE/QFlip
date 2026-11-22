@@ -29,9 +29,9 @@ export const queueService = {
       const demoPatients: PatientToken[] = [
         { id: 'tok-demo-1', tokenNumber: 'OPD-GEN-301', patientId: 'PT-DEMO-1', patientName: 'Riya Sharma', age: 27, gender: 'Female', phone: '+91 98765 43101', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Fever', 'Body ache'], priority: 'Normal', status: 'WAITING', registeredAt: '09:40 AM', estimatedWaitMinutes: 12 },
         { id: 'tok-demo-2', tokenNumber: 'OPD-GEN-302', patientId: 'PT-DEMO-2', patientName: 'Mohit Verma', age: 68, gender: 'Male', phone: '+91 98765 43102', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Joint pain'], priority: 'Senior', status: 'WAITING', registeredAt: '09:42 AM', estimatedWaitMinutes: 10 },
-        { id: 'tok-demo-3', tokenNumber: 'OPD-GEN-303', patientId: 'PT-DEMO-3', patientName: 'Kabir Singh', age: 8, gender: 'Male', phone: '+91 98765 43103', department: 'Pediatrics', assignedDoctorName: 'Dr. Priya Singh', roomNumber: 'OPD Room 103', symptoms: ['Cough'], priority: 'Pediatric', status: 'WAITING', registeredAt: '09:44 AM', estimatedWaitMinutes: 8 },
-        { id: 'tok-demo-4', tokenNumber: 'OPD-GEN-304', patientId: 'PT-DEMO-4', patientName: 'Sunita Devi', age: 54, gender: 'Female', phone: '+91 98765 43104', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Chest discomfort'], priority: 'Emergency', status: 'WAITING', registeredAt: '09:46 AM', estimatedWaitMinutes: 5 },
-        { id: 'tok-demo-5', tokenNumber: 'OPD-GEN-305', patientId: 'PT-DEMO-5', patientName: 'Aarav Jain', age: 34, gender: 'Male', phone: '+91 98765 43105', department: 'Orthopedics', assignedDoctorName: 'Dr. Harpreet Singh', roomNumber: 'OPD Room 108', symptoms: ['Knee pain'], priority: 'Normal', status: 'WAITING', registeredAt: '09:48 AM', estimatedWaitMinutes: 15 },
+        { id: 'tok-demo-3', tokenNumber: 'OPD-GEN-303', patientId: 'PT-DEMO-3', patientName: 'Kabir Singh', age: 8, gender: 'Male', phone: '+91 98765 43103', department: 'Pediatrics', assignedDoctorName: 'Dr. Simran Kaur', roomNumber: 'Room 301', symptoms: ['Cough'], priority: 'Pediatric', status: 'WAITING', registeredAt: '09:44 AM', estimatedWaitMinutes: 8 },
+        { id: 'tok-demo-4', tokenNumber: 'OPD-GEN-304', patientId: 'PT-DEMO-4', patientName: 'Sunita Devi', age: 54, gender: 'Female', phone: '+91 98765 43104', department: 'Cardiology', assignedDoctorName: 'Dr. Priya Singh', roomNumber: 'Room 201', symptoms: ['Chest discomfort'], priority: 'Emergency', status: 'WAITING', registeredAt: '09:46 AM', estimatedWaitMinutes: 5 },
+        { id: 'tok-demo-5', tokenNumber: 'OPD-GEN-305', patientId: 'PT-DEMO-5', patientName: 'Aarav Jain', age: 34, gender: 'Male', phone: '+91 98765 43105', department: 'Orthopedics', assignedDoctorName: 'Dr. Karan Malhotra', roomNumber: 'Room 108', symptoms: ['Knee pain'], priority: 'Normal', status: 'WAITING', registeredAt: '09:48 AM', estimatedWaitMinutes: 15 },
         { id: 'tok-demo-6', tokenNumber: 'OPD-GEN-306', patientId: 'PT-DEMO-6', patientName: 'Meera Kapoor', age: 31, gender: 'Female', phone: '+91 98765 43106', department: 'General Medicine', assignedDoctorName: 'Dr. Rahul Verma', roomNumber: 'OPD Room 101', symptoms: ['Migraine'], priority: 'Normal', status: 'WAITING', registeredAt: '09:50 AM', estimatedWaitMinutes: 18 },
       ];
       const existing = getStoredTokens();
@@ -168,18 +168,18 @@ export const queueService = {
         isClosed,
         alternativeDoctors: [
           {
-            id: 'doc-ortho',
-            name: 'Dr. Harpreet Singh, MS',
+            id: 'doc-karan',
+            name: 'Dr. Karan Malhotra, MS',
             specialization: 'Orthopedics',
-            roomNumber: 'OPD Room 08',
+            roomNumber: 'Room 108',
             activeQueueCount: 4,
             estimatedWaitMinutes: 20
           },
           {
-            id: 'doc-peds',
-            name: 'Dr. Priya Patel, MD',
+            id: 'doc-simran',
+            name: 'Dr. Simran Kaur, MD',
             specialization: 'Pediatrics',
-            roomNumber: 'OPD Room 03',
+            roomNumber: 'Room 301',
             activeQueueCount: 3,
             estimatedWaitMinutes: 15
           }
@@ -220,6 +220,15 @@ export const queueService = {
         (t) => t.department === payload.department && (t.status === 'WAITING' || t.status === 'IN_CONSULTATION')
       ).length;
 
+      const docMapping: Record<string, { name: string; room: string }> = {
+        'general medicine': { name: 'Dr. Rahul Verma', room: 'OPD Room 101' },
+        'cardiology': { name: 'Dr. Priya Singh', room: 'Room 201' },
+        'orthopedics': { name: 'Dr. Karan Malhotra', room: 'Room 108' },
+        'pediatrics': { name: 'Dr. Simran Kaur', room: 'Room 301' },
+      };
+      const deptKey = (payload.department || '').toLowerCase();
+      const assigned = docMapping[deptKey] || { name: 'Dr. Rahul Verma', room: 'OPD Room 101' };
+
       const newToken: PatientToken = {
         id: `tok-${Date.now()}`,
         tokenNumber,
@@ -230,8 +239,8 @@ export const queueService = {
         phone: payload.phone,
         abhaId: payload.abhaId,
         department: payload.department,
-        assignedDoctorName: 'Dr. Rajesh Sharma',
-        roomNumber: 'OPD Room 12',
+        assignedDoctorName: assigned.name,
+        roomNumber: assigned.room,
         symptoms: payload.symptoms,
         priority: payload.priority || 'Normal',
         status: 'WAITING',
@@ -302,8 +311,11 @@ export const queueService = {
       await delay(300);
       const tokens = getStoredTokens();
       
-      // Find current in consultation and mark completed
-      const currentInConsult = tokens.find((t) => t.department === department && t.status === 'IN_CONSULTATION');
+      // Find current in consultation in this department (or any if 'All') and mark completed
+      const currentInConsult = tokens.find((t) => 
+        (department === 'All' || t.department.toLowerCase().includes(department.toLowerCase())) && 
+        t.status === 'IN_CONSULTATION'
+      );
       let updated = tokens.map((t) => {
         if (t.id === currentInConsult?.id) {
           return { ...t, status: 'COMPLETED' as TokenStatus, consultationEndTime: new Date().toISOString() };
@@ -311,16 +323,39 @@ export const queueService = {
         return t;
       });
 
-      // Find next waiting (priority cases first: Emergency > Senior > Standard)
-      // Note: Skipped patients are in separate queue and NEVER called here!
-      const emergencyNext = updated.find((t) => t.department === department && t.status === 'WAITING' && t.priority === 'Emergency');
-      const seniorNext = updated.find((t) => t.department === department && t.status === 'WAITING' && t.priority === 'Senior');
-      const standardNext = updated.find((t) => t.department === department && t.status === 'WAITING');
-      const nextToCall = emergencyNext || seniorNext || standardNext;
+      // Find next waiting:
+      // Step 1: Look in doctor's department (priority: Emergency > Senior > Standard)
+      let nextToCall: PatientToken | undefined;
+      if (department && department !== 'All') {
+        const emergencyNext = updated.find((t) => 
+          (t.department.toLowerCase().includes(department.toLowerCase()) || 
+           (t.assignedDoctorName && t.assignedDoctorName.toLowerCase().includes(department.toLowerCase()))) && 
+          t.status === 'WAITING' && t.priority === 'Emergency'
+        );
+        const seniorNext = updated.find((t) => 
+          (t.department.toLowerCase().includes(department.toLowerCase()) || 
+           (t.assignedDoctorName && t.assignedDoctorName.toLowerCase().includes(department.toLowerCase()))) && 
+          t.status === 'WAITING' && t.priority === 'Senior'
+        );
+        const standardNext = updated.find((t) => 
+          (t.department.toLowerCase().includes(department.toLowerCase()) || 
+           (t.assignedDoctorName && t.assignedDoctorName.toLowerCase().includes(department.toLowerCase()))) && 
+          t.status === 'WAITING'
+        );
+        nextToCall = emergencyNext || seniorNext || standardNext;
+      }
+
+      // Step 2: If no patient waiting in this department, assign ANY waiting patient across the hospital!
+      if (!nextToCall) {
+        const anyEmergency = updated.find((t) => t.status === 'WAITING' && t.priority === 'Emergency');
+        const anySenior = updated.find((t) => t.status === 'WAITING' && t.priority === 'Senior');
+        const anyStandard = updated.find((t) => t.status === 'WAITING');
+        nextToCall = anyEmergency || anySenior || anyStandard;
+      }
 
       if (nextToCall) {
         updated = updated.map((t) => {
-          if (t.id === nextToCall.id) {
+          if (t.id === nextToCall!.id) {
             return {
               ...t,
               status: 'IN_CONSULTATION' as TokenStatus,

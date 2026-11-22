@@ -55,12 +55,10 @@ export const adminService = {
     if (USE_MOCK) {
       await delay(200);
       return [
-        { id: 'doc-1', name: 'Dr. Rajesh Sharma', specialty: 'General Medicine', qualification: 'MBBS, MD', room: 'OPD-12', status: 'Active', shift: '08:30 - 14:00', load: '24 Patients' },
-        { id: 'doc-2', name: 'Dr. Priya Patel', specialty: 'Pediatrics', qualification: 'MBBS, MD (Ped)', room: 'OPD-04', status: 'Active', shift: '09:00 - 15:00', load: '15 Patients' },
-        { id: 'doc-3', name: 'Dr. Harpreet Singh', specialty: 'Orthopedics', qualification: 'MBBS, MS (Ortho)', room: 'OPD-08', status: 'Active', shift: '08:30 - 14:00', load: '19 Patients' },
-        { id: 'doc-4', name: 'Dr. Arvind Kumar', specialty: 'Cardiology', qualification: 'MBBS, MD, DM', room: 'OPD-21', status: 'On Break', shift: '10:00 - 16:00', load: '11 Patients' },
-        { id: 'doc-5', name: 'Dr. Sunita Verma', specialty: 'Obstetrics & Gynae', qualification: 'MBBS, MS (OBG)', room: 'OPD-19', status: 'Active', shift: '08:30 - 14:30', load: '31 Patients' },
-        { id: 'doc-6', name: 'Dr. Vikramaditya Sen', specialty: 'Emergency Trauma', qualification: 'MBBS, MD (Emerg)', room: 'Trauma Bay', status: 'Active', shift: '08:00 - 20:00', load: '88 Treated' },
+        { id: 'doc-1', name: 'Dr. Rahul Verma', email: 'rahul@example.com', specialty: 'General Medicine', qualification: 'MBBS, MD', room: 'OPD-101', status: 'Active', shift: '08:30 - 14:00', load: '18 Patients', role: 'doctor' },
+        { id: 'doc-2', name: 'Dr. Priya Singh', email: 'priya@example.com', specialty: 'Cardiology', qualification: 'MBBS, MD, DM', room: 'OPD-201', status: 'Active', shift: '09:00 - 15:00', load: '14 Patients', role: 'doctor' },
+        { id: 'doc-3', name: 'Dr. Karan Malhotra', email: 'karan@example.com', specialty: 'Orthopedics', qualification: 'MBBS, MS (Ortho)', room: 'OPD-108', status: 'Active', shift: '08:30 - 14:00', load: '16 Patients', role: 'doctor' },
+        { id: 'doc-4', name: 'Dr. Simran Kaur', email: 'simran@example.com', specialty: 'Pediatrics', qualification: 'MBBS, MD (Ped)', room: 'OPD-301', status: 'Active', shift: '09:00 - 15:00', load: '12 Patients', role: 'doctor' },
       ];
     }
     return apiClient.get('/admin/doctors');

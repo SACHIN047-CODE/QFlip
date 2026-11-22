@@ -1,19 +1,38 @@
 import { apiClient, delay, USE_MOCK } from './api';
 import { ConsultationNote, PrescriptionMedicine } from '../types';
 
+const getCurrentDoctor = () => {
+  try {
+    const u = JSON.parse(localStorage.getItem('qflip_user') || '{}');
+    if (u && (u.role === 'doctor' || u.name)) {
+      return {
+        name: u.name,
+        department: u.department || 'General Medicine',
+        room: u.roomNumber || 'OPD Room 101'
+      };
+    }
+  } catch {}
+  return {
+    name: 'Dr. Rahul Verma, MD',
+    department: 'General Medicine',
+    room: 'OPD Room 101'
+  };
+};
+
 export const doctorService = {
   async getDoctorSchedule(doctorId: string) {
     if (USE_MOCK) {
       await delay(200);
+      const activeDoc = getCurrentDoctor();
       return {
-        doctorId: doctorId || 'doc-rajesh',
-        name: 'Dr. Rajesh Sharma, MD',
-        department: 'General Medicine',
-        room: 'OPD Room 12',
+        doctorId: doctorId || 'doc-rahul',
+        name: activeDoc.name,
+        department: activeDoc.department,
+        room: activeDoc.room,
         shift: 'Morning OPD: 08:30 AM – 02:00 PM',
         status: 'IN_SESSION',
-        totalPatientsAssigned: 48,
-        completedConsultations: 24,
+        totalPatientsAssigned: 32,
+        completedConsultations: 16,
         avgConsultationMinutes: 6.5
       };
     }
@@ -34,14 +53,15 @@ export const doctorService = {
   }): Promise<ConsultationNote> {
     if (USE_MOCK) {
       await delay(450);
+      const activeDoc = getCurrentDoctor();
       const noteId = `note-${Date.now()}`;
       const note: ConsultationNote = {
         id: noteId,
         patientId: consultation.patientId,
         patientName: consultation.patientName,
-        doctorId: 'doc-rajesh',
-        doctorName: 'Dr. Rajesh Sharma, MD',
-        department: 'General Medicine',
+        doctorId: 'doc-current',
+        doctorName: activeDoc.name,
+        department: activeDoc.department,
         date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
         chiefComplaints: consultation.chiefComplaints,
         clinicalFindings: consultation.clinicalFindings,
@@ -69,8 +89,8 @@ export const doctorService = {
             tokenNumber: consultation.tokenId || `OPD-${Math.floor(100 + Math.random() * 900)}`,
             patientId: consultation.patientId,
             patientName: consultation.patientName,
-            prescribedDoctor: 'Dr. Rajesh Sharma, MD',
-            department: 'General Medicine',
+            prescribedDoctor: activeDoc.name,
+            department: activeDoc.department,
             medicines: consultation.prescriptions.map((p) => ({
               name: p.name,
               dosage: p.dosage || '500 mg',
@@ -103,9 +123,9 @@ export const doctorService = {
             testName,
             category: testName.toLowerCase().includes('x-ray') || testName.toLowerCase().includes('scan') ? 'RADIOLOGY' : 'PATHOLOGY',
             status: 'PENDING' as const,
-            orderedBy: 'Dr. Rajesh Sharma, MD',
+            orderedBy: activeDoc.name,
             orderedAt: 'Just now',
-            department: 'General Medicine'
+            department: activeDoc.department
           }));
           localStorage.setItem('qflip_lab_requests', JSON.stringify([...newLabItems, ...storedLab]));
         } catch (e) {

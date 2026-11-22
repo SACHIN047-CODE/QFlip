@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useQueue } from '../../context/QueueContext';
+import { useLanguage, FULL_PAGE_TRANSLATIONS } from '../../context/LanguageContext';
 
 interface SidebarProps {
   onCloseMobile?: () => void;
@@ -16,6 +17,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { user, role, logout } = useAuth();
   const { tokens } = useQueue();
+  const { language } = useLanguage();
   const navigate = useNavigate();
 
   const waitingCount = tokens.filter((t) => t.status === 'WAITING').length;
@@ -32,7 +34,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     label: string;
     badge?: React.ReactNode;
     end?: boolean;
-  }) => (
+  }) => {
+    const displayLabel = language === 'hi' && FULL_PAGE_TRANSLATIONS[label] ? FULL_PAGE_TRANSLATIONS[label] : label;
+    return (
     <div className="relative group">
       <NavLink
         to={to}
@@ -56,14 +60,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
           )}
         </div>
-        {!isCollapsed && <span className="truncate flex-1">{label}</span>}
+        {!isCollapsed && <span className="truncate flex-1">{displayLabel}</span>}
         {!isCollapsed && badge && <span>{badge}</span>}
       </NavLink>
 
       {/* Floating Tooltip in Collapsed Mode */}
       {isCollapsed && (
         <div className="hidden group-hover:flex absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xl whitespace-nowrap z-50 items-center gap-2 pointer-events-none border border-slate-700">
-          <span>{label}</span>
+          <span>{displayLabel}</span>
           {badge && (
             <span className="px-1.5 py-0.5 rounded bg-accent text-on-accent text-[10px] font-bold">
               {badge}
@@ -74,6 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
     </div>
   );
+  };
 
   const renderNavLinks = () => {
     switch (role) {
