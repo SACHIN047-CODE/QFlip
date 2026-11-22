@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Sidebar } from '../components/common/Sidebar';
 import { useAuth } from '../context/AuthContext';
-import { useLanguage, FULL_PAGE_TRANSLATIONS } from '../context/LanguageContext';
-// import { useLanguage, translateText } from '../context/LanguageContext';
+// import { useLanguage, FULL_PAGE_TRANSLATIONS } from '../context/LanguageContext';
+import { useLanguage, translateText } from '../context/LanguageContext';
 import { LanguageSelector } from '../components/common/LanguageSelector';
 import { VoiceInputModal } from '../components/common/VoiceInputModal';
 import { VoiceChatAssistantModal } from '../components/assistant/VoiceChatAssistantModal';
@@ -95,14 +95,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ title, subtitl
           {/* Quick Header Actions */}
           <div className="flex items-center gap-3">
             <LanguageSelector variant="compact" />
-
-            <button
-              onClick={() => setMapOpen(true)}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-light-outline text-xs font-semibold text-light-primary hover:bg-light-surface-variant transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm text-secondary">map</span>
-              <span>Hospital Map</span>
-            </button>
 
             <button
               onClick={() => setVoiceOpen(true)}

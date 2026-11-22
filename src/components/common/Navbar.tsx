@@ -265,14 +265,6 @@ export const Navbar: React.FC<NavbarProps> = ({ mode = 'public', onMenuToggle })
           {/* Right Action Controls */}
           <div className="flex items-center gap-3">
             {/* Voice Input Quick Button */}
-            <button
-              onClick={() => setIsVoiceOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-secondary/30 bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-bold transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm">mic</span>
-              <span className="hidden sm:inline">{t('nav.voice_opd', 'Voice OPD')}</span>
-            </button>
-
             {/* Notification Bell */}
             <div className="relative">
               <button
